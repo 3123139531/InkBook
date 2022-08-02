@@ -20,15 +20,11 @@ d_id 非空主键
 
 d_content 内容
 
-d_user_u_id 没想好
-
 d_team_t_id 团队id 外键
 
 #### api
 **post请求**
 
-/insertDocument
+暂定
 
-/deleteDocument
-
-/updateDocument
+#### 最新版push至20373311分支，合并了project部分，controller部分暂时没写
