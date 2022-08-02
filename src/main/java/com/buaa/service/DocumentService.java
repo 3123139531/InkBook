@@ -1,8 +1,10 @@
 package com.buaa.service;
 
 import com.buaa.pojo.Document;
-import java.util.List;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+@Service
 public interface DocumentService {
     public void createDocument(int tid, String content);
     void deleteDocumentById(int id);
