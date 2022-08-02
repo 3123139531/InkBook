@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<mapper namespace="com.example.backed.Mapper.DocumentMapper">
+    <insert id="insertDocument" parameterType="Document">
+        insert into doucument(d_content,d_user_u_id)
+        values(#{documentContent},#{documentUserId})
+    </insert>
+    <update id="updateDocument" parameterType="Document">
+        update doucument set d_content = #{documentContent}
+        where d_id = #{documentId}
+    </update>
+    <delete id="deleteDocument" parameterType="Document">
+        delete from doucument where d_id = #{documentId}
+    </delete>
 
-</beans>
+</mapper>

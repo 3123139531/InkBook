@@ -12,3 +12,23 @@ dependencies springweb/mysql driver
 
 #### 新增document类
 
+### 2022/8/2
+
+#### 数据库设计
+
+d_id 非空主键
+
+d_content 内容
+
+d_user_u_id 没想好
+
+d_team_t_id 团队id 外键
+
+#### api
+**post请求**
+
+/insertDocument
+
+/deleteDocument
+
+/updateDocument
