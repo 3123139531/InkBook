@@ -5,7 +5,9 @@ import com.buaa.pojo.Document;
 import com.buaa.service.DocumentService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DocumentImpl implements DocumentService {
     @Autowired
     private DocumentMapper documentMapper;
