@@ -19,7 +19,7 @@ public class ProjectImpl implements ProjectService {
     public int createProject(int tid, String name) {
         Project project = new Project();
         project.setTid(tid);
-        project.setPname(name);
+        project.setPName(name);
         projectMapper.insertProject(project);
         project = projectMapper.getProjectByPName(name);
         return project.getPid();
@@ -28,15 +28,24 @@ public class ProjectImpl implements ProjectService {
     @Override
     public boolean deleteProjectById(int id) {
         QueryWrapper<Project> qw = new QueryWrapper<>();
-        qw.eq("pid", id);
+        qw.eq("p_id", id);
         return projectMapper.delete(qw) > 0;
+    }
+
+    @Override
+    public boolean updateStatus(int id, String status) {
+        Project project = new Project();
+        project.setPid(id);
+        project.setStatus(status);
+        projectMapper.updateStatus(project);
+        return true;
     }
 
     @Override
     public boolean renameProject(int id, String name) {
         Project project = new Project();
         project.setPid(id);
-        project.setPname(name);
+        project.setPName(name);
         projectMapper.updateProjectName(project);
         return true;
     }
@@ -55,4 +64,30 @@ public class ProjectImpl implements ProjectService {
     public Project selectByName(String name) {
         return projectMapper.getProjectByPName(name);
     }
+
+    @Override
+    public boolean checkNameRepeat(int tid, String name) {
+        Project project = new Project();
+        project.setTid(tid);
+        project.setPName(name);
+        return projectMapper.checkNameRepeat(project) != null;
+    }
+
+    @Override
+    public List<Project> selectProjectByStatus(int tid, String status) {
+        Project project = new Project();
+        project.setTid(tid);
+        project.setStatus(status);
+        return projectMapper.getProjectByStatus(project);
+    }
+
+    @Override
+    public List<Project> selectProjectLike(int tid, String key) {
+        QueryWrapper<Project> qw = new QueryWrapper<>();
+        qw.select("*");
+        qw.like("p_name", key);
+        qw.eq("t_id", tid);
+        return projectMapper.selectList(qw);
+    }
+
 }
