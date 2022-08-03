@@ -1,7 +1,7 @@
 package com.buaa.controller.utils;
 
-import com.primary22.entity.User;
-import com.primary22.service.UserService;
+import com.buaa.pojo.User;
+import com.buaa.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,16 +34,17 @@ public class UserController {
 
     @ApiOperation(value = "注册")
     @PostMapping("/user/register")
-    public R userRegister(@RequestBody String user_name, @RequestBody String email, @RequestBody String password, HttpSession session) throws Exception{
-        User tryRegisterUser = userService.findUserByName(user_name);
+    public R userRegister(@RequestBody(required=false) User user) {
+        User tryRegisterUser = userService.findUserByName(user.getuName());
         if(tryRegisterUser != null){
-            throw new Exception("User already exists");
+//            throw new Exception("User already exists");
+            return new R();
         }
         else {
-            User user = new User();
-            user.setuName(user_name);
-            user.setEmail(email);
-            user.setPassword(password);
+//            User user = new User();
+//            user.setuName(user_name);
+//            user.setEmail(email);
+//            user.setPassword(password);
 
             R r = new R();
             r.setData(userService.insertRegisteredUser(user));
@@ -54,17 +55,17 @@ public class UserController {
 
     @ApiOperation(value = "登录")
     @PostMapping("/user/login")
-    public R userLogin(@RequestBody String user_name, @RequestBody String password, HttpSession session) throws Exception{
+    public R userLogin(@RequestBody User user, HttpSession session) throws Exception{
 //        User user = new User();
 //        user.setuName(user_name);
 //        user.setPassword(password);
         //find user by name
-        User tryLoginUser = userService.findUserByName(user_name);
+        User tryLoginUser = userService.findUserByName(user.getuName());
         if(tryLoginUser != null) {
             //if found check password
-            if(tryLoginUser.getPassword().equals(password)){
+            if(tryLoginUser.getPassword().equals(user.getPassword())){
                 //login success
-                session.setAttribute("username",user_name);
+                session.setAttribute("username",user.getuName());
                 R r = new R();
                 r.setData(userService.insertRegisteredUser(tryLoginUser));
                 r.setFlag(true);

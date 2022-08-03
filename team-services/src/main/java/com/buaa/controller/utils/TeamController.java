@@ -1,9 +1,9 @@
 package com.buaa.controller.utils;
 
-import com.primary22.entity.Team;
-import com.primary22.entity.User;
-import com.primary22.service.TeamService;
-import com.primary22.service.UserService;
+import com.buaa.pojo.Team;
+import com.buaa.pojo.User;
+import com.buaa.service.TeamService;
+import com.buaa.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +20,10 @@ public class TeamController {
     UserService userService;
 
     @ApiOperation(value = "根据团队id获取团队成员列表")
-    @GetMapping("/team/{team_id}")
+    @GetMapping("/team/{team_id}/members")
     public R showTeamMembers(@PathVariable("team_id") int team_id){
         Team team = new Team();
-        team.settId(team_id);
+        team.setTid(team_id);
         //return
         R r = new R();
         r.setData(teamService.getTeamMembers(team));
@@ -47,8 +47,8 @@ public class TeamController {
     @PostMapping("/team")
     public R insertTeam(@RequestParam("team_name") String team_name, @RequestParam("team_name") String team_description, HttpSession session){
         Team team = new Team();
-        team.settName(team_name);
-        team.setBrief(team_description);
+        team.setTname(team_name);
+        team.setTbrief(team_description);
 
         String username = session.getAttribute("username").toString();
         User creator = userService.findUserByName(username);
