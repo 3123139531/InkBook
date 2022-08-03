@@ -111,7 +111,7 @@
             </div>
             <div v-if="ManageMod===3">
               <el-dialog v-model="dialogVisible" title="可邀请用户">
-                <span v-for="user in Users" class="Member" @click="InviteMem(user.account)">
+                <span v-for="user in Users" class="Member" @click="InviteMem(user.username)">
                   {{user.username}}({{user.account}})
                 </span>
               </el-dialog>
@@ -139,7 +139,6 @@
 
 <script>
 import { ElMessage } from 'element-plus'
-import { Search } from '@element-plus/icons-vue'
 
 export default {
   data () {
@@ -195,7 +194,19 @@ export default {
       dialogVisible : false
     }
   },
+  mounted() {
+    this.init();
+  },
   methods : {
+    init () {
+      // this.$axios.get("/team/{team_id}", {
+      //   params: {
+      //     team_id : this.teamId
+      //   }
+      // }).then(function (response) {
+      //   console.log(response);
+      // });
+    },
     JurisdictionError () {
       ElMessage.error('您没有此权限');
     },
@@ -226,15 +237,36 @@ export default {
     AppointManager (i) {
       this.team.members[i].identity = '管理员';
     },
-    DismissManager () {
+    DismissManager (i) {
       this.team.members[i].identity = '队员';
     },
-    InviteMem (account) {
-      alert(account);
+    InviteMem (username) {
+      ElMessage({
+        message: '已发送邀请',
+        type: 'success',
+      });
+
+      // this.$axios.get("/team/{team_id}", {
+      //   params: {
+      //     team_id : this.teamId,
+      //     username : username
+      //   }
+      // }).then(function (response) {
+      //   console.log(response);
+      // });
     },
     KickMem (i) {
       this.team.members[i] = null;
       this.team.numMembers--;
+
+      // this.$axios.delete("/team/{team_id}", {
+      //   params: {
+      //     team_id : this.teamId,
+      //     username: this.team.members[i].username
+      //   }
+      // }).then(function (response) {
+      //   console.log(response);
+      // });
     },
     toHomepage () {
       this.$router.push({

@@ -4,7 +4,7 @@
   <div class="ProjectInfo">
     <el-container>
       <el-header class="ProjectHeader">
-        <img src="../assets/头像.jpg" class="ProjectImg">
+        <img src="../assets/bgimg2.png" class="ProjectImg">
         <div class="ProjectIntro">
           <div class="ProjectName">
             <span>项目名：</span>
@@ -53,7 +53,6 @@
 
 <script>
 import { ElMessage } from 'element-plus'
-import { Search } from '@element-plus/icons-vue'
 
 export default {
   data () {
@@ -87,6 +86,17 @@ export default {
 
     },
     delProject () {
+      ElMessage({
+        message: '删除',
+        type: 'success',
+      });
+
+      this.$axios.delete("/projects/{pid}", {
+        pid : this.ProjectId
+      }).then(function (response) {
+        console.log(response);
+      })
+
       this.$router.push({
         name : 'Homepage',
         params : {
@@ -101,6 +111,13 @@ export default {
       this.Project.name = this.newName;
       this.dialogFormVisible = false;
       this.newName = '';
+
+      this.$axios.put("/projects/", {
+        pid : this.ProjectId,
+        pName : this.newName
+      }).then(function (response) {
+        console.log(response);
+      })
     },
     toHomepage () {
       this.$router.push({
