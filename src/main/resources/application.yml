@@ -16,3 +16,11 @@ mybatis-plus:
   configuration:
     #    日志信息（便于调试）
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+cos:
+  baseUrl: https://ljx-bucket-1310587083.cos.ap-beijing.myqcloud.com
+  accessKey: AKID61g5F8k59wRfcIhqiIbdPu85lAI9j26t
+  secretKey: Yp9G94k9IBpDKCo9D1YonWyA5j6D3cv1
+  regionName: ap-beijing
+  bucketName: ljx-bucket-1310587083
+  folderPrefix: /files
