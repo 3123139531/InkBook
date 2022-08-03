@@ -6,6 +6,7 @@
 
 .background-img {
     position: absolute;
+    top: 0;
     width: 100%;
     height: 100%;
     margin-left: -50%;
@@ -125,7 +126,6 @@
     width: 21%;
     height: 140px;
     border-radius: 10px;
-    /*background: transparent -webkit-linear-gradient(right, #FBE8EA 0%, #DEF4FF 100%);*/
     border: black solid;
     text-align: left;
     transition: 0.5s;
@@ -146,7 +146,6 @@
     width: 20%;
     height: 140px;
     border-radius: 10px;
-    /*background: transparent -webkit-linear-gradient(right, #FBE8EA 0%, #DEF4FF 100%);*/
     border: black solid;
     text-align: left;
     transition: 0.5s;

@@ -1,4 +1,5 @@
 <template>
+  <link rel="stylesheet" type="text/css" href="../style/ProjectInfo.css">
   <img src="../assets/bgimg2.png" class="background-img">
   <div class="ProjectInfo">
     <el-container>
@@ -10,12 +11,19 @@
             <span style="font-weight: 700">{{Project.name}}</span>
           </div>
         </div>
+        <div class="Link">
+          <span class="Prototype">
+            项目原型
+          </span>
+          <a href="https://online.visual-paradigm.com/cn/diagrams/features/uml-tool/"
+             target="_blank" class="UML-link">绘制UML</a>
+        </div>
         <div class="ProjectBtn">
           <el-button type="primary" round @click="RenameProBtn">重命名项目</el-button>
           <el-button type="primary" round class="delBtn" @click="delProject">删除项目</el-button>
           <el-dialog v-model="dialogFormVisible" title="输入新项目名">
             <el-form>
-              <el-form-item label="Promotion name" :label-width="140">
+              <el-form-item>
                 <el-input v-model="newName" autocomplete="off" />
               </el-form-item>
             </el-form>
@@ -107,5 +115,133 @@ export default {
 </script>
 
 <style scoped>
-@import "../style/ProjectInfo.css";
+  /*@import "../style/ProjectInfo.css";*/
+
+  a {
+    font-style: normal;
+    text-decoration: none;
+  }
+
+  .background-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin-left: -50%;
+    margin-top: -8px;
+  }
+
+  .ProjectInfo {
+    position: relative;
+    left: 0;
+    top: 10px;
+    width: 90%;
+    margin: 0 auto;
+    height: 700px;
+  }
+
+  .ProjectHeader {
+    height: 105px;
+    border: 1px black solid;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .ProjectImg {
+    float: left;
+    display: inline-block;
+    height: 80px;
+    width: 80px;
+    border-radius: 40px;
+    margin-top: 10px;
+    margin-left: 10px;
+  }
+
+  .ProjectIntro {
+    display: inline-block;
+    height: 100%;
+    float: left;
+    margin-left: 50px;
+    font-size: 18px;
+    text-align: left;
+  }
+
+  .ProjectName {
+    line-height: 103px;
+  }
+
+  .ProjectBtn {
+    display: inline-block;
+    float: right;
+    margin-top: 35px;
+    margin-right: 80px;
+  }
+
+  .Link {
+    line-height: 103px;
+    display: inline-block;
+  }
+
+  .Prototype,
+  .UML-link {
+    display: inline-block;
+    width: 100px;
+    border-left: 1px black solid;
+    border-right: 1px black solid;
+    margin-left: 1px;
+    border-radius: 5px;
+    font-size: 18px;
+    color: black;
+    background: rgba(144, 144, 144, 0.5);
+    transition: 0.5s;
+  }
+
+  .UML-link {
+
+  }
+
+  .Prototype:hover,
+  .UML-link:hover {
+    color: whitesmoke;
+  }
+
+  .ProjectMain {
+    height: 580px;
+    overflow: auto;
+    border: 1px black solid;
+    border-radius: 20px;
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .toHomepageBtn {
+    position: absolute;
+    left: 10px;
+    top: 20px;
+  }
+
+  .ProDoc {
+    display: inline-block;
+    float: left;
+    margin: 20px;
+    width: 10%;
+    height: 150px;
+    border-radius: 5px;
+    background: transparent -webkit-linear-gradient(right, lightgreen 0%, lightblue 100%);
+    border: black solid;
+    text-align: left;
+    transition: 0.5s;
+  }
+
+  .ProDoc:hover {
+    box-shadow: 5px 5px 20px;
+  }
+
+  .ProjectMain .DocName {
+    display: block;
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+  }
+
 </style>

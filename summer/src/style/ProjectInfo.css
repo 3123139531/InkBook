@@ -1,10 +1,11 @@
-* {
-    padding: 0;
-    margin: 0;
+a {
+    font-style: normal;
+    text-decoration: none;
 }
 
 .background-img {
     position: absolute;
+    top: 0;
     width: 100%;
     height: 100%;
     margin-left: -50%;
@@ -12,9 +13,9 @@
 
 .ProjectInfo {
     position: relative;
+    top: 10px;
     width: 90%;
     margin: 0 auto;
-    padding-top: 20px;
     height: 700px;
 }
 
@@ -22,7 +23,7 @@
     height: 105px;
     border: 1px black solid;
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .ProjectImg {
@@ -45,7 +46,7 @@
 }
 
 .ProjectName {
-    margin-top: 38px;
+    line-height: 103px;
 }
 
 .ProjectBtn {
@@ -55,13 +56,41 @@
     margin-right: 80px;
 }
 
+.Link {
+    line-height: 103px;
+    display: inline-block;
+}
+
+.Prototype,
+.UML-link {
+    display: inline-block;
+    width: 100px;
+    border-left: 1px black solid;
+    border-right: 1px black solid;
+    margin-left: 1px;
+    border-radius: 5px;
+    font-size: 18px;
+    color: black;
+    background: rgba(144, 144, 144, 0.5);
+    transition: 0.5s;
+}
+
+.UML-link {
+
+}
+
+.Prototype:hover,
+.UML-link:hover {
+    color: whitesmoke;
+}
+
 .ProjectMain {
     height: 580px;
     overflow: auto;
     border: 1px black solid;
     border-radius: 20px;
     margin-top: 10px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .toHomepageBtn {
@@ -77,7 +106,7 @@
     width: 10%;
     height: 150px;
     border-radius: 5px;
-    background: transparent -webkit-linear-gradient(right, #FBE8EA 0%, #DEF4FF 100%);
+    background: transparent -webkit-linear-gradient(right, lightgreen 0%, lightblue 100%);
     border: black solid;
     text-align: left;
     transition: 0.5s;

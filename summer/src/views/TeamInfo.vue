@@ -70,11 +70,11 @@
             stripe
             class="MemDetail"
         >
-          <el-table-column prop="username" label="用户名" width="265"/>
-          <el-table-column prop="account" label="账号" width="265" />
-          <el-table-column prop="name" label="姓名" width="265"/>
-          <el-table-column prop="email" label="邮箱" width="265"/>
-          <el-table-column prop="identity" label="身份" width="265"/>
+          <el-table-column prop="username" label="用户名" width="262"/>
+          <el-table-column prop="account" label="账号" width="262" />
+          <el-table-column prop="name" label="姓名" width="262"/>
+          <el-table-column prop="email" label="邮箱" width="262"/>
+          <el-table-column prop="identity" label="身份" width="262"/>
         </el-table>
         <div v-if="userIdentity!=='队员'">
           <div style="font:normal bold 20px/30px Georgia, serif;">成员管理</div>
@@ -249,5 +249,163 @@ export default {
 </script>
 
 <style scoped>
-  @import "../style/TeamInfo.css";
+  /*@import "../style/TeamInfo.css";*/
+
+  .background-img {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    margin-left: -50%;
+  }
+
+  .TeamInfo {
+    position: relative;
+    left: 0;
+    top: 10px;
+    width: 90%;
+    margin: 0 auto;
+    height: 700px;
+  }
+
+  .TeamHeader {
+    height: 205px;
+    border: 1px black solid;
+    border-radius: 20px;
+    background: rgba(200, 200, 200, 0.5);
+  }
+
+  .TeamImg {
+    float: left;
+    display: inline-block;
+    height: 160px;
+    width: 160px;
+    border-radius: 80px;
+    margin-top: 20px;
+    margin-left: 10px;
+  }
+
+  .TeamIntro {
+    display: inline-block;
+    height: 100%;
+    float: left;
+    margin-left: 50px;
+    font-size: 18px;
+    text-align: left;
+  }
+
+  .TeamName {
+    margin-top: 55px;
+  }
+
+  .TeamLeader {
+    margin-top: 30px;
+  }
+
+  .TeamDetail {
+    width: 500px;
+    float: left;
+    text-align: left;
+    margin-left: 200px;
+    margin-top: 40px;
+  }
+
+  .TeamBtn {
+    display: inline-block;
+    float: right;
+    margin-top: 50px;
+    margin-right: 100px;
+  }
+
+  .QuitBtn {
+    margin-top: 20px;
+  }
+
+  .TeamMain {
+    height: 480px;
+    overflow: auto;
+    border: 1px black solid;
+    border-radius: 20px;
+    margin-top: 10px;
+    background: rgba(200, 200, 200, 0.5);
+  }
+
+  .MemDetail {
+    display: inline-block;
+    float: left;
+    width: 100%;
+    padding-left: 15px;
+    margin-bottom: 20px;
+  }
+
+  .TeamMain tr {
+    height: 40px;
+    line-height: 40px;
+  }
+
+  .example-showcase .el-dropdown-link {
+    cursor: pointer;
+    color: var(--el-color-primary);
+    display: flex;
+    align-items: center;
+  }
+
+  .MemManageNav {
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    margin-top: 10px;
+  }
+
+  .ModifyMem {
+    width: 100px;
+    display: inline-block;
+    border-radius: 10px;
+    background: rgba(144, 144, 144, 0.6);
+  }
+
+  .KickMem,
+  .InviteMem {
+    width: 100px;
+    display: inline-block;
+    border-radius: 10px;
+    background: rgba(144, 144, 144, 0.6);
+  }
+
+  .KickMem {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .ModifyMem:hover,
+  .KickMem:hover,
+  .InviteMem:hover {
+    color: whitesmoke;
+  }
+
+  .MemManage {
+    width: 40%;
+    border-radius: 10px;
+    margin: 20px auto;
+    display: block;
+    background: rgba(144, 144, 144, 0.6);
+  }
+
+  .Member {
+    display: inline-block;
+    margin: 20px auto;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .Member:hover {
+    color: blue;
+  }
+
+  .toHomepageBtn {
+    position: absolute;
+    left: 10px;
+    top: 20px;
+  }
+
 </style>
