@@ -1,6 +1,6 @@
-package com.primary22.mapper;
+package com.buaa.mapper;
 
-import com.primary22.entity.User;
+import com.buaa.pojo.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

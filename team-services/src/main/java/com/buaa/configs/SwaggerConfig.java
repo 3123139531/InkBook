@@ -1,4 +1,4 @@
-package com.primary22.configs;
+package com.buaa.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,7 @@ public class SwaggerConfig {
 //                .groupName("分布式任务系统") // 如果配置多个文档的时候，那么需要配置groupName来分组标识
                 .apiInfo(apiInfo()) // 用于生成API信息
                 .select() // select()函数返回一个ApiSelectorBuilder实例,用来控制接口被swagger做成文档
-                .apis(RequestHandlerSelectors.basePackage("com.primary22.controller")) // 用于指定扫描哪个包下的接口
+                .apis(RequestHandlerSelectors.basePackage("com.buaa.controller.utils")) // 用于指定扫描哪个包下的接口
                 .paths(PathSelectors.any())// 选择所有的API,如果你想只为部分API生成文档，可以配置这里
                 .build();
     }

@@ -1,22 +1,12 @@
-package com.primary22.service;
+package com.buaa.service;
 
-import com.primary22.entity.User;
-import com.primary22.mapper.UserMapper;
+import com.buaa.mapper.UserMapper;
+import com.buaa.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
-public class UserService {
+public interface UserService {
 
-    @Autowired
-    UserMapper userMapper;
+    public User insertRegisteredUser(User user);
 
-    public User insertRegisteredUser(User user){
-        userMapper.insertUser(user);
-        return user;
-    }
-
-    public User findUserByName(String username){
-        return userMapper.selectUserByName(username);
-    }
+    public User findUserByName(String username);
 }

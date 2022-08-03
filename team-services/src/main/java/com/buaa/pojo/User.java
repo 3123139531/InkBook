@@ -1,4 +1,4 @@
-package com.primary22.entity;
+package com.buaa.pojo;
 
 import org.springframework.stereotype.Repository;
 

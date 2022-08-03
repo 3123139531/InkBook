@@ -1,47 +1,22 @@
-package com.primary22.service;
+package com.buaa.service;
 
-import com.primary22.entity.Team;
-import com.primary22.entity.User;
-import com.primary22.mapper.TeamMapper;
-import com.primary22.mapper.TeamMemberMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.buaa.pojo.Team;
+import com.buaa.pojo.User;
 
-@Service
-public class TeamService {
-    @Autowired
-    TeamMapper teamMapper;
-    @Autowired
-    TeamMemberMapper teamMemberMapper;
+public interface TeamService {
+    public Team selectTeamById(int id);
 
-    public Team selectTeamById(int id){
-        return teamMapper.selectTeamByID(id);
-    }
-
-    public Team[] createTeam(Team team, User creator){
-        teamMapper.insertTeam(team);
-        //TODO add self as team creator,position=3
-        teamMemberMapper.insertTeamMember(team,creator,3);
-        return teamMapper.selectAllTeam();
-    }
+    public Team[] createTeam(Team team, User creator);
 
     //TODO: invite/ add member
-    public void addTeamMember(Team team, User user){
-        teamMemberMapper.insertTeamMember(team,user,1);
-    }
+    public void addTeamMember(Team team, User user);
 
     //TODO: remove/ delete member
-    public void removeTeamMember(Team team,User user){
-        teamMemberMapper.deleteTeamMember(team,user);
-    }
+    public void removeTeamMember(Team team,User user);
 
     //TODO: select teams user is in
-    public Team[] getUserTeams(User user){
-        return teamMemberMapper.selectTeamsByUserId(user);
-    }
+    public Team[] getUserTeams(User user);
     //TODO: change/ update member position
     //TODO: select team members
-    public User[] getTeamMembers(Team team){
-        return teamMemberMapper.selectMembersByTeam(team);
-    }
+    public User[] getTeamMembers(Team team);
 }
