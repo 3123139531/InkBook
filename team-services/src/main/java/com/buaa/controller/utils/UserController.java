@@ -67,7 +67,7 @@ public class UserController {
                 //login success
                 session.setAttribute("username",user.getuName());
                 R r = new R();
-                r.setData(userService.insertRegisteredUser(tryLoginUser));
+                r.setData(userService.findUserByName(user.getuName()));
                 r.setFlag(true);
                 return r;
             }
