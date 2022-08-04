@@ -6,17 +6,19 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import static com.buaa.pojo.User.*;
+
 @Mapper
 public interface UserMapper {
     public static final String userTable = "user";
-    @Insert("insert into user(u_nickname,u_name,email,password,profile_pic) " +
+    @Insert("insert into user("+USER_ID+","+USER_NICKNAME+","+USER_NAME+","+EMAIL+","+PASSWORD+","+PROFILE_PIC_URL+") " +
             "values(#{uNickname},#{uName},#{email},#{password},#{profilePic})")
     public void insertUser(User user);
 
-    @Select("select * from user where u_name = #{user_name}")
+    @Select("select * from user where "+USER_NAME+" = #{user_name}")
     public User selectUserByName(String user_name);
 
-    @Update("update user set u_nickname = #{uNickname}, profile_pic = #{profilePicUrl}, u_name = #{uName}, email = #{email} , password = #{password}" +
+    @Update("update user set "+USER_NICKNAME+" = #{uNickname}, "+PROFILE_PIC_URL+" = #{profilePicUrl}, "+USER_NAME+" = #{uName}, "+EMAIL+" = #{email} , "+PASSWORD+" = #{password}" +
             "where u_name = #{uName}")
     public User updateUserInfo(String nameOfUserToUpdate,User newUserInfo);
 

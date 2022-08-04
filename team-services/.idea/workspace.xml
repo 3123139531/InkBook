@@ -6,6 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="10da0693-3d43-4827-8f7b-4af77cae9510" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/buaa/mapper/TeamMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/mapper/TeamMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/buaa/mapper/TeamMemberMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/mapper/TeamMemberMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/buaa/mapper/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/mapper/UserMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/buaa/pojo/Team.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/pojo/Team.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/buaa/pojo/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/buaa/pojo/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
