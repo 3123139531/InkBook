@@ -12,7 +12,8 @@
         </div>
         <div class="Link">
           <span class="Prototype">
-            项目原型
+            <a href="https://wozhishilaonanhai.github.io/dragUI/unpackage/dist/build/h5/index.html#/"
+               target="_blank" style="color: black">项目原型</a>
           </span>
           <a href="https://online.visual-paradigm.com/cn/diagrams/features/uml-tool/"
              target="_blank" class="UML-link">绘制UML</a>
