@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/projects")
+@CrossOrigin
 public class ProjectController {
 
     @Autowired

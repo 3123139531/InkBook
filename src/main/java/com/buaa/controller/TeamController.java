@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 @Api(tags = "团队管理")
 @RestController
+@CrossOrigin
 public class TeamController {
     @Autowired
     TeamService teamService;

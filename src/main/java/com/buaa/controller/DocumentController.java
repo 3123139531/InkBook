@@ -4,10 +4,7 @@ package com.buaa.controller;
 import com.buaa.pojo.Document;
 import com.buaa.service.DocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +12,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/documents")
+@CrossOrigin
 public class DocumentController {
     @Autowired
     private DocumentService documentService;
