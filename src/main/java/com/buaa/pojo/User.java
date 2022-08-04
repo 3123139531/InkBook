@@ -12,5 +12,5 @@ public class User {
     private String uName;
     private String email;
     private String password;
-    private Byte[] profilePic;
+    private String profilePic;
 }
