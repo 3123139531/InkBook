@@ -24,7 +24,7 @@
           </svg>
           <div style="font-size: 14px; font-weight: bold">项目</div>
         </div>
-        <el-button type="primary" round class="Cancellation">注销</el-button>
+        <el-button type="primary" round class="Cancellation" @click="Quit">注销</el-button>
       </el-aside>
       <el-container>
         <el-main class="Main">
@@ -170,7 +170,7 @@ import { ElMessage } from 'element-plus'
 export default {
   data () {
     return {
-      account: '',
+      account: 1,
       info : {
         username : "wzszs",
         account : "3123139531",
@@ -209,13 +209,13 @@ export default {
   methods: {
     init () {
       this.account = this.$route.params.account;
-      // this.$axios.get("/team", {
-      //   params: {
-      //
-      //   }
-      // }).then(function (response) {
-      //   console.log(response);
-      // });
+      this.$axios.get(("/team/"), {
+        params: {
+          u_id : this.account
+        }
+      }).then(function (response) {
+        console.log(response);
+      });
     },
     showPersonalInfo () {
       // this.$axios.get("/user/info", {
@@ -238,13 +238,13 @@ export default {
       this.option = 2;
     },
     showProject () {
-      // this.$axios.get("/projects/doing/{tid}", {
-      //   params: {
-      //
-      //   }
-      // }).then(function (response) {
-      //   console.log(response);
-      // });
+      this.$axios.get("projects/doing", {
+        params: {
+          tid: 1
+        }
+      }).then(function (response) {
+        console.log(response);
+      });
       this.option = 3;
     },
     Submit () {
@@ -341,6 +341,18 @@ export default {
         //   console.log(response);
         // });
       }
+    },
+    Quit () {
+      ElMessage({
+        message: '退出登录',
+        type: 'success',
+      })
+      this.$router.push({
+        name: 'Login',
+        params: {
+
+        }
+      })
     }
   }
 }

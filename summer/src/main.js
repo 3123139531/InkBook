@@ -16,4 +16,4 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 
 app.config.globalProperties.$axios = axios;
-axios.defaults.baseURL="/"
+axios.defaults.baseURL="http://101.42.246.11/"

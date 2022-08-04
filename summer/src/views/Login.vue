@@ -1,4 +1,5 @@
 <template>
+  <img src="../assets/bgimg.png" class="background-img">
   <div class="login" >
     <el-form
         ref="loginForm"
@@ -8,7 +9,7 @@
         label-width="0px"
         class="login-form"
     >
-      <h3 class="title">欢迎使用</h3>
+      <h3 class="title">欢迎使用墨书</h3>
       <el-form-item prop="username">
         <el-input
             v-model="loginForm.username"
@@ -54,6 +55,8 @@
 // 加密
 // import { encrypt } from '@/utils/rsaEncrypt'
 // import Cookies from 'js-cookie'
+
+import {ElMessage} from "element-plus";
 
 export default {
   name: 'Login',
@@ -119,10 +122,23 @@ export default {
             Cookies.remove('password')
             Cookies.remove('rememberMe')
           }
-          // 模拟登录成功
-          console.log('登录成功')
+          ElMessage({
+            message: '登录成功',
+            type: 'success',
+          })
+          setTimeout(
+              this.$router.push({
+                name: 'Homepage',
+                params: {
+                  account : this.loginForm.uuid
+                }
+              }), 1000
+          )
         } else {
-          console.log('error submit!!')
+          ElMessage({
+            message: '登录失败',
+            type: 'info',
+          })
           return false
         }
       })
@@ -144,65 +160,73 @@ export default {
 </script>
 
 <style scoped rel="stylesheet/scss" lang="scss">
-  .login {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    background-size: cover;
-  }
-  .title {
-    margin: 0 auto 30px auto;
-    text-align: center;
-    color: #707070;
-  }
+.background-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.login {
+  position: relative;
+  top: 10px;
+  display: inline-block;
+  align-items: center;
+  background: white;
+  border-radius: 6px;
+  margin-top: 100px;
+}
+.title {
+  margin: 0 auto 30px auto;
+  text-align: center;
+  color: #707070;
+}
 
-  .login-form {
-    border-radius: 6px;
-    border: 1px black solid;
-    background: #ffffff;
-    width: 385px;
-    padding: 25px 25px 5px 25px;
-    margin-top: 100px;
-    .el-input {
-      height: 38px;
-      input {
-        height: 38px;
-      }
-    }
-    .input-icon {
-      height: 39px;
-      width: 14px;
-      margin-left: 2px;
-    }
-  }
-  .login-tip {
-    font-size: 13px;
-    text-align: center;
-    color: #bfbfbf;
-  }
-  .login-code {
-    width: 33%;
-    display: inline-block;
+.login-form {
+  border-radius: 6px;
+  border: 1px black solid;
+  background: #ffffff;
+  width: 385px;
+  padding: 25px 25px 5px 25px;
+  .el-input {
     height: 38px;
-    //float: right;
-    img {
-      cursor: pointer;
-      vertical-align: middle;
+    input {
+      height: 38px;
     }
   }
-  .register {
-    margin: 0 auto;
-    color: rgb(24, 144, 255);
+  .input-icon {
+    height: 39px;
+    width: 14px;
+    margin-left: 2px;
   }
-  a {
-    color: #1890ff;
-    text-decoration: none;
-    background-color: transparent;
-    outline: none;
+}
+.login-tip {
+  font-size: 13px;
+  text-align: center;
+  color: #bfbfbf;
+}
+.login-code {
+  width: 33%;
+  display: inline-block;
+  height: 38px;
+  //float: right;
+  img {
     cursor: pointer;
-    transition: color 0.3s;
+    vertical-align: middle;
   }
+}
+.register {
+  margin: 0 auto;
+  color: rgb(24, 144, 255);
+}
+a {
+  color: #1890ff;
+  text-decoration: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  transition: color 0.3s;
+}
 
 </style>
 

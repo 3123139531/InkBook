@@ -1,10 +1,11 @@
 <template>
+  <img src="../assets/bgimg3.png" class="background-img">
   <div class="page-register">
     <article class="header">
       <header>
-        <el-avatar icon="el-icon-user-solid" shape="circle"></el-avatar>
+        <div class="title" style="color: rgb(40, 40, 40);">注册墨书</div>
         <span class="login">
-          <em class="bold">已有账号？</em>
+          <em class="bold" style="color: rgb(40, 40, 40)">已有账号？</em>
           <a href="/#/">
             <el-button type="primary" size="small">登录</el-button>
           </a>
@@ -26,7 +27,7 @@
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="ruleForm.email" />
-<!--          <el-button size="mini" round @click="sendMsg">发送验证码</el-button>-->
+          <!--          <el-button size="mini" round @click="sendMsg">发送验证码</el-button>-->
           <span class="status">{{ statusMsg }}</span>
         </el-form-item>
         <el-form-item label="真实姓名" prop="name">
@@ -44,7 +45,7 @@
       <el-button
           type="primary"
           @click="register"
-      >同意以下协议并注册
+      >点击注册
       </el-button>
       <div class="error">{{ error }}</div>
     </div>
@@ -52,6 +53,8 @@
 </template>
 
 <script>
+
+import {ElMessage} from "element-plus";
 
 export default {
   data() {
@@ -123,53 +126,14 @@ export default {
   },
   layout: 'blank',
   methods: {
-    sendMsg: function() {
-      const self = this
-      let namePass
-      let emailPass
-      if (self.timerid) {
-        return false
-      }
-      this.$refs['ruleForm'].validateField('name', (valid) => {
-        namePass = valid
-      })
-      self.statusMsg = ''
-      if (namePass) {
-        return false
-      }
-      this.$refs['ruleForm'].validateField('email', (valid) => {
-        emailPass = valid
-      })
-      // 模拟验证码发送
-      if (!namePass && !emailPass) {
-        let count = 60
-        self.statusMsg = `验证码已发送,剩余${count--}秒`
-        self.timerid = setInterval(function() {
-          self.statusMsg = `验证码已发送,剩余${count--}秒`
-          if (count === 0) {
-            clearInterval(self.timerid)
-          }
-        }, 1000)
-      }
-    },
-
-    next: function() {
-      if (this.active === 0) {
-        this.$refs['ruleForm'].validateField('agreed', (valid) => {
-          if (valid === '') {
-            this.active++
-          }
-        })
-      }
-    },
-    prev: function() {
-      if (--this.active < 0) this.active = 0
-    },
-
     // 模拟登录
     register: function() {
       this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
+          ElMessage({
+            message: '注册成功',
+            type: 'success',
+          });
           setTimeout(
               this.$router.push({
               }), 2000
@@ -182,7 +146,21 @@ export default {
 </script>
 
 <style scoped rel="stylesheet/scss" lang="scss">
+.background-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 .page-register {
+  position: relative;
+  top: 10px;
+  display: inline-block;
+  height: 500px;
+  border-radius: 10px;
+  margin-top: 50px;
+  color: white;
   .header {
     min-width: 980px;
     color: #666;
@@ -190,20 +168,25 @@ export default {
       margin: 0 auto;
       padding: 10px 0;
       width: 980px;
-
+      .title {
+        font-size: 24px;
+        font-weight: 700;
+        text-align: center;
+      }
       .login {
         float: right;
       }
-
       .bold {
         font-style: normal;
       }
     }
   }
-  .register {
-    display: inline-block;
-    float: right;
-    color: #1890ff;
+  .demo-ruleForm {
+    background: white;
+    margin: 20px auto;
+    border: 1px black solid;
+    padding: 20px 20px 0 0;
+    border-radius: 10px;
   }
   a {
     color: #1890ff;
@@ -216,9 +199,8 @@ export default {
   > section {
     margin: 0 auto 30px;
     padding-top: 30px;
-    width: 980px;
+    width: 580px;
     min-height: 300px;
-    padding-right: 550px;
     box-sizing: border-box;
     .status {
       font-size: 12px;
