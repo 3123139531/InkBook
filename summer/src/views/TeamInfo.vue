@@ -304,7 +304,8 @@ export default {
     height: 205px;
     border: 1px black solid;
     border-radius: 20px;
-    background: rgba(200, 200, 200, 0.5);
+    background: white;
+    /*background: rgba(200, 200, 200, 0.5);*/
   }
 
   .TeamImg {
@@ -359,7 +360,8 @@ export default {
     border: 1px black solid;
     border-radius: 20px;
     margin-top: 10px;
-    background: rgba(200, 200, 200, 0.5);
+    background: white;
+    /*background: rgba(200, 200, 200, 0.5);*/
   }
 
   .MemDetail {

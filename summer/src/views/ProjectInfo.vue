@@ -160,7 +160,8 @@ export default {
     height: 105px;
     border: 1px black solid;
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.2);
+    background: white;
+    /*background: rgba(255, 255, 255, 0.2);*/
   }
 
   .ProjectImg {
@@ -208,17 +209,12 @@ export default {
     border-radius: 5px;
     font-size: 18px;
     color: black;
-    background: rgba(144, 144, 144, 0.5);
     transition: 0.5s;
-  }
-
-  .UML-link {
-
   }
 
   .Prototype:hover,
   .UML-link:hover {
-    color: whitesmoke;
+    background: rgba(144, 144, 144, 0.5);
   }
 
   .ProjectMain {
@@ -227,7 +223,8 @@ export default {
     border: 1px black solid;
     border-radius: 20px;
     margin-top: 10px;
-    background: rgba(255, 255, 255, 0.2);
+    background: white;
+    /*background: rgba(255, 255, 255, 0.2);*/
   }
 
   .toHomepageBtn {

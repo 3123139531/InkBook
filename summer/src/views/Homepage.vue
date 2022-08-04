@@ -368,9 +368,10 @@ export default {
   .Aside {
     margin-right: 3px;
     width: 100px;
-    box-shadow: 5px 0px 5px #888888;
+    box-shadow: 5px 0 5px #888888;
     border: 1px solid black;
-    background: rgba(255, 255, 255, 0.4);
+    background: white;
+    /*background: rgba(255, 255, 255, 0.4);*/
     color: black;
   }
 
@@ -399,7 +400,6 @@ export default {
   .Aside .Enterprise:hover,
   .Aside .Project:hover {
     background: rgba(144, 144, 144, 0.4);
-    color: ghostwhite;
   }
 
   .Aside .Cancellation {
@@ -408,7 +408,8 @@ export default {
 
   .Main {
     height: 680px;
-    background: rgba(255, 255, 255, 0.4);
+    background: white;
+    /*background: rgba(255, 255, 255, 0.4);*/
   }
 
   .Main .Header {
@@ -444,7 +445,9 @@ export default {
     width: 50%;
     margin-top: 100px;
     margin-right: 50px;
+    border: 1px grey solid;
     border-radius: 5px;
+    box-shadow: 5px 5px 10px #888888;
     padding-top: 10px;
     padding-right: 20px;
     color: black;
@@ -529,12 +532,9 @@ export default {
     border: 2px black solid;
     border-radius: 31px;
     transition: 0.5s;
-    background: rgba(144, 144, 144, 0.5);
-    color: whitesmoke;
   }
 
   .changeBtn:hover{
-    color: black;
-    background: rgba(240, 255, 255, 0.5);
+    background: rgba(144, 144, 144, 0.5);
   }
 </style>
