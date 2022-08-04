@@ -199,6 +199,8 @@ export default {
   },
   methods : {
     init () {
+      this.userAccount = this.$route.params.userAccount;
+      this.teamId = this.$route.params.teamId;
       // this.$axios.get("/team/{team_id}", {
       //   params: {
       //     team_id : this.teamId

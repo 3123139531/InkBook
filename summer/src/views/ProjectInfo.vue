@@ -1,5 +1,4 @@
 <template>
-  <link rel="stylesheet" type="text/css" href="../style/ProjectInfo.css">
   <img src="../assets/bgimg2.png" class="background-img">
   <div class="ProjectInfo">
     <el-container>
@@ -8,7 +7,7 @@
         <div class="ProjectIntro">
           <div class="ProjectName">
             <span>项目名：</span>
-            <span style="font-weight: 700">{{Project.name}}</span>
+            <span style="font-weight: 700">{{project.name}}</span>
           </div>
         </div>
         <div class="Link">
@@ -60,8 +59,8 @@ export default {
       userAccount: '2',
       userIdentity: '管理员',
 
-      ProjectId: '1',
-      Project : {
+      projectId: '1',
+      project : {
         name: "六轮车",
         setTime: "2022-08-01",
         remark: "听我说谢谢你",
@@ -83,7 +82,7 @@ export default {
   },
   methods : {
     init () {
-
+      this.ProjectId = this.$route.params.id;
     },
     delProject () {
       ElMessage({
@@ -92,7 +91,7 @@ export default {
       });
 
       this.$axios.delete("/projects/{pid}", {
-        pid : this.ProjectId
+        pid : this.projectId
       }).then(function (response) {
         console.log(response);
       })
@@ -108,12 +107,12 @@ export default {
       this.dialogFormVisible = true;
     },
     RenamePro () {
-      this.Project.name = this.newName;
+      this.project.name = this.newName;
       this.dialogFormVisible = false;
       this.newName = '';
 
       this.$axios.put("/projects/", {
-        pid : this.ProjectId,
+        pid : this.projectId,
         pName : this.newName
       }).then(function (response) {
         console.log(response);
@@ -132,8 +131,6 @@ export default {
 </script>
 
 <style scoped>
-  /*@import "../style/ProjectInfo.css";*/
-
   a {
     font-style: normal;
     text-decoration: none;

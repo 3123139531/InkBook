@@ -208,6 +208,7 @@ export default {
   },
   methods: {
     init () {
+      this.account = this.$route.params.account;
       // this.$axios.get("/team", {
       //   params: {
       //
