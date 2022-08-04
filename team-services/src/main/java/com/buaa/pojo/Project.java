@@ -7,5 +7,5 @@ public class Project {
     private int pid;
     private int tid;
     private String status;
-    private String pname;
+    private String pName;
 }

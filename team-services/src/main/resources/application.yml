@@ -1,16 +1,13 @@
 server:
   port: 80
+
 spring:
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-#      url: jdbc:mysql://localhost:3306/jdbc-test?serverTimezone=UTC
-      url: jdbc:mysql://localhost:3306/mydbtest?serverTimezone=UTC
+      url: jdbc:mysql://101.42.246.11:3306/se?serverTimezone=UTC
       username: root
-#      password: mysql182469
-      password: 1234
-  main:
-    banner-mode: off
+      password: mysql
 
 mybatis-plus:
   global-config:
@@ -19,3 +16,11 @@ mybatis-plus:
   configuration:
     #    日志信息（便于调试）
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+cos:
+  baseUrl: https://ljx-bucket-1310587083.cos.ap-beijing.myqcloud.com
+  accessKey: AKID61g5F8k59wRfcIhqiIbdPu85lAI9j26t
+  secretKey: Yp9G94k9IBpDKCo9D1YonWyA5j6D3cv1
+  regionName: ap-beijing
+  bucketName: ljx-bucket-1310587083
+  folderPrefix: /files

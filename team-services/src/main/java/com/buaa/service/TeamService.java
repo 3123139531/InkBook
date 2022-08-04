@@ -3,6 +3,8 @@ package com.buaa.service;
 import com.buaa.pojo.Team;
 import com.buaa.pojo.User;
 
+import javax.swing.text.Position;
+
 public interface TeamService {
     public Team selectTeamById(int id);
 
@@ -17,6 +19,8 @@ public interface TeamService {
     //TODO: select teams user is in
     public Team[] getUserTeams(User user);
     //TODO: change/ update member position
+    public void updateTeamMemberPosition(Team team, User user, int position);
+
     //TODO: select team members
     public User[] getTeamMembers(Team team);
 }

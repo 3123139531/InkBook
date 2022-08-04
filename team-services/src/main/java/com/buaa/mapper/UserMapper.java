@@ -16,6 +16,12 @@ public interface UserMapper {
     @Select("select * from user where u_name = #{user_name}")
     public User selectUserByName(String user_name);
 
+    @Update("update user set u_nickname =  #{uNickname}, profile_pic = #{profilePicUrl} where u_name = #{uName}")
+    public User updateUserInfo(String nameOfUserToUpdate,User newUserInfo);
+
     @Update("update user set u_nickname = #{uNickname} where u_name = #{uName}")
     public User updateUserNickname(User user);
+
+    @Update("update user set profile_pic = #{profilePicUrl} where u_name = #{uName}")
+    public User updateUserProfilePic(User user);
 }

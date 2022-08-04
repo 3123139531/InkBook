@@ -13,18 +13,31 @@ import java.util.List;
 @Mapper
 public interface ProjectMapper extends BaseMapper<Project> {
 
-    @Select("select * from project where pid = #{id}")
+
+    @Select("select * from project where p_id = #{id}")
     Project getProjectById(int id);
 
-    @Select("select * from project where tid = #{id}")
+    @Select("select * from project where t_id = #{id}")
     List<Project> getProjectByTeam(int id);
 
-    @Select("select * from project where pname = #{name}")
+    @Select("select * from project where p_name = #{name}")
     Project getProjectByPName(String name);
 
-    @Update("update project set pname = #{pname} where pid = #{pid}")
+    @Select("select * from project where p_name like '%#{pName}%'")
+    List<Project> getProjectLike(Project project);
+
+    @Update("update project set p_name = #{pName} where p_id = #{pid}")
     void updateProjectName(Project project);
 
-    @Insert("insert into project (tid, pname) values (#{tid}, #{pname})")
+    @Insert("insert into project (t_id, p_name) values (#{tid}, #{pName})")
     void insertProject(Project project);
+
+    @Select("select * from project where t_id = #{tid} and p_name = #{pName}")
+    Project checkNameRepeat(Project project);
+
+    @Select("select * from project where t_id = #{tid} and status = #{status}")
+    List<Project> getProjectByStatus(Project project);
+
+    @Update("update project set status = #{status} where p_id = #{pid}")
+    void updateStatus(Project project);
 }

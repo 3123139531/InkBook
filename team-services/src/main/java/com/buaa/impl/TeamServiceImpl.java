@@ -8,6 +8,8 @@ import com.buaa.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.Position;
+
 @Service
 public class TeamServiceImpl implements TeamService {
     @Autowired
@@ -40,7 +42,12 @@ public class TeamServiceImpl implements TeamService {
     public Team[] getUserTeams(User user){
         return teamMemberMapper.selectTeamsByUserId(user);
     }
+
     //TODO: change/ update member position
+    public void updateTeamMemberPosition(Team team, User user, int position) {
+        teamMemberMapper.updateMemberPositionInTeam(team,user,position);
+    }
+
     //TODO: select team members
     public User[] getTeamMembers(Team team){
         return teamMemberMapper.selectMembersByTeam(team);
