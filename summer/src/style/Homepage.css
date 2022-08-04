@@ -1,0 +1,195 @@
+/*
+不知道为什么，引入外部css会出问题，所以实际上css都是写在vue文件的<style></style>里面的，
+这几个css文件就作为副本了
+ */
+
+.background-img {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    margin-left: -50%;
+}
+
+.Homepage {
+    position: relative;
+    top: 10px;
+    display: block;
+    height: 700px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.Aside {
+    margin-right: 3px;
+    width: 100px;
+    box-shadow: 5px 0px 5px #888888;
+    border: 1px solid black;
+    background: rgba(255, 255, 255, 0.4);
+    color: black;
+}
+
+.Aside .Portrait {
+    margin-bottom: 20px;
+}
+
+.Aside .portrait {
+    display: block;
+    width: 80px;
+    height: 80px;
+    border-radius: 40px;
+    margin: 20px auto 50px;
+}
+
+.Aside .Personal, .Enterprise, .Project {
+    height: 55px;
+    width: 60px;
+    padding-top: 20px;
+    margin: 15px auto auto auto;
+    border-radius: 5px;
+    transition: 0.5s;
+}
+
+.Aside .Personal:hover,
+.Aside .Enterprise:hover,
+.Aside .Project:hover {
+    background: rgba(144, 144, 144, 0.4);
+    color: ghostwhite;
+}
+
+.Aside .Cancellation {
+    margin-top: 220px;
+}
+
+.Main {
+    height: 680px;
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.Main .Header {
+    height: 50px;
+    line-height: 50px;
+    font-size: 26px;
+    font-weight: 700;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.4);
+    border-bottom: 2px black dotted;
+}
+
+.PersonalInfo,
+.PersonalEnterprises,
+.PersonalProjects {
+    position: relative;
+    width: 99%;
+    height: 99%;
+    border: 2px black solid;
+}
+
+.PersonalInfo .portrait {
+    position: absolute;
+    left: 150px;
+    top: 200px;
+    width: 160px;
+    height: 160px;
+    border-radius: 80px;
+}
+
+.PersonalInfo .Format {
+    display: inline-block;
+    width: 50%;
+    margin-top: 100px;
+    margin-right: 50px;
+    border-radius: 5px;
+    padding-top: 10px;
+    padding-right: 20px;
+    color: black;
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.PersonalInfo .PersonalPortrait {
+    display: inline-block;
+    float: left;
+    width: 30%;
+}
+
+.changePortraitBtn {
+    position: absolute;
+    left: 185px;
+    top: 400px;
+}
+
+.changeInfoBtn {
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.divisionBox {
+    display: inline-block;
+    float: left;
+    margin: 20px;
+    width: 21%;
+    height: 140px;
+    border-radius: 10px;
+    border: black solid;
+    text-align: left;
+    transition: 0.5s;
+    background: lightcyan;
+}
+
+.innerChar {
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 27px;
+}
+
+.newBox {
+    display: inline-block;
+    float: left;
+    margin: 20px;
+    width: 20%;
+    height: 140px;
+    border-radius: 10px;
+    border: black solid;
+    text-align: left;
+    transition: 0.5s;
+    background: rgba(144, 144, 144, 0.4);
+}
+
+.newBox .plusIcon {
+    display: block;
+    width: 50px;
+    height: 50px;
+    margin: 20px auto;
+}
+
+.newBox .plusChar {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.divisionBox:hover,
+.newBox:hover {
+    box-shadow: 5px 5px 20px;
+}
+
+.changeBtn {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    width: 62px;
+    height: 62px;
+    border: 2px black solid;
+    border-radius: 31px;
+    transition: 0.5s;
+    background: rgba(144, 144, 144, 0.5);
+    color: whitesmoke;
+}
+
+.changeBtn:hover{
+    color: black;
+    background: rgba(240, 255, 255, 0.5);
+}
