@@ -20,4 +20,8 @@ public class UserServiceImpl implements UserService {
     public User findUserByName(String username){
         return userMapper.selectUserByName(username);
     }
+
+    public void updateUserInfo(String nameOfUserToUpdate, User newUserInfo) {
+        userMapper.updateUserInfo(nameOfUserToUpdate,newUserInfo);
+    }
 }
