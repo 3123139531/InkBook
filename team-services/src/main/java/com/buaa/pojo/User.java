@@ -3,8 +3,9 @@ package com.buaa.pojo;
 import lombok.Data;
 import org.springframework.stereotype.Repository;
 
-@Data
+//@Data
 @Repository
+@Data
 public class User {
     public static final String USER_ID = "u_id";
     public static final String USER_NICKNAME = "u_Nickname";
@@ -18,5 +19,5 @@ public class User {
     private String uName;
     private String email;
     private String password;
-    private String profilePicUrl;
+    private String profilePic;
 }

@@ -5,9 +5,11 @@ spring:
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://101.42.246.11:3306/se?serverTimezone=UTC
+#      url: jdbc:mysql://101.42.246.11:3306/se?serverTimezone=UTC
+      url: jdbc:mysql://localhost:3306/mydbtest?serverTimezone=UTC
       username: root
-      password: mysql
+#      password: mysql
+      password: 1234
 
 mybatis-plus:
   global-config:

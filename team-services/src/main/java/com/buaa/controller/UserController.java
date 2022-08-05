@@ -52,6 +52,9 @@ public class UserController {
         User tryRegisterUser = userService.findUserByName(user.getUName());
         if(tryRegisterUser != null){
 //            throw new Exception("User already exists");
+            R r = new R();
+            r.setData("this username is taken");
+            r.setFlag(false);
             return new R();
         }
         else {
@@ -75,24 +78,29 @@ public class UserController {
 //        user.setPassword(password);
         //find user by name
         User tryLoginUser = userService.findUserByName(user.getUName());
+        R r = new R();
         if(tryLoginUser != null) {
             //if found check password
             if(tryLoginUser.getPassword().equals(user.getPassword())){
                 //login success
                 session.setAttribute("username",user.getUName());
-                R r = new R();
-                r.setData(userService.insertRegisteredUser(tryLoginUser));
+
+                r.setData(userService.findUserByName(tryLoginUser.getUName()));
                 r.setFlag(true);
                 return r;
             }
             else{
                 //output incorrect password
-                throw new Exception("Incorrect Password");
+                r.setData("incorrect password");
+                r.setFlag(false);
+                return r;
             }
         }
         else{
             //if not output: user doesn't exist
-            throw new Exception("User doesn't exist");
+            r.setData("user doesn't exist");
+            r.setFlag(false);
+            return r;
         }
     }
 
