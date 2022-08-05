@@ -49,10 +49,10 @@
               <el-form-item label="用户名" class="Form-line">
                 <el-input v-model="info.uname" />
               </el-form-item>
-              <el-form-item label="姓名">
+              <el-form-item label="姓名" class="Form-line">
                 <el-input v-model="info.unickname" />
               </el-form-item>
-              <el-form-item label="邮箱">
+              <el-form-item label="邮箱" class="Form-line">
                 <el-input v-model="info.email" />
               </el-form-item>
               <el-form-item>
@@ -231,8 +231,11 @@ export default {
         params: {
           user_name : this.account
         }
-      }).then(function (response) {
-        console.log(response);
+      }).then(response=> {
+        this.teams = response.data.data;
+        this.numTeams = this.teams.length;
+        // console.log(this.teams)
+        // console.log(this.numTeams)
       });
       this.option = 2;
     },
@@ -436,6 +439,11 @@ export default {
     border: 2px black solid;
   }
 
+  .Form-line {
+    padding-top: 10px;
+    padding-right: 10px;
+  }
+
   .PersonalInfo .portrait {
     position: absolute;
     left: 150px;
@@ -471,6 +479,8 @@ export default {
   }
 
   .changeInfoBtn {
+    width: 80px;
+    height: 30px;
     margin-top: 10px;
     margin-right: 10px;
   }
