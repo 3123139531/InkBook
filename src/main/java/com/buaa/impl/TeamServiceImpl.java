@@ -1,6 +1,7 @@
 package com.buaa.impl;
 
 import com.buaa.pojo.Team;
+import com.buaa.pojo.TeamMember;
 import com.buaa.pojo.User;
 import com.buaa.mapper.TeamMapper;
 import com.buaa.mapper.TeamMemberMapper;
@@ -22,18 +23,35 @@ public class TeamServiceImpl implements TeamService {
     public Team[] createTeam(Team team, User creator){
         teamMapper.insertTeam(team);
         //TODO add self as team creator,position=3
-        teamMemberMapper.insertTeamMember(team,creator,3);
+        int tid = team.getTid();
+        int uid = creator.getUId();
+        TeamMember teamCreator = new TeamMember();
+        teamCreator.setTId(tid);
+        teamCreator.setUId(uid);
+        teamCreator.setPosition(3);
+        teamMemberMapper.insertTeamMember(teamCreator);
         return teamMapper.selectAllTeam();
     }
 
     //TODO: invite/ add member
     public void addTeamMember(Team team, User user){
-        teamMemberMapper.insertTeamMember(team,user,1);
+        int tid = team.getTid();
+        int uid = user.getUId();
+        TeamMember newTeamMember = new TeamMember();
+        newTeamMember.setTId(tid);
+        newTeamMember.setUId(uid);
+        newTeamMember.setPosition(1);
+        teamMemberMapper.insertTeamMember(newTeamMember);
     }
 
     //TODO: remove/ delete member
     public void removeTeamMember(Team team,User user){
-        teamMemberMapper.deleteTeamMember(team,user);
+        int tid = team.getTid();
+        int uid = user.getUId();
+        TeamMember memberToDelete = new TeamMember();
+        memberToDelete.setTId(tid);
+        memberToDelete.setUId(uid);
+        teamMemberMapper.deleteTeamMember(memberToDelete);
     }
 
     //TODO: select teams user is in
@@ -41,6 +59,23 @@ public class TeamServiceImpl implements TeamService {
         return teamMemberMapper.selectTeamsByUserId(user);
     }
     //TODO: change/ update member position
+    public int selectMemberPosition(Team team,User user){
+        int tid = team.getTid();
+        int uid = user.getUId();
+        TeamMember memberToFind = new TeamMember();
+        memberToFind.setTId(tid);
+        memberToFind.setUId(uid);
+        return teamMemberMapper.selectMemberPositionInTeam(memberToFind);
+    }
+    public void updateMemberPosition(Team team,User user, int position){
+        int tid = team.getTid();
+        int uid = user.getUId();
+        TeamMember memberToChange = new TeamMember();
+        memberToChange.setTId(tid);
+        memberToChange.setUId(uid);
+        memberToChange.setPosition(position);
+        teamMemberMapper.updateMemberPositionInTeam(memberToChange);
+    }
     //TODO: select team members
     public User[] getTeamMembers(Team team){
         return teamMemberMapper.selectMembersByTeam(team);

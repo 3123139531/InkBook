@@ -9,10 +9,10 @@ public interface TeamMapper {
     @Select("select * from team")
     public Team[] selectAllTeam();
 
-    @Select("select * from team where t_id = #{id}")
+    @Select("select * from team where t_id = #{tid}")
     public Team selectTeamByID(int id);
 
-    @Insert("INSERT INTO team(t_name) values(#{tName})")
+    @Insert("INSERT INTO team(t_name) values(#{tname})")
     public void insertTeam(Team team);
 
     @Delete("delete")

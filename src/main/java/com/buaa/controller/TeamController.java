@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Api(tags = "团队管理")
 @RestController
@@ -27,8 +30,20 @@ public class TeamController {
         Team team = new Team();
         team.setTid(team_id);
         //return
+        User[] users = teamService.getTeamMembers(team);
+        ArrayList<Map<String,String>> usersList = new ArrayList<>();
+        HashMap<String,String> userInfos = new HashMap<String,String>();
+
+        for (User user: users) {
+            userInfos.put("uname",user.getUName());
+            userInfos.put("uid",String.valueOf(user.getUId()));
+            userInfos.put("unickname",user.getUNickname());
+            userInfos.put("email",user.getEmail());
+            userInfos.put("identity",String.valueOf(teamService.selectMemberPosition(team,user)));
+            usersList.add(userInfos);
+        }
         R r = new R();
-        r.setData(teamService.getTeamMembers(team));
+        r.setData(usersList);
         r.setFlag(true);
         return r;
     }
@@ -75,8 +90,8 @@ public class TeamController {
 
 
     @ApiOperation(value = "创建团队")
-    @PostMapping("/team/{user_name}/")
-    public R insertTeam(@RequestBody Team team, @PathVariable("user_name") String username){
+    @PostMapping("/team/{user_name}")
+    public R createTeam(@PathVariable("user_name") String username, @RequestBody Team team){
 
         User creator = userService.findUserByName(username);
 
@@ -96,7 +111,7 @@ public class TeamController {
 //    }
 
     @ApiOperation(value = "邀请用户加入团队")
-    @PostMapping("/team/{team_id}")
+    @PostMapping("/team/{team_id}/")
     public void inviteUserToTeam(@PathVariable("team_id") int t_id,@RequestBody User user){
         Team team = teamService.selectTeamById(t_id);
         teamService.addTeamMember(team,user);
@@ -110,10 +125,34 @@ public class TeamController {
 //        teamService.removeTeamMember(team,user);
 //    }
 
+//    @ApiOperation(value = "团队移除用户")
+//    @DeleteMapping("/team/{team_id}")
+//    public void removeUserFromTeam(@PathVariable("team_id") int t_id,@RequestBody User user){
+//        Team team = teamService.selectTeamById(t_id);
+//        teamService.removeTeamMember(team,user);
+//    }
+
     @ApiOperation(value = "团队移除用户")
-    @DeleteMapping("/team/{team_id}")
-    public void removeUserFromTeam(@PathVariable("team_id") int t_id,@RequestBody User user){
+    @DeleteMapping("/team/{team_id}/members/{kicker_username}")
+    public void removeUserFromTeam(@PathVariable("team_id") int t_id,@PathVariable("kicker_username") String kickerUsername,@RequestBody User userToKick){
         Team team = teamService.selectTeamById(t_id);
-        teamService.removeTeamMember(team,user);
+        User kicker = userService.findUserByName(kickerUsername);
+        int kickerPosition = teamService.selectMemberPosition(team,kicker);
+        int userToKickPosition = teamService.selectMemberPosition(team,userToKick);
+        if(kickerPosition >=2 && kickerPosition>userToKickPosition) {
+            teamService.removeTeamMember(team, userToKick);
+        }
     }
+
+    @ApiOperation(value = "修改团队成员权限")
+    @PutMapping("/team/{team_id}/members/{changer_username}")
+    public void changeUserPosition(@PathVariable("team_id") int t_id,@PathVariable("changer_username") String changerUsername,@RequestBody User userToChange,@RequestParam("target_position") int targetPosition){
+        Team team = teamService.selectTeamById(t_id);
+        User changer = userService.findUserByName(changerUsername);
+        int changerPosition = teamService.selectMemberPosition(team,changer);
+        if(changerPosition>=2 && targetPosition<3) {
+            teamService.updateMemberPosition(team, userToChange, targetPosition);
+        }
+    }
+
 }

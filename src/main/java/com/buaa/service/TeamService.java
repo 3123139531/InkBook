@@ -17,6 +17,8 @@ public interface TeamService {
     //TODO: select teams user is in
     public Team[] getUserTeams(User user);
     //TODO: change/ update member position
+    public int selectMemberPosition(Team team, User user);
+    public void updateMemberPosition(Team team, User user, int position);
     //TODO: select team members
     public User[] getTeamMembers(Team team);
 }

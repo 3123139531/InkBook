@@ -1,17 +1,20 @@
 package com.buaa.mapper;
 
 import com.buaa.pojo.Team;
+import com.buaa.pojo.TeamMember;
 import com.buaa.pojo.User;
 import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface TeamMemberMapper {
 
-    @Insert("insert into team_member(t_id,u_id,u_position) values(#{uId},#{tid},#{position})")
-    public void insertTeamMember(Team team, User user, int position);
+//    @Insert("insert into team_member(t_id,u_id,u_position) values(#{tid},#{uId},#{position})")
+//    public void insertTeamMember(User user,@Param("tid") int tid,@Param("position") int position);
+    @Insert("insert into team_member(t_id,u_id,u_position) values(#{tId},#{uId},#{position})")
+    public void insertTeamMember(TeamMember teamMember);
 
-    @Delete("delete from team_member where t_id = #{tid} and u_id = #{uId}")
-    public void deleteTeamMember(Team team, User user);
+    @Delete("delete from team_member where t_id = #{tId} and u_id = #{uId}")
+    public void deleteTeamMember(TeamMember teamMember);
 
     @Select("select * from user where u_id in (select u_id from team_member where t_id = #{tid} )")
     public User[] selectMembersByTeam(Team team);
@@ -20,5 +23,8 @@ public interface TeamMemberMapper {
     public Team[] selectTeamsByUserId(User user);
 
     @Update("update team_member set u_position=#{position} where t_id=#{tid} and u_id=#{uId}")
-    public void updateMemberPositionInTeam(Team team,User user, int position);
+    public void updateMemberPositionInTeam(TeamMember teamMember);
+
+    @Select("select position from team_member where t_id=#{tId} and u_id=#{uId}")
+    public int selectMemberPositionInTeam(TeamMember teamMember);
 }
