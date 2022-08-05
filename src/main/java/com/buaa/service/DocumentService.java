@@ -15,5 +15,5 @@ public interface DocumentService {
     boolean setDocumentContent(int did, String content);
     boolean renameDocument(int did, String name);
     List<Document> selectByProject(int pid);
-
+    Document selectByDid(int did);
 }

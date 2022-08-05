@@ -40,12 +40,18 @@ public class DocumentController {
                 null, "文档名称已变更");
     }
 
-    @GetMapping("/{/project/pid}")
+    @GetMapping("//project/{pid}")
     public R selectByProject(@PathVariable int pid) {
         List<Document> documents = documentService.selectByProject(pid);
         Map<String, Object> map = new HashMap<>();
         map.put("documents", documents);
         return new R(true, map, "查询成功");
+    }
+
+    @GetMapping("/{did}")
+    public R selectByDid(@PathVariable int did) {
+        Document document = documentService.selectByDid(did);
+        return new R(true, document, "查询成功");
     }
 //    @PostMapping("/createDocument")
 //    public Map<String,Object> createDocument(@RequestBody Map<String,String> map){

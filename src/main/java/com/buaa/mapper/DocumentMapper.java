@@ -25,4 +25,7 @@ public interface DocumentMapper extends BaseMapper<Document> {
 
     @Select("select * from document where d_pid = #{pid}")
     List<Document> selectByProject(int pid);
+
+    @Select("select * from document where d_id = #{did}")
+    Document selectByDid(int did);
 }

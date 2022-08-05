@@ -43,6 +43,13 @@ public class DocumentImpl implements DocumentService {
     @Override
     public List<Document> selectByProject(int pid) {
         return documentMapper.selectByProject(pid);
+
+
+    }
+
+    @Override
+    public Document selectByDid(int did) {
+        return documentMapper.selectByDid(did);
     }
 //
 //    @Override
