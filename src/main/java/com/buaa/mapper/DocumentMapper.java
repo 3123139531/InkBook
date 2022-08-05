@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper
 public interface DocumentMapper extends BaseMapper<Document> {
 
-    @Insert("insert into document (t_id, content) values (#{tid}, #{content})")
+    @Insert("insert into document (d_pid, content) values (#{pid}, #{content})")
     void insertDocument(Document document);
 
     @Select("select * from document where d_name = #{name}")
@@ -22,4 +22,7 @@ public interface DocumentMapper extends BaseMapper<Document> {
 
     @Update("update document set d_name = #{name} where d_id = #{did}")
     void updateDocumentName(Document document);
+
+    @Select("select * from document where d_pid = #{pid}")
+    List<Document> selectByProject(int pid);
 }

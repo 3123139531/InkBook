@@ -20,11 +20,11 @@ public class DocumentController {
 
     @PostMapping
     public R createDocument(@RequestBody Document document) {
-        int tid = document.getTid();
+        int pid = document.getPid();
         String name = document.getName();
 //        if(documentService.checkNameRepeat(tid, name))
 //            return new R(false, "项目内已有同名文档，请改名！");
-        return new R(true, documentService.createDocument(tid,name),
+        return new R(true, documentService.createDocument(pid,name),
                 "新文档创建成功！");
     }
 
@@ -38,6 +38,14 @@ public class DocumentController {
     public R renameDocument(@RequestBody Document document) {
         return new R(documentService.renameDocument(document.getDid(), document.getName()),
                 null, "文档名称已变更");
+    }
+
+    @GetMapping("/{/project/pid}")
+    public R selectByProject(@PathVariable int pid) {
+        List<Document> documents = documentService.selectByProject(pid);
+        Map<String, Object> map = new HashMap<>();
+        map.put("documents", documents);
+        return new R(true, map, "查询成功");
     }
 //    @PostMapping("/createDocument")
 //    public Map<String,Object> createDocument(@RequestBody Map<String,String> map){

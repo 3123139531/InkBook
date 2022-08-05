@@ -13,9 +13,9 @@ public class DocumentImpl implements DocumentService {
     private DocumentMapper documentMapper;
 
     @Override
-    public int createDocument(int tid, String name) {
+    public int createDocument(int pid, String name) {
         Document document = new Document();
-        document.setTid(tid);
+        document.setPid(pid);
         document.setName(name);
         documentMapper.insertDocument(document);
         document = documentMapper.getDocumentByName(name);
@@ -38,6 +38,11 @@ public class DocumentImpl implements DocumentService {
         document.setName(name);
         documentMapper.updateDocumentName(document);
         return true;
+    }
+
+    @Override
+    public List<Document> selectByProject(int pid) {
+        return documentMapper.selectByProject(pid);
     }
 //
 //    @Override

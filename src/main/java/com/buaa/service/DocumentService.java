@@ -11,8 +11,9 @@ public interface DocumentService {
 //    void updateDocumentContent(int id, String content);
 //    Document selectById(int id);
 //    List<Document> selectByTeam(int tid);
-    int createDocument(int tid, String name);
+    int createDocument(int pid, String name);
     boolean setDocumentContent(int did, String content);
-    boolean renameDocument(int pid, String name);
+    boolean renameDocument(int did, String name);
+    List<Document> selectByProject(int pid);
 
 }
