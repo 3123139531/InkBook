@@ -47,26 +47,13 @@
             </div>
             <el-form :model="info" label-width="120px" size="large" class="Format">
               <el-form-item label="用户名" class="Form-line">
-                <el-input v-model="info.username" />
+                <el-input v-model="info.uname" />
               </el-form-item>
-              <el-form-item label="账号">
-                <el-input v-model="info.account" />
+              <el-form-item label="姓名" class="Form-line">
+                <el-input v-model="info.unickname" />
               </el-form-item>
-              <el-form-item label="姓名">
-                <el-input v-model="info.name" />
-              </el-form-item>
-              <el-form-item label="邮箱">
+              <el-form-item label="邮箱" class="Form-line">
                 <el-input v-model="info.email" />
-              </el-form-item>
-              <el-form-item label="生日">
-                <el-col :span="11">
-                  <el-date-picker
-                      v-model="$data.info.birthday"
-                      type="date"
-                      placeholder="Pick a date"
-                      style="width: 100%"
-                  />
-                </el-col>
               </el-form-item>
               <el-form-item>
                 <el-button :plain="true" type="primary" @click="Submit" class="changeInfoBtn">确认修改</el-button>
@@ -78,9 +65,9 @@
           <div v-if="option===2" class="PersonalEnterprises">
             <el-header class="Header">所在团队</el-header>
             <div v-for="i in numTeams" :key="i">
-              <div class="divisionBox" @click="toTeamView(i, info.account)">
-                <span class="innerChar">团队名称：{{teams[i-1].EName}}</span>
-                <span class="innerChar">团队编号：{{teams[i-1].id}}</span>
+              <div class="divisionBox" @click="toTeamView(i)">
+                <span class="innerChar">团队名称：{{teams[i-1].tname}}</span>
+                <span class="innerChar">团队编号：{{teams[i-1].tid}}</span>
               </div>
             </div>
             <div class="newBox" @click="addNewTeamBtn">
@@ -172,29 +159,20 @@
 
 <script>
 /* eslint-disable */
+import { thisTypeAnnotation } from '@babel/types';
 import { ElMessage } from 'element-plus'
 import { captureRejectionSymbol } from 'events';
 
 export default {
   data () {
     return {
-      info : {
-        username : "wzszs",
-        account : 3123139531,
-        name : "王振阳",
-        email : "3123139531@qq.com",
-        birthday : "2003.06.08"
-      },
-      teams : [
-        {
-          id: 1,
-          EName: 'A'
-        }
-      ],
+      account : 0,
+      info : {},
+      teams : [],
       projects : [],
       t_projects : [],
       pp : [],
-      numTeams : 1,
+      numTeams : 0,
       numProjects : 0,
       numt_Projects : 0,
       option : 2,
@@ -211,19 +189,38 @@ export default {
   },
   methods: {
     init () {
+      console.log(this.$route)
+      this.account = this.$route.params.ac
+      this.$axios.get('/team/' + this.account
+      ).then(response=> { 
+        this.teams = response.data.data;
+        this.numTeams = this.teams.length;
+      });
     },
     showPersonalInfo () {
+      console.log(this.account)
+      this.$axios.get('/user/info/' + this.account
+      ).then(response=> {
+        this.info = response.data.data
+      })
       this.option = 1;
     },
     showEnterprise () {
+      console.log(this.account)
+      this.$axios.get('/team/' + this.account
+      ).then(response=> { 
+        this.teams = response.data.data;
+        this.numTeams = this.teams.length;
+      });
       this.option = 2;
     },
     showProject () {
+      console.log(this.account)
       if(this.proMod===1){
         this.projects = []
         this.numProjects = 0
         for (let i=0; i<this.numTeams; i++){
-          this.$axios.get('/projects/doing/'+this.teams[i].id
+          this.$axios.get('/projects/doing/'+this.teams[i].tid
           ).then(response =>{
             this.pp = response.data.data
             this.numProjects += response.data.data.length
@@ -237,7 +234,7 @@ export default {
         this.t_projects = []
         this.numt_Projects = 0
         for (let i=0; i<this.numTeams; i++){
-          this.$axios.get('/projects/trash/'+this.teams[i].id
+          this.$axios.get('/projects/trash/'+this.teams[i].tid
           ).then(response =>{
             this.pp = response.data.data
             this.numt_Projects += response.data.data.length
@@ -257,11 +254,11 @@ export default {
     },
     Revoke () {
     },
-    toTeamView (id, account) {
+    toTeamView (id) {
       this.$router.push({
         name: 'team',
         params: {
-          userAccount: account,
+          ac: this.account,
           teamId: id
         }
       })
@@ -271,7 +268,7 @@ export default {
         name: 'project',
         params: {
           p_id: this.projects[id-1].pid,
-          ac: this.info.account
+          ac: this.account
         }
       })
     },
@@ -280,7 +277,7 @@ export default {
         name: 'project',
         params: {
           p_id: this.t_projects[id-1].pid,
-          ac: this.info.account
+          ac: this.account
         }
       })
     },
@@ -323,7 +320,7 @@ export default {
         this.projects = []
         this.numProjects = 0
         for (let i=0; i<this.numTeams; i++){
-          this.$axios.get('/projects/doing/'+this.teams[i].id
+          this.$axios.get('/projects/doing/'+this.teams[i].tid
           ).then(response =>{
             this.pp = response.data.data
             this.numProjects += response.data.data.length
@@ -337,7 +334,7 @@ export default {
         this.t_projects = []
         this.numt_Projects = 0
         for (let i=0; i<this.numTeams; i++){
-          this.$axios.get('/projects/trash/'+this.teams[i].id
+          this.$axios.get('/projects/trash/'+this.teams[i].tid
           ).then(response =>{
             this.pp = response.data.data
             this.numt_Projects += response.data.data.length
@@ -354,10 +351,7 @@ export default {
         type: 'success',
       })
       this.$router.push({
-        name: 'Login',
-        params: {
-
-        }
+        name: 'login',
       })
     }
   }

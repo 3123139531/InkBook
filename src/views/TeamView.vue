@@ -145,6 +145,7 @@ import { Search } from '@element-plus/icons-vue'
 export default {
   data () {
     return {
+      acc: 0,
       userAccount: '2',
       userIdentity: '管理员',
 
@@ -196,7 +197,14 @@ export default {
       dialogVisible : false
     }
   },
+  mounted () {
+    this.init()
+    console.log(this.acc)
+  },
   methods : {
+    init () {
+      this.acc = this.$route.params.ac
+    },
     JurisdictionError () {
       ElMessage.error('您没有此权限');
     },
@@ -204,7 +212,7 @@ export default {
       this.$router.push({
         name : 'home',
         params : {
-          account : this.userAccount
+          account : this.acc
         }
       })
     },
@@ -241,7 +249,7 @@ export default {
       this.$router.push({
         name: 'home',
         params : {
-          account : this.userAccount
+          ac : this.acc
         }
       })
     }
@@ -322,7 +330,7 @@ export default {
   }
 
   .TeamMain {
-    height: 480px;
+    height: 680px;
     overflow: auto;
     border: 1px black solid;
     border-radius: 20px;

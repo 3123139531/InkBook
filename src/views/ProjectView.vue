@@ -31,7 +31,7 @@
       <el-main class="ProjectMain">
         <div style="font:normal 700 20px/30px Georgia, serif;">项目文档</div>
         <div v-for="i in numDocuments" class="ProDoc" :key="i" @click="toFileView(i)">
-          <span class="DocName">{{documents[i-1].name}}</span>
+          <span class="DocName">{{documents[i-1].dname}}</span>
         </div>
         <div class="ProDoc" @click="addNewFileBtn">
           <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" class="plusIcon">
@@ -99,8 +99,8 @@ export default {
       })
       this.$axios.get('/documents/project/'+this.projectId
       ).then(response =>{
-        this.documents = response.data.data
-        this.numDocuments = response.data.data.length
+        this.documents = response.data.data.documents
+        this.numDocuments = response.data.data.documents.length
       })
     },
     delProject () {
@@ -146,7 +146,10 @@ export default {
         pid: this.projectId,
       }).then(response =>{
         console.log(response)
-        this.documents.push({content: '', did: response.data.data, name: this.newFile, pid: this.projectId});
+        console.log(this.newFile)
+        console.log(this.documents)
+        this.documents.push({content: '', did: response.data.data, dname: this.newFile, pid: this.projectId});
+        console.log(this.documents)
         this.numDocuments ++;
         this.addFileDialog = false;
         this.newFile = '';
@@ -156,7 +159,7 @@ export default {
       this.$router.push({
         name: 'home',
         params : {
-          account : this.userAccount
+          ac : this.userAccount
         }
       })
     },
@@ -164,8 +167,10 @@ export default {
       this.$router.push({
         name: 'file',
         params : {
-          account : this.userAccount,
-          d_id : this.documents[id].did,
+          ac : this.userAccount,
+          d_id : this.documents[id-1].did,
+          p_id : this.projectId,
+          p_name : this.project.pname
         }
       })
     }
@@ -258,7 +263,7 @@ export default {
   }
 
   .ProjectMain {
-    height: 580px;
+    height: 780px;
     overflow: auto;
     border: 1px black solid;
     border-radius: 20px;

@@ -7,7 +7,9 @@
         <div class="ProjectIntro">
           <div class="ProjectName">
             <span>文档名：</span>
-            <span style="font-weight: 700">{{document.name}}</span>
+            <span style="font-weight: 700">{{document.dname}}</span>
+            <span style="margin-left:30px" @click="toProjectView">项目名：</span>
+            <span style="font-weight: 700" @click="toProjectView">{{$route.params.p_name}}</span>
           </div>
         </div>
         <div class="ProjectBtn">
@@ -55,15 +57,12 @@ export default {
   data () {
     return {
       contentEditor:"",
-
+      pid: 0,
       userAccount: 0,
       userIdentity: '管理员',
 
       documentId : 0,
-      document : {
-        name : '临时',
-        did : 1
-      },
+      document : {},
 
       newName : '',
       dialogFormVisible : false
@@ -73,7 +72,7 @@ export default {
     this.init();
     console.log(this.$route)
     this.contentEditor = new Vditor("vditor",{
-            height:500,
+            height:690,
             mode:'ir',
             toolbarConfig:{
                 pin:true
@@ -82,19 +81,20 @@ export default {
                 enable:false
             },
             after:()=>{
-                this.contentEditor.setValue("hello,Vditor+Vue!")
+                this.contentEditor.setValue(document.dcontent)
             }
         })
   },
   methods : {
     init () {
-      this.userAccount = this.$route.params.account
+      this.userAccount = this.$route.params.ac
       this.documentId = this.$route.params.d_id
-      /*this.$axios.get('/documents/'+this.documentId
+      this.pid = this.$route.params.p_id
+      this.$axios.get('/documents/'+this.documentId
       ).then(response =>{
         this.document = response.data.data
         console.log(this.document)
-      })*/
+      })
     },
     delFile () {
       this.$router.push({
@@ -102,6 +102,12 @@ export default {
         params : {
           account : this.userAccount
         }
+      })
+    },
+    saveFile () {
+      this.$axios.get('/documents',{
+        did: 1,
+        dcontent: '文档1'
       })
     },
     renameFileBtn () {
@@ -122,7 +128,16 @@ export default {
       this.$router.push({
         name: 'home',
         params : {
-          account : this.userAccount
+          ac : this.userAccount
+        }
+      })
+    },
+    toProjectView () {
+      this.$router.push({
+        name: 'project',
+        params : {
+          ac : this.userAccount,
+          p_id : this.pid
         }
       })
     }
@@ -215,8 +230,9 @@ export default {
   }
 
   .ProjectMain {
-    height: 580px;
+    height: 780px;
     overflow: auto;
+    padding: 40px;
     border: 1px black solid;
     border-radius: 20px;
     margin-top: 10px;
