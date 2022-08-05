@@ -7,6 +7,6 @@ public class Document {
     private int did;
 //    private int tid;
     private int pid;
-    private String name;
-    private String Content;
+    private String dName;
+    private String dContent;
 }

@@ -21,7 +21,7 @@ public class DocumentController {
     @PostMapping
     public R createDocument(@RequestBody Document document) {
         int pid = document.getPid();
-        String name = document.getName();
+        String name = document.getDName();
 //        if(documentService.checkNameRepeat(tid, name))
 //            return new R(false, "项目内已有同名文档，请改名！");
         return new R(true, documentService.createDocument(pid,name),
@@ -30,13 +30,13 @@ public class DocumentController {
 
     @GetMapping
     public R setDocumentContent(@RequestBody Document document) {
-        return new R(documentService.setDocumentContent(document.getDid(), document.getContent()),
+        return new R(documentService.setDocumentContent(document.getDid(), document.getDContent()),
                 null, "文档内容已变更");
     }
 
     @PutMapping
     public R renameDocument(@RequestBody Document document) {
-        return new R(documentService.renameDocument(document.getDid(), document.getName()),
+        return new R(documentService.renameDocument(document.getDid(), document.getDName()),
                 null, "文档名称已变更");
     }
 

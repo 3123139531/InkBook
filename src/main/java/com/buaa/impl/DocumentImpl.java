@@ -16,7 +16,7 @@ public class DocumentImpl implements DocumentService {
     public int createDocument(int pid, String name) {
         Document document = new Document();
         document.setPid(pid);
-        document.setName(name);
+        document.setDName(name);
         documentMapper.insertDocument(document);
         document = documentMapper.getDocumentByName(name);
         return document.getDid();
@@ -26,7 +26,7 @@ public class DocumentImpl implements DocumentService {
     public boolean setDocumentContent(int did, String content) {
         Document document = new Document();
         document.setDid(did);
-        document.setContent(content);
+        document.setDContent(content);
         documentMapper.updateDocumentContent(document);
         return true;
     }
@@ -35,7 +35,7 @@ public class DocumentImpl implements DocumentService {
     public boolean renameDocument(int did, String name) {
         Document document = new Document();
         document.setDid(did);
-        document.setName(name);
+        document.setDName(name);
         documentMapper.updateDocumentName(document);
         return true;
     }
