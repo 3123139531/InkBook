@@ -4,7 +4,8 @@ import lombok.Data;
 
 @Data
 public class Document {
-    private int documentId;
+    private int did;
+    private int tid;
+    private String name;
     private String documentContent;
-    private int documentTeamId;
 }

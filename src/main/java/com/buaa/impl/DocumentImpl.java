@@ -13,30 +13,32 @@ public class DocumentImpl implements DocumentService {
     private DocumentMapper documentMapper;
 
     @Override
-    public void createDocument(int tid, String content) {
+    public int createDocument(int tid, String name) {
         Document document = new Document();
-        document.setDocumentTeamId(tid);
-        document.setDocumentContent(content);
-        documentMapper.insertDocument(document, tid);
+        document.setTid(tid);
+        document.setName(name);
+        documentMapper.insertDocument(document);
+        document = documentMapper.getDocumentByName(name);
+        return document.getDid();
     }
-
-    @Override
-    public void deleteDocumentById(int id) {
-        documentMapper.deleteDocumentById(id);
-    }
-
-    @Override
-    public void updateDocumentContent(int id, String content) {
-        documentMapper.updateDocumentContent(id, content);
-    }
-
-    @Override
-    public Document selectById(int id) {
-        return documentMapper.getDocumentById(id);
-    }
-
-    @Override
-    public List<Document> selectByTeam(int tid) {
-        return documentMapper.getDocumentByTeamId(tid);
-    }
+//
+//    @Override
+//    public void deleteDocumentById(int id) {
+//        documentMapper.deleteDocumentById(id);
+//    }
+//
+//    @Override
+//    public void updateDocumentContent(int id, String content) {
+//        documentMapper.updateDocumentContent(id, content);
+//    }
+//
+//    @Override
+//    public Document selectById(int id) {
+//        return documentMapper.getDocumentById(id);
+//    }
+//
+//    @Override
+//    public List<Document> selectByTeam(int tid) {
+//        return documentMapper.getDocumentByTeamId(tid);
+//    }
 }
