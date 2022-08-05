@@ -21,14 +21,16 @@ public class TeamServiceImpl implements TeamService {
     }
 
     public Team[] createTeam(Team team, User creator){
+        System.out.println(team.toString());
+        System.out.println(team.toString());
+        System.out.println(team.toString());
         teamMapper.insertTeam(team);
-        //TODO add self as team creator,position=3
         int tid = team.getTid();
         int uid = creator.getUId();
         TeamMember teamCreator = new TeamMember();
         teamCreator.setTId(tid);
         teamCreator.setUId(uid);
-        teamCreator.setPosition(3);
+        teamCreator.setUPosition(3);
         teamMemberMapper.insertTeamMember(teamCreator);
         return teamMapper.selectAllTeam();
     }
@@ -40,7 +42,7 @@ public class TeamServiceImpl implements TeamService {
         TeamMember newTeamMember = new TeamMember();
         newTeamMember.setTId(tid);
         newTeamMember.setUId(uid);
-        newTeamMember.setPosition(1);
+        newTeamMember.setUPosition(1);
         teamMemberMapper.insertTeamMember(newTeamMember);
     }
 
@@ -73,7 +75,7 @@ public class TeamServiceImpl implements TeamService {
         TeamMember memberToChange = new TeamMember();
         memberToChange.setTId(tid);
         memberToChange.setUId(uid);
-        memberToChange.setPosition(position);
+        memberToChange.setUPosition(position);
         teamMemberMapper.updateMemberPositionInTeam(memberToChange);
     }
     //TODO: select team members

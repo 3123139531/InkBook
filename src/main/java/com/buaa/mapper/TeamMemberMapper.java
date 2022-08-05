@@ -10,7 +10,7 @@ public interface TeamMemberMapper {
 
 //    @Insert("insert into team_member(t_id,u_id,u_position) values(#{tid},#{uId},#{position})")
 //    public void insertTeamMember(User user,@Param("tid") int tid,@Param("position") int position);
-    @Insert("insert into team_member(t_id,u_id,u_position) values(#{tId},#{uId},#{position})")
+    @Insert("insert into team_member(t_id,u_id,u_position) values(#{tId},#{uId},#{uPosition})")
     public void insertTeamMember(TeamMember teamMember);
 
     @Delete("delete from team_member where t_id = #{tId} and u_id = #{uId}")
@@ -22,9 +22,9 @@ public interface TeamMemberMapper {
     @Select("select * from team where t_id in (select t_id from team_member where u_id=#{uId})")
     public Team[] selectTeamsByUserId(User user);
 
-    @Update("update team_member set u_position=#{position} where t_id=#{tid} and u_id=#{uId}")
+    @Update("update team_member set u_position=#{uPosition} where t_id=#{tid} and u_id=#{uId}")
     public void updateMemberPositionInTeam(TeamMember teamMember);
 
-    @Select("select position from team_member where t_id=#{tId} and u_id=#{uId}")
+    @Select("select u_position from team_member where t_id=#{tId} and u_id=#{uId}")
     public int selectMemberPositionInTeam(TeamMember teamMember);
 }

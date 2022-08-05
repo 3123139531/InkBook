@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 public class TeamMember {
     int tId;
     int uId;
-    int position;
+    int uPosition;
 }
