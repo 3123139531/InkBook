@@ -15,7 +15,7 @@ public class DocumentImpl implements DocumentService {
     @Override
     public int createDocument(int pid, String name) {
         Document document = new Document();
-        document.setPid(pid);
+        document.setDPid(pid);
         document.setDName(name);
         documentMapper.insertDocument(document);
         document = documentMapper.getDocumentByName(name);
