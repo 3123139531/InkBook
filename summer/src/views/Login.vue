@@ -76,8 +76,6 @@ export default {
   },
   methods: {
     handleLogin() {
-      console.log(this.loginForm.username);
-      console.log(this.loginForm.password);
       if(this.loginForm.username==='' || this.loginForm.password===''){
         ElMessage({
           message: '请填写所有信息',
@@ -85,43 +83,45 @@ export default {
         });
         return;
       }
-      ElMessage({
-        message: '登录成功',
-        type: 'success',
-      });
-      this.$router.push({
-        name: 'Homepage',
-        params: {
-          account : this.loginForm.username
-        }
-      })
-      // this.$axios.post("user/login", {
-      //   email: '0',
-      //   password: this.loginForm.password,
-      //   profilePic: '0',
-      //   uid: 0,
-      //   uname: this.loginForm.username,
-      //   unickname: '0',
-      // }).then(function (response) {
-      //   console.log(response);
-      //   this.loading = true;
-      //
-      //   ElMessage({
-      //     message: '登录成功',
-      //     type: 'success',
-      //   });
-      //   this.$router.push({
-      //     name: 'Homepage',
-      //     params: {
-      //       account : this.loginForm.uuid
-      //     }
-      //   })
-      // }).catch(function (error) {
-      //   ElMessage({
-      //     message: '登录失败',
-      //     type: 'info',
-      //   })
+      // ElMessage({
+      //   message: '登录成功',
+      //   type: 'success',
+      // });
+      // this.$router.push({
+      //   name: 'Homepage',
+      //   params: {
+      //     account : this.loginForm.username
+      //   }
       // })
+      this.$axios.post("user/login", {
+        email: '0',
+        password: this.loginForm.password,
+        profilePic: '0',
+        uid: 0,
+        uname: this.loginForm.username,
+        unickname: '0',
+      }).then(function (response) {
+        console.log(response);
+        this.loading = true;
+
+        ElMessage({
+          message: '登录成功',
+          type: 'success',
+        });
+        setInterval(()=>{
+          this.$router.push({
+            name: 'Homepage',
+            params: {
+              account : this.loginForm.uuid
+            }
+          })
+        }, 1000)
+    }).catch(function (error) {
+        ElMessage({
+          message: '登录失败',
+          type: 'info',
+        })
+      })
     },
 
   }
