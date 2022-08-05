@@ -1,5 +1,4 @@
 <template>
-  <img src="../assets/background.png" class="background-img">
   <div class="Homepage">
     <el-container>
       <el-aside class="Aside">
@@ -64,8 +63,8 @@
 <!--          所在团队-->
           <div v-if="option===2" class="PersonalEnterprises">
             <el-header class="Header">所在团队</el-header>
-            <div v-for="i in numTeams">
-              <div class="divisionBox" @click="toTeamInfo(i, info.account)">
+            <div v-for="i in numTeams" :key="i">
+              <div class="divisionBox" @click="toTeamView(i)">
                 <span class="innerChar">团队名称：{{teams[i-1].tname}}</span>
                 <span class="innerChar">团队编号：{{teams[i-1].tid}}</span>
               </div>
@@ -96,10 +95,10 @@
           <div v-if="option===3" class="PersonalProjects">
             <div v-if="proMod===1">
               <el-header class="Header">参与项目</el-header>
-              <div v-for="i in numProjects">
-                <div class="divisionBox" @click="toProjectInfo(i, account)">
-                  <span class="innerChar">项目名称：{{projects[i-1].PName}}</span>
-                  <span class="innerChar">团队编号：{{projects[i-1].tId}}</span>
+              <div v-for="i in numProjects" :key='i'>
+                <div class="divisionBox" @click="toProjectView1(i)">
+                  <span class="innerChar">项目名称：{{projects[i-1].pname}}</span>
+                  <span class="innerChar">团队编号：{{projects[i-1].tid}}</span>
                 </div>
               </div>
               <div class="newBox" @click="addNewProjectBtn">
@@ -136,6 +135,12 @@
             </div>
             <div v-else>
               <el-header class="Header">项目回收站</el-header>
+              <div v-for="i in numt_Projects" :key='i'>
+                <div class="divisionBox" @click="toProjectView2(i)">
+                  <span class="innerChar">项目名称：{{t_projects[i-1].pname}}</span>
+                  <span class="innerChar">团队编号：{{t_projects[i-1].tid}}</span>
+                </div>
+              </div>
               <div class="changeBtn" @click="changeProMod">
                 <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
                      style="width: 20px; height: 20px; margin-top: 5px">
@@ -152,47 +157,30 @@
 </template>
 
 <script>
+/* eslint-disable */
+import { thisTypeAnnotation } from '@babel/types';
 import { ElMessage } from 'element-plus'
+import { captureRejectionSymbol } from 'events';
 
 export default {
   data () {
     return {
-      account: '',
-      info : {
-        email: "",
-        password: "",
-        profilePic: "",
-        uid: 0,
-        uname: "",
-        unickname: ""
-      },
-      teams : [
-        {
-          brief : '',
-          tid: 0,
-          tname: ''
-        }
-      ],
-      projects : [
-        {
-          pId: 1,
-          tId: 1,
-          PName: 'A'
-        }
-      ],
-
+      account : 0,
+      info : {},
+      teams : [],
+      projects : [],
+      t_projects : [],
+      pp : [],
       numTeams : 0,
       numProjects : 0,
-
+      numt_Projects : 0,
       option : 2,
+
       addTeamDialog : false,
       addProDialog : false,
       newPro_team : 0,
       newName : '',
       proMod : 1,
-
-      getTeamUrl : '',
-      getUserInfoUrl : ''
     }
   },
   mounted() {
@@ -200,47 +188,61 @@ export default {
   },
   methods: {
     init () {
-      // var that = this;
-      this.account = this.$route.params.account;
-      this.getTeamUrl = "team/" + this.account;
-      this.getUserInfoUrl = "user/info/" + this.account;
-      this.$axios.get(this.getTeamUrl, {
-        params: {
-          user_name : this.account
-        }
-      }).then(response=> {
+      console.log(this.$route)
+      this.account = this.$route.params.ac
+      this.$axios.get('/team/' + this.account
+      ).then(response=> {
         this.teams = response.data.data;
         this.numTeams = this.teams.length;
-        // console.log(this.teams)
-        // console.log(this.numTeams)
       });
     },
     showPersonalInfo () {
-      this.$axios.get(this.getUserInfoUrl, {
-        params: {
-          u_name : this.account
-        }
-      }).then(response=> {
-        // console.log(response);
+      console.log(this.account)
+      this.$axios.get('/user/info/' + this.account
+      ).then(response=> {
         this.info = response.data.data
       })
       this.option = 1;
     },
     showEnterprise () {
-      this.$axios.get(this.getTeamUrl, {
-        params: {
-          user_name : this.account
-        }
-      }).then(response=> {
+      console.log(this.account)
+      this.$axios.get('/team/' + this.account
+      ).then(response=> {
         this.teams = response.data.data;
         this.numTeams = this.teams.length;
-        // console.log(this.teams)
-        // console.log(this.numTeams)
       });
       this.option = 2;
     },
     showProject () {
-
+      console.log(this.account)
+      if(this.proMod===1){
+        this.projects = []
+        this.numProjects = 0
+        for (let i=0; i<this.numTeams; i++){
+          this.$axios.get('/projects/doing/'+this.teams[i].tid
+          ).then(response =>{
+            this.pp = response.data.data
+            this.numProjects += response.data.data.length
+            for(let j=0; j<response.data.data.length; j++){
+            this.projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
+            }
+          })
+        }
+      }
+      else {
+        this.t_projects = []
+        this.numt_Projects = 0
+        for (let i=0; i<this.numTeams; i++){
+          this.$axios.get('/projects/trash/'+this.teams[i].tid
+          ).then(response =>{
+            this.pp = response.data.data
+            this.numt_Projects += response.data.data.length
+            for(let j=0; j<response.data.data.length; j++){
+            this.t_projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
+            }
+          })
+        }
+      }
       this.option = 3;
     },
     Submit () {
@@ -251,20 +253,31 @@ export default {
     },
     Revoke () {
     },
-    toTeamInfo (id, account) {
+    toTeamView (id) {
       this.$router.push({
-        name: 'TeamInfo',
+        name: 'team',
         params: {
-          userAccount: account,
+          ac: this.account,
+          userAccount: this.info.uname,
           teamId: id
         }
       })
     },
-    toProjectInfo (id) {
+    toProjectView1 (id) {
       this.$router.push({
-        name: 'ProjectInfo',
+        name: 'project',
         params: {
-          id: id
+          p_id: this.projects[id-1].pid,
+          ac: this.account
+        }
+      })
+    },
+    toProjectView2 (id) {
+      this.$router.push({
+        name: 'project',
+        params: {
+          p_id: this.t_projects[id-1].pid,
+          ac: this.account
         }
       })
     },
@@ -275,66 +288,56 @@ export default {
       this.addProDialog = true;
     },
     addNewTeam () {
-      this.teams.push(
-          {
-            id: 0,
-            EName: this.newName
-          }
-      );
-      this.numTeams ++;
 
-      this.$axios.post("/team", {
-        team_name: this.newName
-      }).then(function (response) {
-        console.log(response);
-      })
 
-      this.addTeamDialog = false;
-      this.newName = '';
+
+
+
+
+
     },
     addNewPro() {
-      this.projects.push(
-          {
-            pId: 0,
-            tId: this.newPro_team,
-            PName: this.newName
-          }
-      );
-      this.numProjects ++;
-
-      // var projects = this.projects;
-      // var numPro = this.numProjects;
-      //
-      // this.$axios.post("/projects", {
-      //   tid: this.newPro_team,
-      //   pName: this.newName
-      // }).then(function (response) {
-      //   console.log(response);
-      //   projects[numPro].pid = response.data;
-      // })
-
-      this.addProDialog = false;
-      this.newName = '';
+      this.$axios.post('/projects',{
+        pname: this.newName,
+        tid: this.newPro_team,
+      }).then(response =>{
+        console.log(response)
+        this.projects.push({pid: response.data.data, tid: this.newPro_team, status: 'doing', pname: this.newName});
+        this.numProjects ++;
+        this.addProDialog = false;
+        this.newName = '';
+        this.newPro_team = 0;
+      });
     },
     changeProMod () {
       this.proMod ^= 1;
       if(this.proMod===1){
-        // this.$axios.get("/projects/doing/{tid}", {
-        //   params: {
-        //
-        //   }
-        // }).then(function (response) {
-        //   console.log(response);
-        // });
+        this.projects = []
+        this.numProjects = 0
+        for (let i=0; i<this.numTeams; i++){
+          this.$axios.get('/projects/doing/'+this.teams[i].tid
+          ).then(response =>{
+            this.pp = response.data.data
+            this.numProjects += response.data.data.length
+            for(let j=0; j<response.data.data.length; j++){
+            this.projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
+            }
+          })
+        }
       }
       else {
-        // this.$axios.get("/projects/trash/{tid}", {
-        //   params: {
-        //
-        //   }
-        // }).then(function (response) {
-        //   console.log(response);
-        // });
+        this.t_projects = []
+        this.numt_Projects = 0
+        for (let i=0; i<this.numTeams; i++){
+          this.$axios.get('/projects/trash/'+this.teams[i].tid
+          ).then(response =>{
+            this.pp = response.data.data
+            this.numt_Projects += response.data.data.length
+            for(let j=0; j<response.data.data.length; j++){
+            this.t_projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
+            }
+          })
+        }
       }
     },
     Quit () {
@@ -343,10 +346,7 @@ export default {
         type: 'success',
       })
       this.$router.push({
-        name: 'Login',
-        params: {
-
-        }
+        name: 'login',
       })
     }
   }
@@ -354,9 +354,7 @@ export default {
 </script>
 
 <style scoped>
-  /*@import "../style/Homepage.css";*/
-
-  .background-img {
+    .background-img {
     position: absolute;
     top: 0;
     width: 100%;
@@ -378,7 +376,7 @@ export default {
     width: 100px;
     box-shadow: 5px 0 5px #888888;
     border: 1px solid black;
-    background: white;
+    background: rgba(144, 144, 144, 0.2);
     /*background: rgba(255, 255, 255, 0.4);*/
     color: black;
   }
@@ -417,6 +415,8 @@ export default {
   .Main {
     height: 680px;
     background: white;
+    overflow: auto;
+    background: rgba(144, 144, 144, 0.2);
     /*background: rgba(255, 255, 255, 0.4);*/
   }
 
@@ -437,6 +437,7 @@ export default {
     width: 99%;
     height: 99%;
     border: 2px black solid;
+    background: white;
   }
 
   .Form-line {
@@ -480,7 +481,7 @@ export default {
 
   .changeInfoBtn {
     width: 80px;
-    height: 30px;
+    height: 40px;
     margin-top: 10px;
     margin-right: 10px;
   }

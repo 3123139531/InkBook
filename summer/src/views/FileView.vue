@@ -1,50 +1,45 @@
 <template>
-  <img src="../assets/bgimg2.png" class="background-img">
+  <span class="background-img"></span>
   <div class="ProjectInfo">
     <el-container>
       <el-header class="ProjectHeader">
-        <img src="../assets/bgimg2.png" class="ProjectImg">
+        <img src="../assets/头像.jpg" class="ProjectImg">
         <div class="ProjectIntro">
           <div class="ProjectName">
-            <span>项目名：</span>
-            <span style="font-weight: 700">{{project.name}}</span>
+            <span>文档名：</span>
+            <span style="font-weight: 700">{{document.dname}}</span>
+            <span style="margin-left:30px" @click="toProjectView">项目名：</span>
+            <span style="font-weight: 700" @click="toProjectView">{{$route.params.p_name}}</span>
           </div>
         </div>
-        <div class="Link">
-          <span class="Prototype">
-            <a href="https://wozhishilaonanhai.github.io/dragUI/unpackage/dist/build/h5/index.html#/"
-               target="_blank" style="color: black">项目原型</a>
-          </span>
-          <a href="https://online.visual-paradigm.com/cn/diagrams/features/uml-tool/"
-             target="_blank" class="UML-link">绘制UML</a>
-        </div>
         <div class="ProjectBtn">
-          <el-button type="primary" round @click="RenameProBtn">重命名项目</el-button>
-          <el-button type="primary" round class="delBtn" @click="delProject">删除项目</el-button>
+          <el-button type="primary" round @click="saveFile">保存文档</el-button>
+          <el-button type="primary" round @click="renameFileBtn">重命名文档</el-button>
+          <el-button type="primary" round class="delBtn" @click="delFile">删除文档</el-button>
           <el-dialog v-model="dialogFormVisible" title="输入新项目名">
             <el-form>
-              <el-form-item>
+              <el-form-item label="Promotion name" :label-width="140">
                 <el-input v-model="newName" autocomplete="off" />
               </el-form-item>
             </el-form>
             <template #footer>
               <span class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary" @click="RenamePro">确认</el-button>
+                <el-button type="primary" @click="renameFile">确认</el-button>
               </span>
             </template>
           </el-dialog>
         </div>
       </el-header>
       <el-main class="ProjectMain">
-        <div style="font:normal 700 20px/30px Georgia, serif;">项目文档</div>
-        <div v-for="doc in documents" class="ProDoc">
-          <span class="DocName">{{doc.name}}</span>
+        <div style="font:normal 700 20px/30px Georgia, serif;">{{$route.params.programName}}</div>
+        <div class="order">
+            <div id="vditor"></div>
         </div>
       </el-main>
     </el-container>
   </div>
-  <el-button class="toHomepageBtn" @click="toHomepage">
+  <el-button class="toHomepageBtn" @click="toHomeView">
     <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" style="width: 15px; height: 20px">
       <path fill="currentColor" d="M512 128 128 447.936V896h255.936V640H640v256h255.936V447.936z"></path>
     </svg>
@@ -52,27 +47,22 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { ElMessage } from 'element-plus'
+import { Search } from '@element-plus/icons-vue'
+import Vditor from "vditor"
+import "vditor/dist/index.css"
 
 export default {
   data () {
     return {
-      userAccount: '2',
+      contentEditor:"",
+      pid: 0,
+      userAccount: 0,
       userIdentity: '管理员',
 
-      projectId: '1',
-      project : {
-        name: "六轮车",
-        setTime: "2022-08-01",
-        remark: "听我说谢谢你",
-      },
-
-      documents : [
-        {
-          name : '小学期'
-        }
-      ],
-      numDocuments : 0,
+      documentId : 0,
+      document : {},
 
       newName : '',
       dialogFormVisible : false
@@ -80,50 +70,74 @@ export default {
   },
   mounted() {
     this.init();
+    console.log(this.$route)
+    this.contentEditor = new Vditor("vditor",{
+            height:690,
+            mode:'ir',
+            toolbarConfig:{
+                pin:true
+            },
+            cache:{
+                enable:false
+            },
+            after:()=>{
+                this.contentEditor.setValue(document.dcontent)
+            }
+        })
   },
   methods : {
     init () {
-      this.ProjectId = this.$route.params.id;
-    },
-    delProject () {
-      ElMessage({
-        message: '删除',
-        type: 'success',
-      });
-
-      this.$axios.delete("/projects/{pid}", {
-        pid : this.projectId
-      }).then(function (response) {
-        console.log(response);
+      this.userAccount = this.$route.params.ac
+      this.documentId = this.$route.params.d_id
+      this.pid = this.$route.params.p_id
+      this.$axios.get('/documents/'+this.documentId
+      ).then(response =>{
+        this.document = response.data.data
+        console.log(this.document)
       })
-
+    },
+    delFile () {
       this.$router.push({
-        name : 'Homepage',
+        name : 'home',
         params : {
           account : this.userAccount
         }
       })
     },
-    RenameProBtn () {
+    saveFile () {
+      this.$axios.get('/documents',{
+        did: 1,
+        dcontent: '文档1'
+      })
+    },
+    renameFileBtn () {
       this.dialogFormVisible = true;
     },
     RenamePro () {
-      this.project.name = this.newName;
+      this.$axios.put('/documents',{
+        did: this.documentId,
+        name: this.newName
+      }).then(response =>{
+        console.log(response)
+      })
+      this.document.name = this.newName;
       this.dialogFormVisible = false;
       this.newName = '';
-
-      this.$axios.put("/projects/", {
-        pid : this.projectId,
-        pName : this.newName
-      }).then(function (response) {
-        console.log(response);
+    },
+    toHomeView () {
+      this.$router.push({
+        name: 'home',
+        params : {
+          ac : this.userAccount
+        }
       })
     },
-    toHomepage () {
+    toProjectView () {
       this.$router.push({
-        name: 'Homepage',
+        name: 'project',
         params : {
-          account : this.userAccount
+          ac : this.userAccount,
+          p_id : this.pid
         }
       })
     }
@@ -139,10 +153,11 @@ export default {
 
   .background-img {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    margin-left: -50%;
-    margin-top: -8px;
+    background: rgba(144, 144, 144, 0.2);
   }
 
   .ProjectInfo {
@@ -216,8 +231,9 @@ export default {
   }
 
   .ProjectMain {
-    height: 580px;
+    height: 780px;
     overflow: auto;
+    padding: 40px;
     border: 1px black solid;
     border-radius: 20px;
     margin-top: 10px;
@@ -255,5 +271,4 @@ export default {
     font-weight: 700;
     text-align: center;
   }
-
 </style>

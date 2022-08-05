@@ -1,41 +1,46 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-
-const Login = () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
-const Register = () => import(/* webpackChunkName: "about" */ '../views/Register.vue')
-const Homepage = () => import(/* webpackChunkName: "about" */ '../views/Homepage.vue')
-const ProjectInfo = () => import(/* webpackChunkName: "about" */ '../views/ProjectInfo.vue')
-const TeamInfo = () => import(/* webpackChunkName: "about" */ '../views/TeamInfo.vue')
+import { createRouter, createWebHistory } from 'vue-router'
+import Home from '../views/HomeView.vue'
+import Team from '../views/TeamView.vue'
+import Project from '../views/ProjectView.vue'
+import File from '../views/FileView.vue'
+import Login from '../views/LoginView.vue'
+import Register from '../views/RegisterView.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'Login',
+    name: 'login',
     component: Login
   },
   {
-    path: '/Register',
-    name: 'Register',
+    path: '/register',
+    name: 'register',
     component: Register
   },
   {
-    path: '/Homepage',
-    name: 'Homepage',
-    component: Homepage
+    path: '/home',
+    name: 'home',
+    component: Home
   },
   {
-    path: '/ProjectInfo',
-    name: 'ProjectInfo',
-    component: ProjectInfo
+    path: '/project',
+    name: 'project',
+    component: Project
   },
   {
-    path: '/TeamInfo',
-    name: 'TeamInfo',
-    component: TeamInfo
+    path: '/team',
+    name: 'team',
+    component: Team
   },
+  {
+    path: '/file',
+    name: 'file',
+    component: File
+  }
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(process.env.BASE_URL),
   routes
 })
 

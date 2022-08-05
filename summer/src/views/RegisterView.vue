@@ -1,5 +1,5 @@
 <template>
-  <img src="../assets/bgimg3.png" class="background-img">
+  <span class="background-img"></span>
   <div class="page-register">
     <article class="header">
       <header>
@@ -143,6 +143,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
+  background: rgba(144, 144, 144, 0.2);
 }
 .page-register {
   position: relative;

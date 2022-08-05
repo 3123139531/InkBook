@@ -1,5 +1,5 @@
 <template>
-  <img src="../assets/bgimg.png" class="background-img">
+  <span class="background-img"></span>
   <div class="login" >
     <el-form
         ref="loginForm"
@@ -25,7 +25,7 @@
             type="password"
             auto-complete="off"
             placeholder="密码"
-            @keyup.enter.native="handleLogin"
+            @keyup.enter="handleLogin"
         >
         </el-input>
       </el-form-item>
@@ -34,24 +34,23 @@
             size="default"
             type="primary"
             style="width: 100%"
-            @click.native.prevent="handleLogin"
+            @click.prevent="handleLogin"
         >
           <span>登 录</span>
         </el-button>
       </el-form-item>
       <el-form-item>
-        <a href="/#/Register" class="register">注册</a>
+        <a href="/register" class="register">注册</a>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-
+/* eslint-disable */
 import {ElMessage} from "element-plus";
 
 export default {
-  name: 'Login',
   data() {
     return {
       loginForm: {
@@ -94,14 +93,12 @@ export default {
           type: 'success',
         });
       })
-      setInterval(()=>{
-        this.$router.push({
-          name: 'Homepage',
-          params: {
-            account : this.loginForm.username
-          }
-        })
-      }, 1000)
+      this.$router.push({
+        name: 'home',
+        params: {
+          ac : this.loginForm.username
+        }
+      })
     },
   }
 }
@@ -114,10 +111,11 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
+  background: rgba(144, 144, 144, 0.2);
 }
 .login {
   position: relative;
-  top: 10px;
+  top: 30px;
   display: inline-block;
   align-items: center;
   background: white;

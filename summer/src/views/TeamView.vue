@@ -1,5 +1,5 @@
 <template>
-  <img src="../assets/bgimg2.png" class="background-img">
+  <span class="background-img"></span>
   <div class="TeamInfo">
     <el-container>
       <el-header class="TeamHeader">
@@ -11,7 +11,7 @@
           </div>
           <div class="TeamLeader">
             <span>队长：</span>
-            <span v-for="i in team.numMembers">
+            <span v-for="i in team.numMembers" :key="i">
               <span v-if="team.members[i-1].identity==='创建者'" style="font-weight: 700">{{team.members[i-1].username}}</span>
             </span>
           </div>
@@ -70,11 +70,11 @@
             stripe
             class="MemDetail"
         >
-          <el-table-column prop="username" label="用户名" width="262"/>
-          <el-table-column prop="account" label="账号" width="262" />
-          <el-table-column prop="name" label="姓名" width="262"/>
-          <el-table-column prop="email" label="邮箱" width="262"/>
-          <el-table-column prop="identity" label="身份" width="262"/>
+          <el-table-column prop="username" label="用户名" width="265"/>
+          <el-table-column prop="account" label="账号" width="265" />
+          <el-table-column prop="name" label="姓名" width="265"/>
+          <el-table-column prop="email" label="邮箱" width="265"/>
+          <el-table-column prop="identity" label="身份" width="265"/>
         </el-table>
         <div v-if="userIdentity!=='队员'">
           <div style="font:normal bold 20px/30px Georgia, serif;">成员管理</div>
@@ -95,7 +95,7 @@
           <div class="MemManage">
             <div v-if="ManageMod===1">
               <el-dialog v-model="dialogVisible" title="点击用户名设置管理员">
-                <span v-for="i in team.numMembers">
+                <span v-for="i in team.numMembers" :key="i">
                   <span v-if="team.members[i-1].identity==='队员'" class="Member" @click="AppointManager(i-1)">
                     {{team.members[i-1].username}}
                   </span>
@@ -103,7 +103,7 @@
               </el-dialog>
             </div>
             <div v-if="ManageMod===2">
-              <span v-for="i in team.numMembers">
+              <span v-for="i in team.numMembers" :key="i">
                 <span v-if="team.members[i-1].identity==='管理员'" class="Member" @click="DismissManager(i-1)">
                   {{team.members[i-1].username}}
                 </span>
@@ -111,14 +111,14 @@
             </div>
             <div v-if="ManageMod===3">
               <el-dialog v-model="dialogVisible" title="可邀请用户">
-                <span v-for="user in Users" class="Member" @click="InviteMem(user.username)">
+                <span v-for="user in Users" class="Member" @click="InviteMem(user.account)" :key="user">
                   {{user.username}}({{user.account}})
                 </span>
               </el-dialog>
             </div>
             <div v-if="ManageMod===4">
               <el-dialog v-model="dialogVisible" title="点击用户名踢出成员">
-                <span v-for="i in team.numMembers">
+                <span v-for="i in team.numMembers" :key="i">
                   <span v-if="team.members[i-1].identity==='队员'" class="Member" @click="KickMem(i-1)">
                     {{team.members[i-1].username}}
                   </span>
@@ -130,7 +130,7 @@
       </el-main>
     </el-container>
   </div>
-  <el-button class="toHomepageBtn" @click="toHomepage">
+  <el-button class="toHomepageBtn" @click="toHomeView">
     <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" style="width: 15px; height: 20px">
       <path fill="currentColor" d="M512 128 128 447.936V896h255.936V640H640v256h255.936V447.936z"></path>
     </svg>
@@ -138,11 +138,14 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { ElMessage } from 'element-plus'
+import { Search } from '@element-plus/icons-vue'
 
 export default {
   data () {
     return {
+      acc: 0,
       userAccount: '2',
       userIdentity: '管理员',
 
@@ -194,29 +197,45 @@ export default {
       dialogVisible : false
     }
   },
-  mounted() {
-    this.init();
+  mounted () {
+    this.init()
+    console.log(this.acc)
   },
   methods : {
     init () {
+      this.acc = this.$route.params.ac
       this.userAccount = this.$route.params.userAccount;
       this.teamId = this.$route.params.teamId;
-      // this.$axios.get("/team/{team_id}", {
-      //   params: {
-      //     team_id : this.teamId
-      //   }
-      // }).then(function (response) {
-      //   console.log(response);
-      // });
+      var getUsersUrl = "/team/" + this.teamId + "/members";
+      this.$axios.get(getUsersUrl, {
+        params: {
+          team_id : this.teamId
+        }
+      }).then(response=> {
+        console.log(response);
+        this.team.members = response.data.data;
+        this.team.numMembers = this.team.members.length;
+        for (let i = 0; i < this.team.numMembers; i++) {
+          this.team.members[i].identity = '队员'
+        }
+        // for (let i = 0; i < this.team.numMembers; i++) {
+        //   if(this.team.members[i].identity === 1)
+        //     this.team.members[i].identity = '队员'
+        //   else if(this.team.members[i].identity === 2)
+        //     this.team.members[i].identity = '管理员'
+        //   if(this.team.members[i].identity === 3)
+        //     this.team.members[i].identity = '创建者'
+        // }
+      });
     },
     JurisdictionError () {
       ElMessage.error('您没有此权限');
     },
     QuitTeam () {
       this.$router.push({
-        name : 'Homepage',
+        name : 'home',
         params : {
-          account : this.userAccount
+          account : this.acc
         }
       })
     },
@@ -238,16 +257,22 @@ export default {
     },
     AppointManager (i) {
       this.team.members[i].identity = '管理员';
-    },
-    DismissManager (i) {
-      this.team.members[i].identity = '队员';
-    },
-    InviteMem (username) {
-      ElMessage({
-        message: '已发送邀请',
-        type: 'success',
-      });
 
+
+
+    },
+    DismissManager () {
+      this.team.members[i].identity = '队员';
+
+
+
+
+    },
+    InviteMem (account) {
+      // ElMessage({
+      //   message: '已发送邀请',
+      //   type: 'success',
+      // });
       // this.$axios.get("/team/{team_id}", {
       //   params: {
       //     team_id : this.teamId,
@@ -258,9 +283,6 @@ export default {
       // });
     },
     KickMem (i) {
-      this.team.members[i] = null;
-      this.team.numMembers--;
-
       // this.$axios.delete("/team/{team_id}", {
       //   params: {
       //     team_id : this.teamId,
@@ -270,11 +292,11 @@ export default {
       //   console.log(response);
       // });
     },
-    toHomepage () {
+    toHomeView () {
       this.$router.push({
-        name: 'Homepage',
+        name: 'home',
         params : {
-          account : this.userAccount
+          ac : this.acc
         }
       })
     }
@@ -283,14 +305,13 @@ export default {
 </script>
 
 <style scoped>
-  /*@import "../style/TeamInfo.css";*/
-
   .background-img {
     position: absolute;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    margin-left: -50%;
+    background: rgba(144, 144, 144, 0.2);
   }
 
   .TeamInfo {
@@ -442,6 +463,6 @@ export default {
     position: absolute;
     left: 10px;
     top: 20px;
+    background: white;
   }
-
 </style>
