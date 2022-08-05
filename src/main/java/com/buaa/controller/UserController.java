@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 @Api(tags = "用户管理")
 @RestController
+@CrossOrigin
 public class UserController {
 
     @Autowired
