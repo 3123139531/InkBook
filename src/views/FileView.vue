@@ -6,10 +6,10 @@
         <img src="../assets/头像.jpg" class="ProjectImg">
         <div class="ProjectIntro">
           <div class="ProjectName">
-            <span>文档名：</span>
-            <span style="font-weight: 700">{{document.dname}}</span>
-            <span style="margin-left:30px" @click="toProjectView">项目名：</span>
+            <span @click="toProjectView">项目名：</span>
             <span style="font-weight: 700" @click="toProjectView">{{$route.params.p_name}}</span>
+            <span style="margin-left:30px">文档名：</span>
+            <span style="font-weight: 700">{{document.dname}}</span>
           </div>
         </div>
         <div class="ProjectBtn">
@@ -48,8 +48,6 @@
 
 <script>
 /* eslint-disable */
-import { ElMessage } from 'element-plus'
-import { Search } from '@element-plus/icons-vue'
 import Vditor from "vditor"
 import "vditor/dist/index.css"
 
@@ -100,7 +98,7 @@ export default {
       this.$router.push({
         name : 'home',
         params : {
-          account : this.userAccount
+          ac : this.userAccount
         }
       })
     },

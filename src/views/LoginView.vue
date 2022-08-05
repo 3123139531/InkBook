@@ -70,7 +70,14 @@ export default {
       },
     }
   },
+  mounted () {
+    this.init()
+  },
   methods: {
+    init () {
+      this.loginForm.username = this.$route.params.n
+      console.log(this.loginForm.username)
+    },
     handleLogin() {
       if(this.loginForm.username==='' || this.loginForm.password===''){
         ElMessage({

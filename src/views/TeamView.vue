@@ -212,7 +212,7 @@ export default {
       this.$router.push({
         name : 'home',
         params : {
-          account : this.acc
+          ac : this.acc
         }
       })
     },

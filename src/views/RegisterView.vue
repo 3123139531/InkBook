@@ -126,11 +126,12 @@ export default {
           type: 'success',
         })
       })
-      setInterval(()=>{
-        this.$router.push({
-          name: 'Login',
-        })
-      }, 2000)
+      this.$router.push({
+        name: 'login',
+        params: {
+          n: this.ruleForm.name
+        }
+      })
     }
   }
 }
