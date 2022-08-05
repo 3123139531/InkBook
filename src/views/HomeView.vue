@@ -211,8 +211,6 @@ export default {
   },
   methods: {
     init () {
-      
-      
     },
     showPersonalInfo () {
       this.option = 1;
@@ -225,7 +223,7 @@ export default {
         this.projects = []
         this.numProjects = 0
         for (let i=0; i<this.numTeams; i++){
-          this.$axios.get('/projects/team/'+this.teams[i].id
+          this.$axios.get('/projects/doing/'+this.teams[i].id
           ).then(response =>{
             this.pp = response.data.data
             this.numProjects += response.data.data.length
@@ -244,7 +242,7 @@ export default {
             this.pp = response.data.data
             this.numt_Projects += response.data.data.length
             for(let j=0; j<response.data.data.length; j++){
-           this.t_projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
+            this.t_projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
             }
           })
         }
@@ -325,7 +323,7 @@ export default {
         this.projects = []
         this.numProjects = 0
         for (let i=0; i<this.numTeams; i++){
-          this.$axios.get('/projects/team/'+this.teams[i].id
+          this.$axios.get('/projects/doing/'+this.teams[i].id
           ).then(response =>{
             this.pp = response.data.data
             this.numProjects += response.data.data.length
@@ -344,7 +342,7 @@ export default {
             this.pp = response.data.data
             this.numt_Projects += response.data.data.length
             for(let j=0; j<response.data.data.length; j++){
-           this.t_projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
+            this.t_projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
             }
           })
         }
@@ -428,6 +426,7 @@ export default {
   .Main {
     height: 680px;
     background: white;
+    overflow: auto;
     /*background: rgba(255, 255, 255, 0.4);*/
   }
 

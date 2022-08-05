@@ -6,9 +6,27 @@
         <img src="../assets/头像.jpg" class="ProjectImg">
         <div class="ProjectIntro">
           <div class="ProjectName">
-            <span>项目名：</span>
-            <span style="font-weight: 700">{{Project.name}}</span>
+            <span>文档名：</span>
+            <span style="font-weight: 700">{{document.name}}</span>
           </div>
+        </div>
+        <div class="ProjectBtn">
+          <el-button type="primary" round @click="saveFile">保存文档</el-button>
+          <el-button type="primary" round @click="renameFileBtn">重命名文档</el-button>
+          <el-button type="primary" round class="delBtn" @click="delFile">删除文档</el-button>
+          <el-dialog v-model="dialogFormVisible" title="输入新项目名">
+            <el-form>
+              <el-form-item label="Promotion name" :label-width="140">
+                <el-input v-model="newName" autocomplete="off" />
+              </el-form-item>
+            </el-form>
+            <template #footer>
+              <span class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取消</el-button>
+                <el-button type="primary" @click="renameFile">确认</el-button>
+              </span>
+            </template>
+          </el-dialog>
         </div>
       </el-header>
       <el-main class="ProjectMain">
@@ -38,22 +56,14 @@ export default {
     return {
       contentEditor:"",
 
-      userAccount: '2',
+      userAccount: 0,
       userIdentity: '管理员',
 
-      ProjectId: '1',
-      Project : {
-        name: "六轮车",
-        setTime: "2022-08-01",
-        remark: "听我说谢谢你",
+      documentId : 0,
+      document : {
+        name : '临时',
+        did : 1
       },
-
-      documents : [
-        {
-          name : '小学期'
-        }
-      ],
-      numDocuments : 0,
 
       newName : '',
       dialogFormVisible : false
@@ -78,9 +88,15 @@ export default {
   },
   methods : {
     init () {
-
+      this.userAccount = this.$route.params.account
+      this.documentId = this.$route.params.d_id
+      /*this.$axios.get('/documents/'+this.documentId
+      ).then(response =>{
+        this.document = response.data.data
+        console.log(this.document)
+      })*/
     },
-    delProject () {
+    delFile () {
       this.$router.push({
         name : 'home',
         params : {
@@ -88,11 +104,17 @@ export default {
         }
       })
     },
-    RenameProBtn () {
+    renameFileBtn () {
       this.dialogFormVisible = true;
     },
     RenamePro () {
-      this.Project.name = this.newName;
+      this.$axios.put('/documents',{
+        did: this.documentId,
+        name: this.newName
+      }).then(response =>{
+        console.log(response)
+      })
+      this.document.name = this.newName;
       this.dialogFormVisible = false;
       this.newName = '';
     },

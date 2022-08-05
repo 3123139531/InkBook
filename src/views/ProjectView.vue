@@ -30,8 +30,29 @@
       </el-header>
       <el-main class="ProjectMain">
         <div style="font:normal 700 20px/30px Georgia, serif;">项目文档</div>
-        <div v-for="doc in documents" class="ProDoc" :key="doc.name" @click="toFileView(doc.name)">
-          <span class="DocName">{{doc.name}}</span>
+        <div v-for="i in numDocuments" class="ProDoc" :key="i" @click="toFileView(i)">
+          <span class="DocName">{{documents[i-1].name}}</span>
+        </div>
+        <div class="ProDoc" @click="addNewFileBtn">
+          <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" class="plusIcon">
+                  <path fill="currentColor" d="M352 480h320a32 32 0 1 1 0 64H352a32 32 0 0 1 0-64z"></path>
+                  <path fill="currentColor" d="M480 672V352a32 32 0 1 1 64 0v320a32 32 0 0 1-64 0z"></path>
+                  <path fill="currentColor" d="M512 896a384 384 0 1 0 0-768 384 384 0 0 0 0 768zm0 64a448 448 0 1 1 0-896 448 448 0 0 1 0 896z"></path>
+                </svg>
+                <div class="plusChar">新建文档</div>
+                <el-dialog v-model="addFileDialog">
+                  <el-form>
+                    <el-form-item label="文档名" :label-width="100">
+                      <el-input v-model="newFile" autocomplete="off" />
+                    </el-form-item>
+                  </el-form>
+                  <template #footer>
+                    <span class="dialog-footer">
+                      <el-button @click="addFileDialog = false">取消</el-button>
+                      <el-button type="primary" @click="addNewFile">确认</el-button>
+                    </span>
+                  </template>
+                </el-dialog>
         </div>
       </el-main>
     </el-container>
@@ -45,9 +66,6 @@
 
 <script>
 /* eslint-disable */
-import { ElMessage } from 'element-plus'
-import { Search } from '@element-plus/icons-vue'
-import { concat } from 'lodash';
 
 export default {
   data () {
@@ -58,15 +76,13 @@ export default {
       projectId: 0,
       project : {},
 
-      documents : [
-        {
-          name : '小学期'
-        }
-      ],
+      documents : [],
       numDocuments : 0,
 
       newName : '',
-      dialogFormVisible : false
+      newFile : '',
+      dialogFormVisible : false,
+      addFileDialog : false
     }
   },
   mounted() {
@@ -80,6 +96,11 @@ export default {
       ).then(response =>{
         this.project = response.data.data
         console.log(this.project)
+      })
+      this.$axios.get('/documents/project/'+this.projectId
+      ).then(response =>{
+        this.documents = response.data.data
+        this.numDocuments = response.data.data.length
       })
     },
     delProject () {
@@ -116,6 +137,21 @@ export default {
       this.dialogFormVisible = false;
       this.newName = '';
     },
+    addNewFileBtn () {
+      this.addFileDialog = true;
+    },
+    addNewFile() {
+      this.$axios.post('/documents',{
+        name: this.newFile,
+        pid: this.projectId,
+      }).then(response =>{
+        console.log(response)
+        this.documents.push({content: '', did: response.data.data, name: this.newFile, pid: this.projectId});
+        this.numDocuments ++;
+        this.addFileDialog = false;
+        this.newFile = '';
+      });
+    },
     toHomeView () {
       this.$router.push({
         name: 'home',
@@ -124,11 +160,12 @@ export default {
         }
       })
     },
-    toFileView (name) {
+    toFileView (id) {
       this.$router.push({
         name: 'file',
         params : {
-          programName : name,
+          account : this.userAccount,
+          d_id : this.documents[id].did,
         }
       })
     }
@@ -253,6 +290,20 @@ export default {
     box-shadow: 5px 5px 20px;
   }
 
+  .ProDoc .plusIcon {
+    display: block;
+    width: 50px;
+    height: 50px;
+    margin: 30px auto;
+  }
+
+  .ProDoc .plusChar {
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+  }
+
   .ProjectMain .DocName {
     display: block;
     margin-top: 20px;
@@ -260,4 +311,6 @@ export default {
     font-weight: 700;
     text-align: center;
   }
+
+  
 </style>
