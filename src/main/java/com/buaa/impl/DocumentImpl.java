@@ -21,6 +21,15 @@ public class DocumentImpl implements DocumentService {
         document = documentMapper.getDocumentByName(name);
         return document.getDid();
     }
+
+    @Override
+    public boolean setDocumentContent(int did, String content) {
+        Document document = new Document();
+        document.setDid(did);
+        document.setContent(content);
+        documentMapper.updateDocumentContent(document);
+        return true;
+    }
 //
 //    @Override
 //    public void deleteDocumentById(int id) {

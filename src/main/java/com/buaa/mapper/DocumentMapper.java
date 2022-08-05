@@ -16,4 +16,7 @@ public interface DocumentMapper extends BaseMapper<Document> {
 
     @Select("select * from document where d_name = #{name}")
     Document getDocumentByName(String name);
+
+    @Update("update document set content = #{content} where d_id = #{did}")
+    void updateDocumentContent(Document document);
 }

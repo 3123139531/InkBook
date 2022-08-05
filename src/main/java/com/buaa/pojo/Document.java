@@ -7,5 +7,5 @@ public class Document {
     private int did;
     private int tid;
     private String name;
-    private String documentContent;
+    private String Content;
 }

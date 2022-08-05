@@ -12,5 +12,6 @@ public interface DocumentService {
 //    Document selectById(int id);
 //    List<Document> selectByTeam(int tid);
     int createDocument(int tid, String name);
+    boolean setDocumentContent(int did, String content);
 
 }

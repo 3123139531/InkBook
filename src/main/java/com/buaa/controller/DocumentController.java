@@ -28,6 +28,12 @@ public class DocumentController {
                 "新文档创建成功！");
     }
 
+    @PutMapping
+    public R setDocumentContent(@RequestBody Document document) {
+        return new R(documentService.setDocumentContent(document.getDid(), document.getContent()),
+                null, "文档内容已变更");
+    }
+
 //    @PostMapping("/createDocument")
 //    public Map<String,Object> createDocument(@RequestBody Map<String,String> map){
 //        String content = map.get("documentContent");
