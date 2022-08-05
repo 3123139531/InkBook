@@ -23,7 +23,7 @@
           autocomplete="off"
       >
         <el-form-item label="用户名" prop="username">
-          <el-input v-model="ruleForm.username" maxlength="4" />
+          <el-input v-model="ruleForm.username"/>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="ruleForm.email" />
@@ -31,7 +31,7 @@
           <span class="status">{{ statusMsg }}</span>
         </el-form-item>
         <el-form-item label="真实姓名" prop="name">
-          <el-input v-model="ruleForm.name" maxlength="4" />
+          <el-input v-model="ruleForm.name" maxlength="5" />
         </el-form-item>
         <el-form-item label="密码" prop="pwd">
           <el-input v-model="ruleForm.pwd" type="password" />
@@ -62,8 +62,6 @@ export default {
       statusMsg: '',
       error: '',
       ruleForm: {
-        textarea: '请仔细阅读以下协议',
-        agreed: false,
         username: '',
         name: '',
         pwd: '',
@@ -71,17 +69,6 @@ export default {
         email: ''
       },
       rules: {
-        agreed: [{
-          validator: (rule, value, callback) => {
-            console.log('value:' + value)
-            if (value !== true) {
-              callback(new Error('请确认同意注册协议'))
-            } else {
-              callback()
-            }
-          },
-          trigger: 'blur'
-        }],
         username: [{
           required: true,
           type: 'string',
@@ -109,17 +96,6 @@ export default {
           required: true,
           message: '确认密码',
           trigger: 'blur'
-        }, {
-          validator: (rule, value, callback) => {
-            if (value === '') {
-              callback(new Error('请再次输入密码'))
-            } else if (value !== this.ruleForm.pwd) {
-              callback(new Error('两次输入密码不一致'))
-            } else {
-              callback()
-            }
-          },
-          trigger: 'blur'
         }]
       }
     }
@@ -128,18 +104,33 @@ export default {
   methods: {
     // 模拟登录
     register: function() {
-      this.$refs['ruleForm'].validate((valid) => {
-        if (valid) {
-          ElMessage({
-            message: '注册成功',
-            type: 'success',
-          });
-          setTimeout(
-              this.$router.push({
-              }), 2000
-          )
-        }
+      if(this.ruleForm.email==='' || this.ruleForm.pwd==='' || this.ruleForm.name===''
+          || this.ruleForm.username==='' || this.ruleForm.cpwd===''){
+        ElMessage({
+          message: '请填写所有信息',
+          type: 'danger',
+        });
+        return;
+      }
+      this.$axios.post("user/register", {
+        email: this.ruleForm.email,
+        password: this.ruleForm.pwd,
+        profilePic: null,
+        uid: 0,
+        uname: this.ruleForm.name,
+        unickname: this.ruleForm.username
+      }).then(function (response) {
+        console.log(response);
+        ElMessage({
+          message: '注册成功,即将跳转到登录页面',
+          type: 'success',
+        })
       })
+      setInterval(()=>{
+        this.$router.push({
+          name: 'Login',
+        })
+      }, 2000)
     }
   }
 }

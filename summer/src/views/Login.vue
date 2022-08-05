@@ -15,7 +15,7 @@
             v-model="loginForm.username"
             type="text"
             auto-complete="off"
-            placeholder="账号"
+            placeholder="用户名"
         >
         </el-input>
       </el-form-item>
@@ -29,9 +29,6 @@
         >
         </el-input>
       </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="margin: 0 0 25px 0; float: left">
-        记住我
-      </el-checkbox>
       <el-form-item style="width: 100%">
         <el-button
             :loading="loading"
@@ -52,9 +49,6 @@
 </template>
 
 <script>
-// 加密
-// import { encrypt } from '@/utils/rsaEncrypt'
-// import Cookies from 'js-cookie'
 
 import {ElMessage} from "element-plus";
 
@@ -62,12 +56,9 @@ export default {
   name: 'Login',
   data() {
     return {
-      codeUrl: '',
-      cookiePass: '',
       loginForm: {
         username: '',
         password: '',
-        rememberMe: false,
         code: '',
         uuid: ''
       },
@@ -81,80 +72,58 @@ export default {
         code: [{ required: true, trigger: 'change', message: '验证码不能为空' }]
       },
       loading: false,
-      redirect: undefined
-    }
-  },
-  watch: {
-    $route: {
-      handler: function(route) {
-        this.redirect = route.query && route.query.redirect
-      },
-      immediate: true
     }
   },
   methods: {
     handleLogin() {
-      this.$refs.loginForm.validate((valid) => {
-        const user = {
-          username: this.loginForm.username,
-          password: this.loginForm.password,
-          rememberMe: this.loginForm.rememberMe,
-          code: this.loginForm.code,
-          uuid: this.loginForm.uuid
-        }
-        if (user.password !== this.cookiePass) {
-          user.password = encrypt(user.password)
-        }
-        if (valid) {
-          this.loading = true
-          if (user.rememberMe) {
-            Cookies.set('username', user.username, {
-              expires: Config.passCookieExpires
-            })
-            Cookies.set('password', user.password, {
-              expires: Config.passCookieExpires
-            })
-            Cookies.set('rememberMe', user.rememberMe, {
-              expires: Config.passCookieExpires
-            })
-          } else {
-            Cookies.remove('username')
-            Cookies.remove('password')
-            Cookies.remove('rememberMe')
+      console.log(this.loginForm.username);
+      console.log(this.loginForm.password);
+      if(this.loginForm.username==='' || this.loginForm.password===''){
+        ElMessage({
+          message: '请填写所有信息',
+          type: 'danger',
+        });
+        return;
+      }
+      // ElMessage({
+      //   message: '登录成功',
+      //   type: 'success',
+      // });
+      // this.$router.push({
+      //   name: 'Homepage',
+      //   params: {
+      //     account : this.loginForm.username
+      //   }
+      // })
+      this.$axios.post("user/login", {
+        email: '',
+        password: this.loginForm.password,
+        profilePic: '',
+        uid: 0,
+        uname: this.loginForm.username,
+        unickname: '',
+      }).then(function (response) {
+        console.log(response);
+        this.loading = true;
+
+        ElMessage({
+          message: '登录成功',
+          type: 'success',
+        });
+        this.$router.push({
+          name: 'Homepage',
+          params: {
+            account : this.loginForm.uuid
           }
-          ElMessage({
-            message: '登录成功',
-            type: 'success',
-          })
-          setTimeout(
-              this.$router.push({
-                name: 'Homepage',
-                params: {
-                  account : this.loginForm.uuid
-                }
-              }), 1000
-          )
-        } else {
-          ElMessage({
-            message: '登录失败',
-            type: 'info',
-          })
-          return false
-        }
+        })
+      }).catch(function (error) {
+        ElMessage({
+          message: '登录失败',
+          type: 'info',
+        })
       })
     },
-    // point() {
-    //   const point = Cookies.get('point') !== undefined
-    //   if (point) {
-    //     this.$notify({
-    //       title: '提示',
-    //       message: '当前登录状态已过期，请重新登录！',
-    //       type: 'warning',
-    //       duration: 5000
-    //     })
-    //     Cookies.remove('point')
-    //   }
-    // }
+
   }
 }
 </script>

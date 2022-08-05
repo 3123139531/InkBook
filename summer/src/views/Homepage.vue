@@ -208,23 +208,21 @@ export default {
   },
   methods: {
     init () {
-      this.account = this.$route.params.account;
-      this.$axios.get(("/team/"), {
-        params: {
-          u_id : this.account
-        }
-      }).then(function (response) {
-        console.log(response);
-      });
-    },
-    showPersonalInfo () {
-      // this.$axios.get("/user/info", {
-      //   params: {
-      //     uid : this.account
-      //   }
+      // this.account = this.$route.params.account;
+      // this.$axios.get(("team"), {
+      //
       // }).then(function (response) {
       //   console.log(response);
       // });
+    },
+    showPersonalInfo () {
+      this.$axios.get(("user/info"), {
+
+      }).then(function (response) {
+        console.log(response);
+      }).catch(function (error) {
+        console.log(error);         /* 若出现异常则在终端输出相关信息 */
+      });
       this.option = 1;
     },
     showEnterprise () {
@@ -288,11 +286,11 @@ export default {
       );
       this.numTeams ++;
 
-      // this.$axios.post("/team", {
-      //
-      // }).then(function (response) {
-      //   console.log(response);
-      // })
+      this.$axios.post("/team", {
+        team_name: this.newName
+      }).then(function (response) {
+        console.log(response);
+      })
 
       this.addTeamDialog = false;
       this.newName = '';
