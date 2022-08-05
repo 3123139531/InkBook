@@ -13,5 +13,6 @@ public interface DocumentService {
 //    List<Document> selectByTeam(int tid);
     int createDocument(int tid, String name);
     boolean setDocumentContent(int did, String content);
+    boolean renameDocument(int pid, String name);
 
 }

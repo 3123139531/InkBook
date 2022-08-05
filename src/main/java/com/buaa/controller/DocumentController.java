@@ -34,6 +34,11 @@ public class DocumentController {
                 null, "文档内容已变更");
     }
 
+    @PutMapping
+    public R renameDocument(@RequestBody Document document) {
+        return new R(documentService.renameDocument(document.getDid(), document.getName()),
+                null, "文档名称已变更");
+    }
 //    @PostMapping("/createDocument")
 //    public Map<String,Object> createDocument(@RequestBody Map<String,String> map){
 //        String content = map.get("documentContent");

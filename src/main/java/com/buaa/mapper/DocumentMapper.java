@@ -19,4 +19,7 @@ public interface DocumentMapper extends BaseMapper<Document> {
 
     @Update("update document set content = #{content} where d_id = #{did}")
     void updateDocumentContent(Document document);
+
+    @Update("update document set d_name = #{name} where d_id = #{did}")
+    void updateDocumentName(Document document);
 }

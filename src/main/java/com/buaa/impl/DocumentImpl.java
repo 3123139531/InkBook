@@ -30,6 +30,15 @@ public class DocumentImpl implements DocumentService {
         documentMapper.updateDocumentContent(document);
         return true;
     }
+
+    @Override
+    public boolean renameDocument(int did, String name) {
+        Document document = new Document();
+        document.setDid(did);
+        document.setName(name);
+        documentMapper.updateDocumentName(document);
+        return true;
+    }
 //
 //    @Override
 //    public void deleteDocumentById(int id) {
