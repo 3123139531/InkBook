@@ -1,0 +1,42 @@
+{
+  "groups": [
+    {
+      "name": "cos",
+      "type": "com.buaa.configs.UploadConfig",
+      "sourceType": "com.buaa.configs.UploadConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "cos.access-key",
+      "type": "java.lang.String",
+      "sourceType": "com.buaa.configs.UploadConfig"
+    },
+    {
+      "name": "cos.base-url",
+      "type": "java.lang.String",
+      "sourceType": "com.buaa.configs.UploadConfig"
+    },
+    {
+      "name": "cos.bucket-name",
+      "type": "java.lang.String",
+      "sourceType": "com.buaa.configs.UploadConfig"
+    },
+    {
+      "name": "cos.folder-prefix",
+      "type": "java.lang.String",
+      "sourceType": "com.buaa.configs.UploadConfig"
+    },
+    {
+      "name": "cos.region-name",
+      "type": "java.lang.String",
+      "sourceType": "com.buaa.configs.UploadConfig"
+    },
+    {
+      "name": "cos.secret-key",
+      "type": "java.lang.String",
+      "sourceType": "com.buaa.configs.UploadConfig"
+    }
+  ],
+  "hints": []
+}

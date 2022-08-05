@@ -28,7 +28,7 @@ public class DocumentController {
                 "新文档创建成功！");
     }
 
-    @PutMapping
+    @GetMapping
     public R setDocumentContent(@RequestBody Document document) {
         return new R(documentService.setDocumentContent(document.getDid(), document.getContent()),
                 null, "文档内容已变更");
