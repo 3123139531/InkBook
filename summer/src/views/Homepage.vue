@@ -47,26 +47,13 @@
             </div>
             <el-form :model="info" label-width="120px" size="large" class="Format">
               <el-form-item label="用户名" class="Form-line">
-                <el-input v-model="info.username" />
-              </el-form-item>
-              <el-form-item label="账号">
-                <el-input v-model="info.account" />
+                <el-input v-model="info.uname" />
               </el-form-item>
               <el-form-item label="姓名">
-                <el-input v-model="info.name" />
+                <el-input v-model="info.unickname" />
               </el-form-item>
               <el-form-item label="邮箱">
                 <el-input v-model="info.email" />
-              </el-form-item>
-              <el-form-item label="生日">
-                <el-col :span="11">
-                  <el-date-picker
-                      v-model="$data.info.birthday"
-                      type="date"
-                      placeholder="Pick a date"
-                      style="width: 100%"
-                  />
-                </el-col>
               </el-form-item>
               <el-form-item>
                 <el-button :plain="true" type="primary" @click="Submit" class="changeInfoBtn">确认修改</el-button>
@@ -79,8 +66,8 @@
             <el-header class="Header">所在团队</el-header>
             <div v-for="i in numTeams">
               <div class="divisionBox" @click="toTeamInfo(i, info.account)">
-                <span class="innerChar">团队名称：{{teams[i-1].EName}}</span>
-                <span class="innerChar">团队编号：{{teams[i-1].id}}</span>
+                <span class="innerChar">团队名称：{{teams[i-1].tname}}</span>
+                <span class="innerChar">团队编号：{{teams[i-1].tid}}</span>
               </div>
             </div>
             <div class="newBox" @click="addNewTeamBtn">
@@ -170,18 +157,20 @@ import { ElMessage } from 'element-plus'
 export default {
   data () {
     return {
-      account: 1,
+      account: '',
       info : {
-        username : "wzszs",
-        account : "3123139531",
-        name : "wzy",
-        email : "3123139531@qq.com",
-        birthday : ""
+        email: "",
+        password: "",
+        profilePic: "",
+        uid: 0,
+        uname: "",
+        unickname: ""
       },
       teams : [
         {
-          id: 1,
-          EName: 'A'
+          brief : '',
+          tid: 0,
+          tname: ''
         }
       ],
       projects : [
@@ -192,15 +181,18 @@ export default {
         }
       ],
 
-      numTeams : 1,
-      numProjects : 1,
+      numTeams : 0,
+      numProjects : 0,
 
       option : 2,
       addTeamDialog : false,
       addProDialog : false,
       newPro_team : 0,
       newName : '',
-      proMod : 1
+      proMod : 1,
+
+      getTeamUrl : '',
+      getUserInfoUrl : ''
     }
   },
   mounted() {
@@ -208,39 +200,44 @@ export default {
   },
   methods: {
     init () {
+      // var that = this;
       this.account = this.$route.params.account;
-      this.$axios.get(("team"), {
-
-      }).then(function (response) {
-        console.log(response);
+      this.getTeamUrl = "team/" + this.account;
+      this.getUserInfoUrl = "user/info/" + this.account;
+      this.$axios.get(this.getTeamUrl, {
+        params: {
+          user_name : this.account
+        }
+      }).then(response=> {
+        this.teams = response.data.data;
+        this.numTeams = this.teams.length;
+        // console.log(this.teams)
+        // console.log(this.numTeams)
       });
     },
     showPersonalInfo () {
-      this.$axios.get(("user/info"), {
-
-      }).then(function (response) {
-        console.log(response);
-      }).catch(function (error) {
-        console.log(error);         /* 若出现异常则在终端输出相关信息 */
-      });
+      this.$axios.get(this.getUserInfoUrl, {
+        params: {
+          u_name : this.account
+        }
+      }).then(response=> {
+        // console.log(response);
+        this.info = response.data.data
+      })
       this.option = 1;
     },
     showEnterprise () {
-      this.$axios.get("/team", {
-
+      this.$axios.get(this.getTeamUrl, {
+        params: {
+          user_name : this.account
+        }
       }).then(function (response) {
         console.log(response);
       });
       this.option = 2;
     },
     showProject () {
-      this.$axios.get("projects/doing", {
-        params: {
-          tid: 1
-        }
-      }).then(function (response) {
-        console.log(response);
-      });
+
       this.option = 3;
     },
     Submit () {
@@ -252,7 +249,6 @@ export default {
     Revoke () {
     },
     toTeamInfo (id, account) {
-
       this.$router.push({
         name: 'TeamInfo',
         params: {

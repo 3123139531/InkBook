@@ -31,14 +31,12 @@
       </el-form-item>
       <el-form-item style="width: 100%">
         <el-button
-            :loading="loading"
-            size="medium"
+            size="default"
             type="primary"
             style="width: 100%"
             @click.native.prevent="handleLogin"
         >
-          <span v-if="!loading">登 录</span>
-          <span v-else>登 录 中...</span>
+          <span>登 录</span>
         </el-button>
       </el-form-item>
       <el-form-item>
@@ -71,7 +69,6 @@ export default {
         ],
         code: [{ required: true, trigger: 'change', message: '验证码不能为空' }]
       },
-      loading: false,
     }
   },
   methods: {
@@ -83,16 +80,6 @@ export default {
         });
         return;
       }
-      // ElMessage({
-      //   message: '登录成功',
-      //   type: 'success',
-      // });
-      // this.$router.push({
-      //   name: 'Homepage',
-      //   params: {
-      //     account : this.loginForm.username
-      //   }
-      // })
       this.$axios.post("user/login", {
         email: '0',
         password: this.loginForm.password,
@@ -101,29 +88,21 @@ export default {
         uname: this.loginForm.username,
         unickname: '0',
       }).then(function (response) {
-        console.log(response);
-        this.loading = true;
-
+        // console.log(response);
         ElMessage({
           message: '登录成功',
           type: 'success',
         });
-        setInterval(()=>{
-          this.$router.push({
-            name: 'Homepage',
-            params: {
-              account : this.loginForm.uuid
-            }
-          })
-        }, 1000)
-    }).catch(function (error) {
-        ElMessage({
-          message: '登录失败',
-          type: 'info',
-        })
       })
+      setInterval(()=>{
+        this.$router.push({
+          name: 'Homepage',
+          params: {
+            account : this.loginForm.username
+          }
+        })
+      }, 1000)
     },
-
   }
 }
 </script>
