@@ -9,4 +9,6 @@ public interface UserService {
     public User insertRegisteredUser(User user);
 
     public User findUserByName(String username);
+
+    public void updateUserInfo(String nameOfUserToUpdate,User newUserInfo);
 }
