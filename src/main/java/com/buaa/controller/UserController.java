@@ -37,6 +37,15 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "根据用户名查询用户信息")
+    @GetMapping("/user/info/{u_name}")
+    public R userInfoByName(@PathVariable("u_name") String username,HttpSession session) throws Exception{
+        R r = new R();
+        r.setData(userService.findUserByName(username));
+        r.setFlag(true);
+        return r;
+    }
+
     @ApiOperation(value = "修改用户信息")
     @PostMapping("/user/info")
     public R updateUserInfo(HttpSession session, @RequestBody User newUserInfo) throws Exception{

@@ -33,10 +33,21 @@ public class TeamController {
         return r;
     }
 
+//    @ApiOperation(value = "获取用户所在的全部团队列表")
+//    @GetMapping("/team")
+//    public R showUserTeam(HttpSession session){
+//        String username = session.getAttribute("username").toString();
+//        User user = userService.findUserByName(username);
+//        //return
+//        R r = new R();
+//        r.setData(teamService.getUserTeams(user));
+//        r.setFlag(true);
+//        return r;
+//    }
+
     @ApiOperation(value = "获取用户所在的全部团队列表")
-    @GetMapping("/team")
-    public R showUserTeam(HttpSession session){
-        String username = session.getAttribute("username").toString();
+    @GetMapping("/team/{user_name}")
+    public R showUserTeam(@PathVariable("user_name") String username){
         User user = userService.findUserByName(username);
         //return
         R r = new R();
@@ -45,14 +56,28 @@ public class TeamController {
         return r;
     }
 
-    @ApiOperation(value = "创建团队")
-    @PostMapping("/team")
-    public R insertTeam(@RequestParam("team_name") String team_name, @RequestParam("team_name") String team_description, HttpSession session){
-        Team team = new Team();
-        team.setTname(team_name);
-        team.setTbrief(team_description);
+//    @ApiOperation(value = "创建团队")
+//    @PostMapping("/team")
+//    public R insertTeam(@RequestParam("team_name") String team_name, @RequestParam("team_brief") String team_description, HttpSession session){
+//        Team team = new Team();
+//        team.setTname(team_name);
+//        team.setTbrief(team_description);
+//
+//        String username = session.getAttribute("username").toString();
+//        User creator = userService.findUserByName(username);
+//
+//        //return
+//        R r = new R();
+//        r.setData(teamService.createTeam(team,creator));
+//        r.setFlag(true);
+//        return r;
+//    }
 
-        String username = session.getAttribute("username").toString();
+
+    @ApiOperation(value = "创建团队")
+    @PostMapping("/team/{user_name}/")
+    public R insertTeam(@RequestBody Team team, @PathVariable("user_name") String username){
+
         User creator = userService.findUserByName(username);
 
         //return
@@ -62,19 +87,33 @@ public class TeamController {
         return r;
     }
 
+//    @ApiOperation(value = "邀请用户加入团队")
+//    @PostMapping("/team/{team_id}")
+//    public void inviteUserToTeam(@PathVariable("team_id") int t_id,@RequestParam("username") String username){
+//        Team team = teamService.selectTeamById(t_id);
+//        User user = userService.findUserByName(username);
+//        teamService.addTeamMember(team,user);
+//    }
+
     @ApiOperation(value = "邀请用户加入团队")
     @PostMapping("/team/{team_id}")
-    public void inviteUserToTeam(@PathVariable("team_id") int t_id,@RequestParam("username") String username){
+    public void inviteUserToTeam(@PathVariable("team_id") int t_id,@RequestBody User user){
         Team team = teamService.selectTeamById(t_id);
-        User user = userService.findUserByName(username);
         teamService.addTeamMember(team,user);
     }
 
+//    @ApiOperation(value = "团队移除用户")
+//    @DeleteMapping("/team/{team_id}")
+//    public void removeUserFromTeam(@PathVariable("team_id") int t_id,@RequestParam("username") String username){
+//        Team team = teamService.selectTeamById(t_id);
+//        User user = userService.findUserByName(username);
+//        teamService.removeTeamMember(team,user);
+//    }
+
     @ApiOperation(value = "团队移除用户")
     @DeleteMapping("/team/{team_id}")
-    public void removeUserFromTeam(@PathVariable("team_id") int t_id,@RequestParam("username") String username){
+    public void removeUserFromTeam(@PathVariable("team_id") int t_id,@RequestBody User user){
         Team team = teamService.selectTeamById(t_id);
-        User user = userService.findUserByName(username);
         teamService.removeTeamMember(team,user);
     }
 }

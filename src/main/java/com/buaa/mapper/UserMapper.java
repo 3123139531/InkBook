@@ -8,15 +8,15 @@ import static com.buaa.pojo.User.*;
 @Mapper
 public interface UserMapper {
     public static final String userTable = "user";
-    @Insert("insert into user(u_Nickname,u_name,email,password,profile_pic) " +
+    @Insert("insert into user(u_nickname,u_name,email,password,profile_pic) " +
             "values(#{uNickname},#{uName},#{email},#{password},#{profilePic})")
     public void insertUser(User user);
 
     @Select("select * from user where u_name = #{user_name}")
     public User selectUserByName(String user_name);
 
-    @Update("update user set u_Nickname = #{uNickname}, profile_pic = #{profilePic}, uname = #{uName}, email = #{email} , password = #{password}" +
-            "where u_name = #{uName}")
+    @Update("update user set u_nickname = #{uNickname}, profile_pic = #{profilePic}, uname = #{uName}, email = #{email} , password = #{password}" +
+            "where u_name = #{nameOfUserToUpdate}")
     public User updateUserInfo(String nameOfUserToUpdate,User newUserInfo);
 
     @Update("update user set u_nickname = #{uNickname} where u_name = #{uName}")
