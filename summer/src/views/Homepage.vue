@@ -174,9 +174,9 @@ export default {
       info : {
         username : "wzszs",
         account : "3123139531",
-        name : "王振阳",
+        name : "wzy",
         email : "3123139531@qq.com",
-        birthday : "2003-06-08"
+        birthday : ""
       },
       teams : [
         {
@@ -208,12 +208,12 @@ export default {
   },
   methods: {
     init () {
-      // this.account = this.$route.params.account;
-      // this.$axios.get(("team"), {
-      //
-      // }).then(function (response) {
-      //   console.log(response);
-      // });
+      this.account = this.$route.params.account;
+      this.$axios.get(("team"), {
+
+      }).then(function (response) {
+        console.log(response);
+      });
     },
     showPersonalInfo () {
       this.$axios.get(("user/info"), {
@@ -226,13 +226,11 @@ export default {
       this.option = 1;
     },
     showEnterprise () {
-      // this.$axios.get("/team", {
-      //   params: {
-      //     uid: this.account
-      //   }
-      // }).then(function (response) {
-      //   console.log(response);
-      // });
+      this.$axios.get("/team", {
+
+      }).then(function (response) {
+        console.log(response);
+      });
       this.option = 2;
     },
     showProject () {

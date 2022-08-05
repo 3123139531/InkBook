@@ -115,7 +115,7 @@ export default {
       this.$axios.post("user/register", {
         email: this.ruleForm.email,
         password: this.ruleForm.pwd,
-        profilePic: null,
+        profilePic: '',
         uid: 0,
         uname: this.ruleForm.name,
         unickname: this.ruleForm.username
