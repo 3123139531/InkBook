@@ -64,7 +64,7 @@
           <div v-if="option===2" class="PersonalEnterprises">
             <el-header class="Header">所在团队</el-header>
             <div v-for="i in numTeams" :key="i">
-              <div class="divisionBox" @click="toTeamView(i)">
+              <div class="divisionBox" @click="toTeamView(teams[i-1].tid, teams[i-1].tname)">
                 <span class="innerChar">团队名称：{{teams[i-1].tname}}</span>
                 <span class="innerChar">团队编号：{{teams[i-1].tid}}</span>
               </div>
@@ -188,16 +188,20 @@ export default {
   },
   methods: {
     init () {
-      console.log(this.$route)
+      // console.log(this.$route)
       this.account = this.$route.params.ac
       this.$axios.get('/team/' + this.account
       ).then(response=> {
         this.teams = response.data.data;
         this.numTeams = this.teams.length;
       });
+      this.$axios.get('/user/info/' + this.account
+      ).then(response=> {
+        this.info = response.data.data
+      });
     },
     showPersonalInfo () {
-      console.log(this.account)
+      // console.log(this.account)
       this.$axios.get('/user/info/' + this.account
       ).then(response=> {
         this.info = response.data.data
@@ -205,7 +209,7 @@ export default {
       this.option = 1;
     },
     showEnterprise () {
-      console.log(this.account)
+      // console.log(this.account)
       this.$axios.get('/team/' + this.account
       ).then(response=> {
         this.teams = response.data.data;
@@ -214,7 +218,7 @@ export default {
       this.option = 2;
     },
     showProject () {
-      console.log(this.account)
+      // console.log(this.account)
       if(this.proMod===1){
         this.projects = []
         this.numProjects = 0
@@ -253,13 +257,14 @@ export default {
     },
     Revoke () {
     },
-    toTeamView (id) {
+    toTeamView (id, name) {
       this.$router.push({
         name: 'team',
         params: {
           ac: this.account,
           userAccount: this.info.uname,
-          teamId: id
+          teamId: id,
+          teamName : name
         }
       })
     },
@@ -288,13 +293,19 @@ export default {
       this.addProDialog = true;
     },
     addNewTeam () {
-
-
-
-
-
-
-
+      let url = '/team/' + this.info.uname
+      console.log(this.newName)
+      this.$axios.post(url,{
+        tbrief: "string",
+        tid: 0,
+        tname: this.newName,
+        user_name: this.info.uname
+      }).then(response =>{
+        console.log(response)
+        this.showEnterprise();
+        this.addProDialog = false;
+        this.newName = '';
+      });
     },
     addNewPro() {
       this.$axios.post('/projects',{
@@ -415,7 +426,6 @@ export default {
   .Main {
     height: 680px;
     background: white;
-    overflow: auto;
     background: rgba(144, 144, 144, 0.2);
     /*background: rgba(255, 255, 255, 0.4);*/
   }
@@ -438,6 +448,7 @@ export default {
     height: 99%;
     border: 2px black solid;
     background: white;
+    overflow: auto;
   }
 
   .Form-line {

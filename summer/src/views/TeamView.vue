@@ -12,29 +12,23 @@
           <div class="TeamLeader">
             <span>队长：</span>
             <span v-for="i in team.numMembers" :key="i">
-              <span v-if="team.members[i-1].identity==='创建者'" style="font-weight: 700">{{team.members[i-1].username}}</span>
+              <span v-if="team.members[i-1].identity==='创建者'" style="font-weight: 700">{{team.members[i-1].uname}}</span>
             </span>
           </div>
         </div>
         <el-descriptions
             title="团队信息"
             direction="vertical"
-            :column="4"
+            :column="2"
             border
             class="TeamDetail"
         >
           <el-descriptions-item label="团队ID">
             <span style="font-weight: 700">{{teamId}}</span>
           </el-descriptions-item>
-          <el-descriptions-item label="创建时间">
-            <span style="font-weight: 700">{{team.setTime}}</span>
-          </el-descriptions-item>
           <el-descriptions-item label="团队人数" :span="2">
             <span style="font-weight: 700">{{team.numMembers}}</span>
           </el-descriptions-item>
-<!--          <el-descriptions-item label="团队简介">-->
-<!--            <span style="font-weight: 700">{{team.remark}}</span>-->
-<!--          </el-descriptions-item>-->
         </el-descriptions>
         <div class="TeamBtn">
           <div>
@@ -43,24 +37,6 @@
           </div>
           <el-button type="primary" round class="QuitBtn" @click="QuitTeam">退出队伍</el-button>
         </div>
-<!--        <ul class="TeamDetail">-->
-<!--          <li>-->
-<!--            <span>团队ID：</span>-->
-<!--            <span style="font-weight: 700">{{teamId}}</span>-->
-<!--          </li>-->
-<!--          <li>-->
-<!--            <span>创建时间：</span>-->
-<!--            <span style="font-weight: 700">{{team.setTime}}</span>-->
-<!--          </li>-->
-<!--          <li>-->
-<!--            <span>团队人数：</span>-->
-<!--            <span style="font-weight: 700">{{team.numMembers}}</span>-->
-<!--          </li>-->
-<!--          <li>-->
-<!--            <span>团队简介：</span>-->
-<!--            <div style="font-weight: 700">{{team.remark}}</div>-->
-<!--          </li>-->
-<!--        </ul>-->
       </el-header>
       <el-main class="TeamMain">
         <div style="font:normal bold 20px/30px Georgia, serif; margin-bottom: 10px;">团队成员</div>
@@ -70,11 +46,11 @@
             stripe
             class="MemDetail"
         >
-          <el-table-column prop="username" label="用户名" width="265"/>
-          <el-table-column prop="account" label="账号" width="265" />
-          <el-table-column prop="name" label="姓名" width="265"/>
-          <el-table-column prop="email" label="邮箱" width="265"/>
-          <el-table-column prop="identity" label="身份" width="265"/>
+          <el-table-column prop="uname" label="用户名" width="262"/>
+          <el-table-column prop="uid" label="用户号" width="262" />
+          <el-table-column prop="unickname" label="姓名" width="262"/>
+          <el-table-column prop="email" label="邮箱" width="262"/>
+          <el-table-column prop="identity" label="身份" width="262"/>
         </el-table>
         <div v-if="userIdentity!=='队员'">
           <div style="font:normal bold 20px/30px Georgia, serif;">成员管理</div>
@@ -97,30 +73,40 @@
               <el-dialog v-model="dialogVisible" title="点击用户名设置管理员">
                 <span v-for="i in team.numMembers" :key="i">
                   <span v-if="team.members[i-1].identity==='队员'" class="Member" @click="AppointManager(i-1)">
-                    {{team.members[i-1].username}}
+                    {{team.members[i-1].uname}}
                   </span>
                 </span>
               </el-dialog>
             </div>
             <div v-if="ManageMod===2">
-              <span v-for="i in team.numMembers" :key="i">
-                <span v-if="team.members[i-1].identity==='管理员'" class="Member" @click="DismissManager(i-1)">
-                  {{team.members[i-1].username}}
+              <el-dialog v-model="dialogVisible" title="点击用户名设置管理员">
+                <span v-for="i in team.numMembers" :key="i">
+                  <span v-if="team.members[i-1].identity==='管理员'" class="Member" @click="DismissManager(i-1)">
+                    {{team.members[i-1].uname}}
+                  </span>
                 </span>
-              </span>
+              </el-dialog>
             </div>
             <div v-if="ManageMod===3">
-              <el-dialog v-model="dialogVisible" title="可邀请用户">
-                <span v-for="user in Users" class="Member" @click="InviteMem(user.account)" :key="user">
-                  {{user.username}}({{user.account}})
-                </span>
+              <el-dialog v-model="dialogVisible" title="输入用户名邀请用户">
+                <el-form>
+                  <el-form-item label="用户名" :label-width="100">
+                    <el-input v-model="userInvited" autocomplete="off" />
+                  </el-form-item>
+                </el-form>
+                <template #footer>
+                    <span class="dialog-footer">
+                      <el-button @click="dialogVisible = false">取消</el-button>
+                      <el-button type="primary" @click="InviteMem()">确认</el-button>
+                    </span>
+                </template>
               </el-dialog>
             </div>
             <div v-if="ManageMod===4">
               <el-dialog v-model="dialogVisible" title="点击用户名踢出成员">
                 <span v-for="i in team.numMembers" :key="i">
                   <span v-if="team.members[i-1].identity==='队员'" class="Member" @click="KickMem(i-1)">
-                    {{team.members[i-1].username}}
+                    {{team.members[i-1].uname}}
                   </span>
                 </span>
               </el-dialog>
@@ -146,52 +132,17 @@ export default {
   data () {
     return {
       acc: 0,
-      userAccount: '2',
-      userIdentity: '管理员',
+      userAccount: '',
+      userIdentity: '',
 
-      teamId: '1',
+      teamId: '',
       team : {
-        name: "六轮车",
-        setTime: "2022-08-01",
-        members: [
-          {
-            username : 'zzh',
-            account : '1',
-            name : '1',
-            email : '1',
-            birthday: '1',
-            identity: '创建者'
-          },
-          {
-            username : 'abb',
-            account : '2',
-            name : '2',
-            email : '2',
-            birthday: '2',
-            identity: '管理员'
-          },
-          {
-            username : 'cbb',
-            account : '3',
-            name : '3',
-            email : '3',
-            birthday: '3',
-            identity: '队员'
-          },
-        ],
-        numMembers : 3,
+        name: "",
+        trief: '',
+        members: [],
+        numMembers : 0,
       },
-
-      Users : [
-        {
-          username : 'cbb',
-          account : '3',
-          name : '3',
-          email : '3',
-          birthday: '3',
-          identity: ''
-        }
-      ],
+      userInvited: '',
 
       ManageMod : 0,
       dialogVisible : false
@@ -206,6 +157,10 @@ export default {
       this.acc = this.$route.params.ac
       this.userAccount = this.$route.params.userAccount;
       this.teamId = this.$route.params.teamId;
+      this.team.name = this.$route.params.teamName;
+      this.getMembers()
+    },
+    getMembers () {
       var getUsersUrl = "/team/" + this.teamId + "/members";
       this.$axios.get(getUsersUrl, {
         params: {
@@ -216,16 +171,16 @@ export default {
         this.team.members = response.data.data;
         this.team.numMembers = this.team.members.length;
         for (let i = 0; i < this.team.numMembers; i++) {
-          this.team.members[i].identity = '队员'
+          if(this.team.members[i].identity === '1')
+            this.team.members[i].identity = '队员'
+          else if(this.team.members[i].identity === '2')
+            this.team.members[i].identity = '管理员'
+          if(this.team.members[i].identity === '3')
+            this.team.members[i].identity = '创建者'
+
+          if(this.team.members[i].uname === this.userAccount)
+            this.userIdentity = this.team.members[i].identity
         }
-        // for (let i = 0; i < this.team.numMembers; i++) {
-        //   if(this.team.members[i].identity === 1)
-        //     this.team.members[i].identity = '队员'
-        //   else if(this.team.members[i].identity === 2)
-        //     this.team.members[i].identity = '管理员'
-        //   if(this.team.members[i].identity === 3)
-        //     this.team.members[i].identity = '创建者'
-        // }
       });
     },
     JurisdictionError () {
@@ -257,40 +212,75 @@ export default {
     },
     AppointManager (i) {
       this.team.members[i].identity = '管理员';
-
-
-
+      this.$axios.put("/team/" + this.teamId + '/members', {
+        targetPosition: 2,
+        twoUserParam: {
+          uName1: this.userAccount,
+          uName2: this.team.members[i].uname,
+        },
+        team_id: this.teamId
+      }).then(function (response) {
+        console.log(response);
+      })
+      ElMessage({
+        message: '任命成功',
+        type: 'success',
+      })
     },
-    DismissManager () {
+    DismissManager (i) {
       this.team.members[i].identity = '队员';
-
-
-
-
+      this.$axios.put("/team/" + this.teamId + '/members', {
+        targetPosition: 1,
+        twoUserParam: {
+          uName1: this.userAccount,
+          uName2: this.team.members[i].uname,
+        },
+        team_id: this.teamId
+      }).then(function (response) {
+        console.log(response);
+      })
+      ElMessage({
+        message: '撤销成功',
+        type: 'success',
+      })
     },
-    InviteMem (account) {
-      // ElMessage({
-      //   message: '已发送邀请',
-      //   type: 'success',
-      // });
-      // this.$axios.get("/team/{team_id}", {
-      //   params: {
-      //     team_id : this.teamId,
-      //     username : username
-      //   }
-      // }).then(function (response) {
-      //   console.log(response);
-      // });
+    InviteMem () {
+      this.$axios.post("/team/" + this.teamId + '/members', {
+        team_id : this.teamId,
+        uName1: this.userAccount,
+        uName2: this.userInvited
+      }).then(response=> {
+        console.log(response);
+        this.userInvited = ''
+        if(response.data.msg === '成功邀请'){
+          ElMessage({
+            message: response.data.msg,
+            type: 'success',
+          })
+          this.getMembers()
+        }
+        else {
+          ElMessage({
+            message: response.data.msg,
+            type: 'warning',
+          })
+        }
+      });
     },
     KickMem (i) {
-      // this.$axios.delete("/team/{team_id}", {
-      //   params: {
-      //     team_id : this.teamId,
-      //     username: this.team.members[i].username
-      //   }
-      // }).then(function (response) {
-      //   console.log(response);
-      // });
+      this.$axios.delete("/team/" + this.teamId + '/members', {
+        data: {
+          uName1: this.userAccount,
+          uName2: this.team.members[i].uname
+        }
+      }).then(response=> {
+        console.log(response);
+        ElMessage({
+          message: '踢出成功',
+          type: 'success',
+        })
+        this.getMembers()
+      });
     },
     toHomeView () {
       this.$router.push({
@@ -359,7 +349,7 @@ export default {
   }
 
   .TeamDetail {
-    width: 500px;
+    width: 300px;
     float: left;
     text-align: left;
     margin-left: 200px;
@@ -418,6 +408,7 @@ export default {
     width: 100px;
     display: inline-block;
     border-radius: 10px;
+    margin-right: 20px;
     background: rgba(144, 144, 144, 0.6);
   }
 
@@ -430,7 +421,6 @@ export default {
   }
 
   .KickMem {
-    margin-left: 20px;
     margin-right: 20px;
   }
 
@@ -450,7 +440,7 @@ export default {
 
   .Member {
     display: inline-block;
-    margin: 20px auto;
+    margin-right: 10px;
     font-size: 18px;
     font-weight: 700;
   }
