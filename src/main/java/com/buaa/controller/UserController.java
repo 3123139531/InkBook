@@ -21,23 +21,23 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @ApiOperation(value = "用户信息")
-    @GetMapping("/user/info")
-    public R userInfo(HttpSession session) throws Exception{
-        String username = session.getAttribute("username").toString();
-        if(username == null || username.equals("")){
-            R r = new R();
-            r.setData(userService.findUserByName(username));
-            r.setFlag(true);
-            return r;
-        }
-        else{
-            R r = new R();
-            r.setData(userService.findUserByName(username));
-            r.setFlag(true);
-            return r;
-        }
-    }
+//    @ApiOperation(value = "用户信息")
+//    @GetMapping("/user/info")
+//    public R userInfo(HttpSession session) throws Exception{
+//        String username = session.getAttribute("username").toString();
+//        if(username == null || username.equals("")){
+//            R r = new R();
+//            r.setData(userService.findUserByName(username));
+//            r.setFlag(true);
+//            return r;
+//        }
+//        else{
+//            R r = new R();
+//            r.setData(userService.findUserByName(username));
+//            r.setFlag(true);
+//            return r;
+//        }
+//    }
 
     @ApiOperation(value = "根据用户名查询用户信息")
     @GetMapping("/user/info/{u_name}")
@@ -48,9 +48,21 @@ public class UserController {
         return r;
     }
 
+//    @ApiOperation(value = "修改用户信息")
+//    @PostMapping("/user/info")
+//    public R updateUserInfo(@PathVariable("u_name") String username, @RequestBody User newUserInfo) throws Exception{
+//        userService.updateUserInfo(username,newUserInfo);
+//
+//        R r = new R();
+//        r.setData(newUserInfo);
+//        r.setFlag(true);
+//        return r;
+//
+//    }
+
     @ApiOperation(value = "修改用户信息")
-    @PostMapping("/user/info")
-    public R updateUserInfo(HttpSession session, @RequestBody User newUserInfo) throws Exception{
+    @PostMapping("/user/info/{u_name}")
+    public R updateUserInfoByName(HttpSession session, @RequestBody User newUserInfo) throws Exception{
         String username = (String) session.getAttribute("username");
         userService.updateUserInfo(username,newUserInfo);
 
@@ -63,25 +75,27 @@ public class UserController {
 
     @ApiOperation(value = "注册")
     @PostMapping("/user/register")
-    public R userRegister(@RequestBody(required=false) User user) {
+    public R userRegister(@RequestBody User user) {
         User tryRegisterUser = userService.findUserByName(user.getUName());
         if(tryRegisterUser != null){
-//            throw new Exception("User already exists");
             R r = new R();
-            r.setData("this username is taken");
+            r.setMsg("this username is taken");
             r.setFlag(false);
             return new R();
         }
         else {
-//            User user = new User();
-//            user.setuName(user_name);
-//            user.setEmail(email);
-//            user.setPassword(password);
-
-            R r = new R();
-            r.setData(userService.insertRegisteredUser(user));
-            r.setFlag(true);
-            return r;
+            if(user.getPassword().length()>6) {
+                R r = new R();
+                r.setData(userService.insertRegisteredUser(user));
+                r.setFlag(true);
+                return r;
+            }
+            else{
+                R r = new R();
+                r.setMsg("password has to be more than 6 characters!");
+                r.setFlag(false);
+                return r;
+            }
         }
     }
 
