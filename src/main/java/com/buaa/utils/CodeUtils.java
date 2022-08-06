@@ -41,7 +41,7 @@ public class CodeUtils {
             String html = "<html>\n" +
                     "<body>\n" +
                     "<p>您好，您的账号正在注册墨书</p>\n" +
-                    "<a href=\"http://localhost/lookCode/" + token + "\">点此链接进行注册</a>" +
+                    "<a href=\"http://101.42.246.11/lookCode/" + token + "\">点此链接进行注册</a>" +
                     "</body>\n" +
                     "</html>";
             messageHelper.setText(html, true); // 邮箱内容
