@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @Api(tags = "用户管理")
 @RestController
@@ -117,6 +119,24 @@ public class UserController {
         }
     }
 
+    @PostMapping("/sendCode")
+    public R sendCode(@RequestBody User user){
+//        System.out.println(user);
+        boolean flag = userService.sendCode(user);
+        if (flag)
+            return new R(true, "邮件发送成功，请前往您的邮箱进行注册验证");
+        else
+            return new R(false, "邮件发送失败");
+    }
 
+    // 判断是否注册成功
+    @GetMapping("/lookCode/{token}")
+    public R lookCode(@PathVariable("token")String token){
+        boolean flag = userService.eqToken(token);
+        if (flag)
+            return new R(true, "注册成功");
+        else
+            return new R(false, "注册码过期，请重新注册");
+    }
 
 }

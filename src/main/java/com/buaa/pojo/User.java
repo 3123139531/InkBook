@@ -3,9 +3,11 @@ package com.buaa.pojo;
 import lombok.Data;
 import org.springframework.stereotype.Repository;
 
+import java.io.Serializable;
+
 @Data
 @Repository
-public class User {
+public class User implements Serializable {
 
     private int uId;
     private String uNickname;
