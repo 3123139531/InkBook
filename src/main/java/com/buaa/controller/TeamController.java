@@ -2,18 +2,21 @@ package com.buaa.controller;
 
 import com.buaa.controller.utils.R;
 import com.buaa.pojo.Team;
+import com.buaa.pojo.TeamMember;
 import com.buaa.pojo.User;
 import com.buaa.service.TeamService;
 import com.buaa.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 @Api(tags = "团队管理")
 @RestController
@@ -32,9 +35,10 @@ public class TeamController {
         //return
         User[] users = teamService.getTeamMembers(team);
         ArrayList<Map<String,String>> usersList = new ArrayList<>();
-        HashMap<String,String> userInfos = new HashMap<String,String>();
 
         for (User user: users) {
+            System.out.println(user);
+            TreeMap<String,String> userInfos = new TreeMap<String,String>();
             userInfos.put("uname",user.getUName());
             userInfos.put("uid",String.valueOf(user.getUId()));
             userInfos.put("unickname",user.getUNickname());
@@ -92,12 +96,21 @@ public class TeamController {
     @ApiOperation(value = "创建团队")
     @PostMapping("/team/{user_name}")
     public R createTeam(@PathVariable("user_name") String username, @RequestBody Team team){
-
         User creator = userService.findUserByName(username);
+        teamService.createTeam(team,creator);
 
-        //return
+        int tid = team.getTid();
+        int uid = creator.getUId();
+        team.setTid(tid);
+
+        TeamMember teamCreator = new TeamMember();
+        teamCreator.setTId(tid);
+        teamCreator.setUId(uid);
+        teamService.addTeamMember(team,creator,3);
+
         R r = new R();
-        r.setData(teamService.createTeam(team,creator));
+        r.setMsg("创建成功");
+        r.setData(teamService.getUserTeams(creator));
         r.setFlag(true);
         return r;
     }
@@ -111,10 +124,23 @@ public class TeamController {
 //    }
 
     @ApiOperation(value = "邀请用户加入团队")
-    @PostMapping("/team/{team_id}/")
-    public void inviteUserToTeam(@PathVariable("team_id") int t_id,@RequestBody User user){
+    @PostMapping("/team/{team_id}/members")
+    public R inviteUserToTeam(@PathVariable("team_id") int t_id,@RequestBody TwoUserParam twoUsers){
         Team team = teamService.selectTeamById(t_id);
-        teamService.addTeamMember(team,user);
+        User inviter = userService.findUserByName(twoUsers.getuName1());
+        User invitee = userService.findUserByName(twoUsers.getuName2());
+        R r = new R();
+        if(!teamService.isMember(team,invitee)){
+            teamService.addTeamMember(team,invitee);
+            r.setMsg("成功邀请");
+            r.setFlag(true);
+        }
+        else{
+            r.setMsg("此用户已经在此团队中");
+            r.setFlag(false);
+        }
+        return r;
+        //TODO: 发送消息而不是直接邀请
     }
 
 //    @ApiOperation(value = "团队移除用户")
@@ -133,11 +159,12 @@ public class TeamController {
 //    }
 
     @ApiOperation(value = "团队移除用户")
-    @DeleteMapping("/team/{team_id}/members/{kicker_username}")
-    public void removeUserFromTeam(@PathVariable("team_id") int t_id,@PathVariable("kicker_username") String kickerUsername,@RequestBody User userToKick){
+    @DeleteMapping("/team/{team_id}/members")
+    public void removeUserFromTeam(@PathVariable("team_id") int t_id,@RequestBody TwoUserParam twoUsers){
         Team team = teamService.selectTeamById(t_id);
-        User kicker = userService.findUserByName(kickerUsername);
+        User kicker = userService.findUserByName(twoUsers.getuName1());
         int kickerPosition = teamService.selectMemberPosition(team,kicker);
+        User userToKick = userService.findUserByName(twoUsers.getuName2());
         int userToKickPosition = teamService.selectMemberPosition(team,userToKick);
         if(kickerPosition >=2 && kickerPosition>userToKickPosition) {
             teamService.removeTeamMember(team, userToKick);
@@ -145,14 +172,57 @@ public class TeamController {
     }
 
     @ApiOperation(value = "修改团队成员权限")
-    @PutMapping("/team/{team_id}/members/{changer_username}")
-    public void changeUserPosition(@PathVariable("team_id") int t_id,@PathVariable("changer_username") String changerUsername,@RequestBody User userToChange,@RequestParam("target_position") int targetPosition){
+    @PutMapping("/team/{team_id}/members")
+    public void changeUserPosition(@PathVariable("team_id") int t_id,@RequestBody ChangePositionParam p){
         Team team = teamService.selectTeamById(t_id);
-        User changer = userService.findUserByName(changerUsername);
+        User changer = userService.findUserByName(p.getTwoUserParam().getuName1());
+        User toChange = userService.findUserByName(p.getTwoUserParam().getuName2());
+        int targetPosition = p.getTargetPosition();
         int changerPosition = teamService.selectMemberPosition(team,changer);
         if(changerPosition>=2 && targetPosition<3) {
-            teamService.updateMemberPosition(team, userToChange, targetPosition);
+            teamService.updateMemberPosition(team, toChange, targetPosition);
         }
     }
 
+}
+
+class TwoUserParam{
+    String uName1;
+    String uName2;
+
+    public String getuName1() {
+        return uName1;
+    }
+
+    public void setuName1(String uName1) {
+        this.uName1 = uName1;
+    }
+
+    public String getuName2() {
+        return uName2;
+    }
+
+    public void setuName2(String uName2) {
+        this.uName2 = uName2;
+    }
+}
+class ChangePositionParam{
+    TwoUserParam twoUserParam;
+    int targetPosition;
+
+    public TwoUserParam getTwoUserParam() {
+        return twoUserParam;
+    }
+
+    public void setTwoUserParam(TwoUserParam twoUserParam) {
+        this.twoUserParam = twoUserParam;
+    }
+
+    public int getTargetPosition() {
+        return targetPosition;
+    }
+
+    public void setTargetPosition(int targetPosition) {
+        this.targetPosition = targetPosition;
+    }
 }

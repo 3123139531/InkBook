@@ -6,10 +6,11 @@ import com.buaa.pojo.User;
 public interface TeamService {
     public Team selectTeamById(int id);
 
-    public Team[] createTeam(Team team, User creator);
+    public void createTeam(Team team, User creator);
 
     //TODO: invite/ add member
     public void addTeamMember(Team team, User user);
+    public void addTeamMember(Team team, User user, int position);
 
     //TODO: remove/ delete member
     public void removeTeamMember(Team team,User user);
@@ -21,4 +22,6 @@ public interface TeamService {
     public void updateMemberPosition(Team team, User user, int position);
     //TODO: select team members
     public User[] getTeamMembers(Team team);
+
+    public boolean isMember(Team team, User user);
 }

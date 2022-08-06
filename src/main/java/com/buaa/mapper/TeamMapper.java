@@ -13,6 +13,7 @@ public interface TeamMapper {
     public Team selectTeamByID(int id);
 
     @Insert("insert into team(t_name) values(#{tname})")
+    @Options(useGeneratedKeys = true, keyProperty = "tid")
     public void insertTeam(Team team);
 
     @Delete("delete")

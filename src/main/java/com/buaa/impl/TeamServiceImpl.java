@@ -20,19 +20,10 @@ public class TeamServiceImpl implements TeamService {
         return teamMapper.selectTeamByID(id);
     }
 
-    public Team[] createTeam(Team team, User creator){
-        System.out.println(team.toString());
-        System.out.println(team.toString());
-        System.out.println(team.toString());
+    public void createTeam(Team team, User creator){
         teamMapper.insertTeam(team);
-        int tid = team.getTid();
-        int uid = creator.getUId();
-        TeamMember teamCreator = new TeamMember();
-        teamCreator.setTId(tid);
-        teamCreator.setUId(uid);
-        teamCreator.setUPosition(3);
-        teamMemberMapper.insertTeamMember(teamCreator);
-        return teamMapper.selectAllTeam();
+
+//        return teamMemberMapper.selectTeamsByUserId(creator);
     }
 
     //TODO: invite/ add member
@@ -43,6 +34,17 @@ public class TeamServiceImpl implements TeamService {
         newTeamMember.setTId(tid);
         newTeamMember.setUId(uid);
         newTeamMember.setUPosition(1);
+        teamMemberMapper.insertTeamMember(newTeamMember);
+    }
+
+
+    public void addTeamMember(Team team, User user, int position){
+        int tid = team.getTid();
+        int uid = user.getUId();
+        TeamMember newTeamMember = new TeamMember();
+        newTeamMember.setTId(tid);
+        newTeamMember.setUId(uid);
+        newTeamMember.setUPosition(position);
         teamMemberMapper.insertTeamMember(newTeamMember);
     }
 
@@ -81,5 +83,15 @@ public class TeamServiceImpl implements TeamService {
     //TODO: select team members
     public User[] getTeamMembers(Team team){
         return teamMemberMapper.selectMembersByTeam(team);
+    }
+
+    public boolean isMember(Team team, User user){
+        int tid = team.getTid();
+        int uid = user.getUId();
+        TeamMember member = new TeamMember();
+        member.setTId(tid);
+        member.setUId(uid);
+        if(teamMemberMapper.isMember(member)>0) return true;
+        else return false;
     }
 }
