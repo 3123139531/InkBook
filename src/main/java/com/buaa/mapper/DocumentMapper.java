@@ -18,13 +18,13 @@ public interface DocumentMapper extends BaseMapper<Document> {
     @Select("select * from document where d_name = #{dName}")
     Document getDocumentByName(String name);
 
-    @Update("update document set d_content = #{content} where d_id = #{did}")
+    @Update("update document set d_content = #{dContent} where d_id = #{did}")
     void updateDocumentContent(Document document);
 
-    @Update("update document set d_name = #{name} where d_id = #{did}")
+    @Update("update document set d_name = #{dName} where d_id = #{did}")
     void updateDocumentName(Document document);
 
-    @Select("select * from document where d_pid = #{pid}")
+    @Select("select * from document where d_pid = #{dPid}")
     List<Document> selectByProject(int pid);
 
     @Select("select * from document where d_id = #{did}")
