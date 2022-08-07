@@ -66,8 +66,7 @@ public class UserController {
 
         User userToChange = userService.findUserByName(username);
         newUserInfo.setUId(userToChange.getUId());
-
-        if(userService.findUserByName(newUserInfo.getUName())!=null){
+        if(userService.findUserByName(newUserInfo.getUName())!=null && !username.equals(newUserInfo.getUName())){
             R r = new R();
             r.setMsg("此用户名已被占用");
             r.setFlag(false);
