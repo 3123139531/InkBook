@@ -108,4 +108,9 @@ public class ProjectImpl implements ProjectService {
         return newPId;
     }
 
+    @Override
+    public List<Project> selectByTeamModify(int id) {
+        return projectMapper.getProjectsByTeamModify(id);
+    }
+
 }

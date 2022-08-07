@@ -27,10 +27,10 @@ public interface ProjectMapper extends BaseMapper<Project> {
     @Select("select * from project where p_name like '%#{pName}%'")
     List<Project> getProjectLike(Project project);
 
-    @Update("update project set p_name = #{pName} where p_id = #{pid}")
+    @Update("update project set p_name = #{pName}, modify_time = now() where p_id = #{pid}")
     void updateProjectName(Project project);
 
-    @Insert("insert into project (t_id, p_name) values (#{tid}, #{pName})")
+    @Insert("insert into project (t_id, p_name, create_time, modify_time) values (#{tid}, #{pName}, now(), now())")
     void insertProject(Project project);
 
     @Select("select * from project where t_id = #{tid} and p_name = #{pName}")
@@ -39,10 +39,10 @@ public interface ProjectMapper extends BaseMapper<Project> {
     @Select("select * from project where t_id = #{tid} and status = #{status}")
     List<Project> getProjectByStatus(Project project);
 
-    @Update("update project set status = #{status} where p_id = #{pid}")
+    @Update("update project set status = #{status}, modify_time = now() where p_id = #{pid}")
     void updateStatus(Project project);
 
-    @Insert("insert into project (t_id, p_name, status) select t_id, p_name, status from project where p_id = #{id};")
+    @Insert("insert into project (t_id, p_name, status, create_time, modify_time) select t_id, p_name, status, now(), now() from project where p_id = #{id};")
     void copyProject(int id);
 
     @Select("select * from project where p_name in (\n" +
@@ -55,4 +55,7 @@ public interface ProjectMapper extends BaseMapper<Project> {
 
     @Insert("insert into document (d_name, d_pid, d_content) select d_name, #{copy}, d_content from document where d_pid = #{pre};")
     void copyDocsForProject(CopyProjectUtils utils);
+
+    @Select("select * from project where t_id = #{id} order by modify_time;")
+    List<Project> getProjectsByTeamModify(int id);
 }

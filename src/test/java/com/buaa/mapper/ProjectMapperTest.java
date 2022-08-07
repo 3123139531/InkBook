@@ -19,9 +19,8 @@ public class ProjectMapperTest {
 //    @Test
 //    public void testSave() {
 //        Project project = new Project();
-//        project.setTid(3);
-//        project.setStatus("doing");
-//        project.setPName("北京大学食堂新建");
+//        project.setTid(1);
+//        project.setPName("创建项目时间测试-2");
 //
 //        projectMapper.insertProject(project);
 //    }

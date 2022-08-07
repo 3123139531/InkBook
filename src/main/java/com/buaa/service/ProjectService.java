@@ -16,4 +16,5 @@ public interface ProjectService {
     List<Project> selectProjectByStatus(int tid, String status);
     List<Project> selectProjectLike(int tid, String key);
     int copyProject(int id);
+    List<Project> selectByTeamModify(int id);
 }

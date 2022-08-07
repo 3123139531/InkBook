@@ -113,4 +113,9 @@ public class ProjectController {
     public R copyProject(@PathVariable int pid) {
         return new R(true, projectService.copyProject(pid), "项目复制成功");
     }
+
+    @GetMapping("/modify/{tid}")
+    public R selectByTeamModify(@PathVariable int tid) {
+        return new R(true, projectService.selectByTeamModify(tid), "查询成功");
+    }
 }
