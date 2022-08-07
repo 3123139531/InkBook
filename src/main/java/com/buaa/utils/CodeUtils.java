@@ -1,5 +1,10 @@
 package com.buaa.utils;
 
+import cn.hutool.core.lang.Dict;
+import cn.hutool.extra.template.Template;
+import cn.hutool.extra.template.TemplateConfig;
+import cn.hutool.extra.template.TemplateEngine;
+import cn.hutool.extra.template.TemplateUtil;
 import com.buaa.pojo.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -37,13 +42,18 @@ public class CodeUtils {
             // 接收方的邮箱地址
             messageHelper.setTo(user.getEmail());
             // 邮箱标题
-            messageHelper.setSubject("注册");
-            String html = "<html>\n" +
-                    "<body>\n" +
-                    "<p>您好，您的账号正在注册墨书</p>\n" +
-                    "<a href=\"http://101.42.246.11/lookCode/" + token + "\">点此链接进行注册</a>" +
-                    "</body>\n" +
-                    "</html>";
+            messageHelper.setSubject("InkBook注册");
+
+            TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("templates", TemplateConfig.ResourceMode.CLASSPATH));
+            Template template = engine.getTemplate("EmailTemplate.html");
+            String html =template.render(Dict.create().set("href", "http://101.42.246.11/lookCode/" + token));
+
+//            String html = "<html>\n" +
+//                    "<body>\n" +
+//                    "<p>您好，您的账号正在注册墨书</p>\n" +
+//                    "<a href=\"http://101.42.246.11/lookCode/" + token + "\">点此链接进行注册</a>" +
+//                    "</body>\n" +
+//                    "</html>";
             messageHelper.setText(html, true); // 邮箱内容
             System.out.println("邮件内容设置成功");
             System.out.println(message);
