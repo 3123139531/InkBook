@@ -84,24 +84,36 @@ public class UserController {
             return new R();
         }
         else {
-            if(user.getPassword().length()>6) {
-                R r = new R();
-                r.setData(userService.insertRegisteredUser(user));
-                r.setFlag(true);
-                return r;
+            if(isValidPassword(user.getPassword())) {
+//                userService.insertRegisteredUser(user);
+                return sendCode(user);
             }
             else{
                 R r = new R();
-                r.setMsg("password has to be more than 6 characters!");
+                r.setMsg("密码需要至少6位数，且需包含至少一个数字及一个英文字母");
                 r.setFlag(false);
                 return r;
             }
         }
     }
 
+    public boolean isValidPassword(String password){
+        boolean isValid = false;
+        if(password.length()>6){
+            String numRegex   = ".*[0-9].*";
+            String upCaseAlphaRegex = ".*[A-Z].*";
+            String lowCaseAlphaRegex = ".*[a-z].*";
+//            if(password.matches(numRegex) && password.matches(upCaseAlphaRegex) && password.matches(lowCaseAlphaRegex)){
+            if(password.matches(numRegex) && (password.matches(upCaseAlphaRegex) || password.matches(lowCaseAlphaRegex))){
+                isValid = true;
+            }
+        }
+        return isValid;
+    }
+
     @ApiOperation(value = "登录")
     @PostMapping("/user/login")
-    public R userLogin(@RequestBody User user, HttpSession session) throws Exception{
+    public R userLogin(@RequestBody User user) throws Exception{
 //        User user = new User();
 //        user.setuName(user_name);
 //        user.setPassword(password);
@@ -112,7 +124,7 @@ public class UserController {
             //if found check password
             if(tryLoginUser.getPassword().equals(user.getPassword())){
                 //login success
-                session.setAttribute("username",user.getUName());
+//                session.setAttribute("username",user.getUName());
 
                 r.setData(userService.findUserByName(tryLoginUser.getUName()));
                 r.setFlag(true);
@@ -120,14 +132,14 @@ public class UserController {
             }
             else{
                 //output incorrect password
-                r.setData("incorrect password");
+                r.setData("密码错误");
                 r.setFlag(false);
                 return r;
             }
         }
         else{
             //if not output: user doesn't exist
-            r.setData("user doesn't exist");
+            r.setData("此用户不存在");
             r.setFlag(false);
             return r;
         }
