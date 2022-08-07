@@ -268,24 +268,6 @@ export default {
         }
       })
     },
-    // toProjectView1 (id) {
-    //   this.$router.push({
-    //     name: 'project',
-    //     params: {
-    //       p_id: this.projects[id-1].pid,
-    //       ac: this.account
-    //     }
-    //   })
-    // },
-    // toProjectView2 (id) {
-    //   this.$router.push({
-    //     name: 'project',
-    //     params: {
-    //       p_id: this.t_projects[id-1].pid,
-    //       ac: this.account
-    //     }
-    //   })
-    // },
     addNewTeamBtn () {
       this.addTeamDialog = true;
     },
@@ -307,19 +289,19 @@ export default {
         this.newName = '';
       });
     },
-    // addNewPro() {
-    //   this.$axios.post('/projects',{
-    //     pname: this.newName,
-    //     tid: this.newPro_team,
-    //   }).then(response =>{
-    //     console.log(response)
-    //     this.projects.push({pid: response.data.data, tid: this.newPro_team, status: 'doing', pname: this.newName});
-    //     this.numProjects ++;
-    //     this.addProDialog = false;
-    //     this.newName = '';
-    //     this.newPro_team = 0;
-    //   });
-    // },
+    addNewPro() {
+      this.$axios.post('/projects',{
+        pname: this.newName,
+        tid: this.newPro_team,
+      }).then(response =>{
+        console.log(response)
+        this.projects.push({pid: response.data.data, tid: this.newPro_team, status: 'doing', pname: this.newName});
+        this.numProjects ++;
+        this.addProDialog = false;
+        this.newName = '';
+        this.newPro_team = 0;
+      });
+    },
     // changeProMod () {
     //   this.proMod ^= 1;
     //   if(this.proMod===1){

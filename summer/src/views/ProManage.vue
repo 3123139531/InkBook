@@ -89,6 +89,20 @@
             <td class="proDetailLink" @click="toProjectView(i-1)">项目详情</td>
           </tr>
         </table>
+        <el-button type="primary" class="addProBtn" @click="addNewProBtn">新建项目</el-button>
+        <el-dialog v-model="addProDialog">
+          <el-form>
+            <el-form-item label="项目名" :label-width="100">
+              <el-input v-model="newProName" autocomplete="off" />
+            </el-form-item>
+          </el-form>
+          <template #footer>
+            <span class="dialog-footer">
+              <el-button @click="addProDialog = false">取消</el-button>
+              <el-button type="primary" @click="addNewPro">确认</el-button>
+            </span>
+          </template>
+        </el-dialog>
       </el-main>
     </el-container>
   </div>
@@ -101,6 +115,8 @@
 
 <script>
 /* eslint-disable */
+
+import {ElMessage} from "element-plus";
 
 export default {
   data () {
@@ -119,7 +135,10 @@ export default {
       searchClicked: false,
       proShow: [],
       numShow: 0,
-      sortType : 1
+      sortType : 1,
+
+      addProDialog: false,
+      newProName: ''
     }
   },
   mounted () {
@@ -213,6 +232,26 @@ export default {
         this.sortType = (this.sortType===5)?6:5
         this.proShow.reverse()
       }
+    },
+    addNewProBtn() {
+      this.addProDialog = true
+    },
+    addNewPro() {
+      this.addProDialog = false
+      this.$axios.post('/projects',{
+        pname: this.newProName,
+        tid: this.team.teamId,
+      }).then(response =>{
+        console.log(response)
+        this.getProjects()
+        this.sortType = 1
+        this.newProName = ''
+        this.newProTeam = 0
+      })
+      ElMessage({
+        message: '创建项目成功',
+        type: 'success',
+      })
     },
     toHomeView () {
       this.$router.push({
@@ -459,6 +498,12 @@ export default {
 
 .proDetailLink:hover {
   text-decoration: underline;
+}
+
+.addProBtn {
+  margin-top: 20px;
+  margin-right: 2.5%;
+  float: right;
 }
 
 .toHomepageBtn {
