@@ -15,9 +15,9 @@ public interface UserMapper {
     @Select("select * from user where u_name = #{user_name}")
     public User selectUserByName(String user_name);
 
-    @Update("update user set u_nickname = #{uNickname}, profile_pic = #{profilePic}, uname = #{uName}, email = #{email} , password = #{password}" +
-            "where u_name = #{nameOfUserToUpdate}")
-    public User updateUserInfo(String nameOfUserToUpdate,User newUserInfo);
+    @Update("update user set u_nickname = #{uNickname}, profile_pic = #{profilePic}, u_name = #{uName}, email = #{email} , password = #{password}" +
+            " where u_id = #{uId}")
+    public void updateUserInfo(User newUserInfo);
 
     @Update("update user set u_nickname = #{uNickname} where u_name = #{uName}")
     public User updateUserNickname(User user);

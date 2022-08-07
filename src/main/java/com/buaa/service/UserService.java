@@ -10,7 +10,7 @@ public interface UserService {
 
     public User findUserByName(String username);
 
-    public void updateUserInfo(String nameOfUserToUpdate,User newUserInfo);
+    public void updateUserInfo(User newUserInfo);
 
     // 根据用户注册信息进行注册链接的的生成和发送
     public boolean sendCode(User user);

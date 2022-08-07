@@ -27,8 +27,8 @@ public class UserServiceImpl implements UserService {
         return userMapper.selectUserByName(username);
     }
 
-    public void updateUserInfo(String nameOfUserToUpdate, User newUserInfo) {
-        userMapper.updateUserInfo(nameOfUserToUpdate,newUserInfo);
+    public void updateUserInfo(User newUserInfo) {
+        userMapper.updateUserInfo(newUserInfo);
     }
 
     @Override

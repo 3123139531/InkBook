@@ -41,7 +41,7 @@ public class UserController {
 
     @ApiOperation(value = "根据用户名查询用户信息")
     @GetMapping("/user/info/{u_name}")
-    public R userInfoByName(@PathVariable("u_name") String username,HttpSession session) throws Exception{
+    public R userInfoByName(@PathVariable("u_name") String username) throws Exception{
         R r = new R();
         r.setData(userService.findUserByName(username));
         r.setFlag(true);
@@ -62,9 +62,25 @@ public class UserController {
 
     @ApiOperation(value = "修改用户信息")
     @PostMapping("/user/info/{u_name}")
-    public R updateUserInfoByName(HttpSession session, @RequestBody User newUserInfo) throws Exception{
-        String username = (String) session.getAttribute("username");
-        userService.updateUserInfo(username,newUserInfo);
+    public R updateUserInfoByName(@PathVariable("u_name")String username, @RequestBody User newUserInfo) throws Exception{
+
+        User userToChange = userService.findUserByName(username);
+        newUserInfo.setUId(userToChange.getUId());
+
+        if(userService.findUserByName(newUserInfo.getUName())!=null){
+            R r = new R();
+            r.setMsg("此用户名已被占用");
+            r.setFlag(false);
+            return r;
+        }
+        if(!isValidPassword(newUserInfo.getPassword())){
+            R r = new R();
+            r.setMsg("密码需要至少6位数，且需包含至少一个数字及一个英文字母");
+            r.setFlag(false);
+            return r;
+        }
+
+        userService.updateUserInfo(newUserInfo);
 
         R r = new R();
         r.setData(newUserInfo);
