@@ -2,6 +2,7 @@ package com.buaa.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.buaa.mapper.ProjectMapper;
+import com.buaa.mapper.utils.CopyProjectUtils;
 import com.buaa.pojo.Project;
 import com.buaa.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +89,23 @@ public class ProjectImpl implements ProjectService {
         qw.like("p_name", key);
         qw.eq("t_id", tid);
         return projectMapper.selectList(qw);
+    }
+
+    @Override
+    public int copyProject(int id) {
+        CopyProjectUtils utils = new CopyProjectUtils();
+        int newPId;
+
+        projectMapper.copyProject(id);
+        Project project = projectMapper.getCopyProject(id);
+        newPId = project.getPid();
+
+        projectMapper.updateNameForNewProject(newPId);
+
+        utils.setPre(id);
+        utils.setCopy(newPId);
+        projectMapper.copyDocsForProject(utils);
+        return newPId;
     }
 
 }
