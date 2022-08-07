@@ -18,7 +18,7 @@ public class DocumentCenterController {
     @Autowired
     DocumentService documentService;
 
-    @GetMapping("/team/{team_id}/docCentre")
+    @GetMapping("/docCentre/{team_id}")
     public R getDocCenter(@PathVariable("team_id") int team_id){
         ArrayList<HashMap<Project, ArrayList<Document>>> docCenterContentList = new ArrayList<>();
 
