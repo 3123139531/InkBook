@@ -231,7 +231,7 @@ export default {
   }
 
   .ProjectMain {
-    height: 780px;
+    height: 580px;
     overflow: auto;
     padding: 40px;
     border: 1px black solid;

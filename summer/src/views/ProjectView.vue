@@ -264,12 +264,13 @@ export default {
   }
 
   .ProjectMain {
-    height: 780px;
+    height: 580px;
     overflow: auto;
     border: 1px black solid;
     border-radius: 20px;
     margin-top: 10px;
     background: white;
+    overflow: auto;
     /*background: rgba(255, 255, 255, 0.2);*/
   }
 

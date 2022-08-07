@@ -30,13 +30,13 @@
             <span style="font-weight: 700">{{team.numMembers}}</span>
           </el-descriptions-item>
         </el-descriptions>
-        <div class="TeamBtn">
-          <div>
-            <el-button type="primary" round v-if="userIdentity==='创建者'">解散队伍</el-button>
-            <el-button type="info" round v-else :plain="true" @click="JurisdictionError">解散队伍</el-button>
-          </div>
-          <el-button type="primary" round class="QuitBtn" @click="QuitTeam">退出队伍</el-button>
-        </div>
+<!--        <div class="TeamBtn">-->
+<!--          <div>-->
+<!--            <el-button type="primary" round v-if="userIdentity==='创建者'">解散队伍</el-button>-->
+<!--            <el-button type="info" round v-else :plain="true" @click="JurisdictionError">解散队伍</el-button>-->
+<!--          </div>-->
+<!--          <el-button type="primary" round class="QuitBtn" @click="QuitTeam">退出队伍</el-button>-->
+<!--        </div>-->
       </el-header>
       <el-main class="TeamMain">
         <div style="font:normal bold 20px/30px Georgia, serif; margin-bottom: 10px;">团队成员</div>
@@ -350,9 +350,9 @@ export default {
 
   .TeamDetail {
     width: 300px;
-    float: left;
+    float: right;
     text-align: left;
-    margin-left: 200px;
+    margin-right: 100px;
     margin-top: 40px;
   }
 
