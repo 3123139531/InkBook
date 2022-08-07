@@ -15,4 +15,5 @@ public interface ProjectService {
     boolean checkNameRepeat(int tid, String name);
     List<Project> selectProjectByStatus(int tid, String status);
     List<Project> selectProjectLike(int tid, String key);
+    int copyProject(int id);
 }

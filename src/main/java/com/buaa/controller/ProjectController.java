@@ -108,4 +108,9 @@ public class ProjectController {
         return new R(true, projectService.selectProjectLike(tid, key),
                 "搜索成功");
     }
+
+    @GetMapping("/copy/{pid}")
+    public R copyProject(@PathVariable int pid) {
+        return new R(true, projectService.copyProject(pid), "项目复制成功");
+    }
 }
