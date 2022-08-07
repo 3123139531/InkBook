@@ -9,6 +9,8 @@ import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.region.Region;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,12 +23,14 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.UUID;
 
+@Api(tags = "文件上传")
 @RestController
 @RequestMapping("/upload")
 public class UploadController {
     @Autowired
     private UploadConfig uploadConfig;
 
+    @ApiOperation(value = "文件上传")
     @CrossOrigin
     @PostMapping("/cos")
     public R upload(MultipartFile file) throws IOException {

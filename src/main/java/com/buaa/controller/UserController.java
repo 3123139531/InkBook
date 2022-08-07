@@ -161,8 +161,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/sendCode")
-    public R sendCode(@RequestBody User user){
+    public R sendCode(User user){
 //        System.out.println(user);
         boolean flag = userService.sendCode(user);
         if (flag)
@@ -171,6 +170,7 @@ public class UserController {
             return new R(false, "邮件发送失败");
     }
 
+    @ApiOperation(value = "验证token")
     // 判断是否注册成功
     @GetMapping("/lookCode/{token}")
     public R lookCode(@PathVariable("token")String token){
