@@ -1,9 +1,7 @@
 package com.buaa.controller;
 
 import com.buaa.controller.utils.R;
-import com.buaa.pojo.Team;
-import com.buaa.pojo.TeamMember;
-import com.buaa.pojo.User;
+import com.buaa.pojo.*;
 import com.buaa.service.TeamService;
 import com.buaa.service.UserService;
 import io.swagger.annotations.Api;
@@ -26,6 +24,7 @@ public class TeamController {
     TeamService teamService;
     @Autowired
     UserService userService;
+
 
     @ApiOperation(value = "根据团队id获取团队成员列表")
     @GetMapping("/team/{team_id}/members")
