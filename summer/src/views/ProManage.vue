@@ -86,7 +86,7 @@
             <td>{{ proShow[i-1].pid }}</td>
             <td>{{ proShow[i-1].pname }}</td>
             <td v-if="proShow[i-1].status==='doing'">进行中</td>
-            <td v-else-if="proShow[i-1].status==='done'">已完成</td>
+            <td v-else-if="proShow[i-1].status==='finish'">已完成</td>
             <td v-else>已回收</td>
             <td>{{ proShow[i-1].createTime }}</td>
             <td>{{ proShow[i-1].modifyTime }}</td>
@@ -159,14 +159,28 @@ export default {
     },
     getProjects() {
       this.$axios.get('/projects/doing/'+this.team.teamId).then(response =>{
-        console.log(response)
-        this.projects = response.data.data
-        this.numPro = this.projects.length
+        // console.log(response)
+        for(let i=0; i<response.data.data.length; i++)
+          this.projects.push(response.data.data[i])
 
-        this.proShow = this.projects
-        this.numShow = this.numPro
-        // console.log(this.proShow)
+        this.$axios.get('/projects/trash/'+this.team.teamId).then(response =>{
+          // console.log(response)
+          for(let i=0; i<response.data.data.length; i++)
+            this.projects.push(response.data.data[i])
+
+          this.$axios.get('/projects/finish/'+this.team.teamId).then(response =>{
+            // console.log(response)
+            for(let i=0; i<response.data.data.length; i++)
+              this.projects.push(response.data.data[i])
+            this.numPro = this.projects.length
+            this.proShow = this.projects
+            this.numShow = this.numPro
+          })
+        })
       })
+
+
+
     },
     searchPro() {
       console.log(this.searchName)

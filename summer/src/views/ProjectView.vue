@@ -145,12 +145,7 @@ export default {
           console.log(response)
         })
       }
-      this.$router.push({
-        name : 'home',
-        params : {
-          ac: this.userAccount,
-        }
-      })
+      this.toTeamView()
     },
     RenameProBtn () {
       this.dialogFormVisible = true;

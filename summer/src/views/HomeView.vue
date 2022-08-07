@@ -10,18 +10,21 @@
             <path fill="currentColor" d="M628.736 528.896A416 416 0 0 1 928 928H96a415.872 415.872 0 0 1 299.264-399.104L512 704l116.736-175.104zM720 304a208 208 0 1 1-416 0 208 208 0 0 1 416 0z"></path>
           </svg>
           <div style="font-size: 14px; font-weight: bold">信息</div>
+          <div class="curView" v-if="option===1"></div>
         </div>
         <div class="Enterprise" @click="showEnterprise">
           <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" style="height: 22px; width: 22px">
             <path fill="currentColor" d="M192 413.952V896h640V413.952L512 147.328 192 413.952zM139.52 374.4l352-293.312a32 32 0 0 1 40.96 0l352 293.312A32 32 0 0 1 896 398.976V928a32 32 0 0 1-32 32H160a32 32 0 0 1-32-32V398.976a32 32 0 0 1 11.52-24.576z"></path>
           </svg>
           <div style="font-size: 14px; font-weight: bold">团队</div>
+          <div class="curView" v-if="option===2"></div>
         </div>
         <div class="Project" @click="showProject">
           <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" style="height: 22px; width: 22px">
             <path fill="currentColor" d="M128 192v640h768V320H485.76L357.504 192H128zm-32-64h287.872l128.384 128H928a32 32 0 0 1 32 32v576a32 32 0 0 1-32 32H96a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32z"></path>
           </svg>
           <div style="font-size: 14px; font-weight: bold">项目</div>
+          <div class="curView" v-if="option===3"></div>
         </div>
         <el-button type="primary" round class="Cancellation" @click="Quit">注销</el-button>
       </el-aside>
@@ -104,30 +107,30 @@
                   <span class="innerChar">团队编号：{{projects[i-1].tid}}</span>
                 </div>
               </div>
-              <div class="newBox" @click="addNewProjectBtn">
-                <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" class="plusIcon">
-                  <path fill="currentColor" d="M352 480h320a32 32 0 1 1 0 64H352a32 32 0 0 1 0-64z"></path>
-                  <path fill="currentColor" d="M480 672V352a32 32 0 1 1 64 0v320a32 32 0 0 1-64 0z"></path>
-                  <path fill="currentColor" d="M512 896a384 384 0 1 0 0-768 384 384 0 0 0 0 768zm0 64a448 448 0 1 1 0-896 448 448 0 0 1 0 896z"></path>
-                </svg>
-                <div class="plusChar">新建项目</div>
-                <el-dialog v-model="addProDialog">
-                  <el-form>
-                    <el-form-item label="团队编号" :label-width="100">
-                      <el-input v-model="newPro_team" autocomplete="off" />
-                    </el-form-item>
-                    <el-form-item label="项目名" :label-width="100">
-                      <el-input v-model="newName" autocomplete="off" />
-                    </el-form-item>
-                  </el-form>
-                  <template #footer>
-                    <span class="dialog-footer">
-                      <el-button @click="addProDialog = false">取消</el-button>
-                      <el-button type="primary" @click="addNewPro">确认</el-button>
-                    </span>
-                  </template>
-                </el-dialog>
-              </div>
+<!--              <div class="newBox" @click="addNewProjectBtn">-->
+<!--                <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" class="plusIcon">-->
+<!--                  <path fill="currentColor" d="M352 480h320a32 32 0 1 1 0 64H352a32 32 0 0 1 0-64z"></path>-->
+<!--                  <path fill="currentColor" d="M480 672V352a32 32 0 1 1 64 0v320a32 32 0 0 1-64 0z"></path>-->
+<!--                  <path fill="currentColor" d="M512 896a384 384 0 1 0 0-768 384 384 0 0 0 0 768zm0 64a448 448 0 1 1 0-896 448 448 0 0 1 0 896z"></path>-->
+<!--                </svg>-->
+<!--                <div class="plusChar">新建项目</div>-->
+<!--                <el-dialog v-model="addProDialog">-->
+<!--                  <el-form>-->
+<!--                    <el-form-item label="团队编号" :label-width="100">-->
+<!--                      <el-input v-model="newPro_team" autocomplete="off" />-->
+<!--                    </el-form-item>-->
+<!--                    <el-form-item label="项目名" :label-width="100">-->
+<!--                      <el-input v-model="newName" autocomplete="off" />-->
+<!--                    </el-form-item>-->
+<!--                  </el-form>-->
+<!--                  <template #footer>-->
+<!--                    <span class="dialog-footer">-->
+<!--                      <el-button @click="addProDialog = false">取消</el-button>-->
+<!--                      <el-button type="primary" @click="addNewPro">确认</el-button>-->
+<!--                    </span>-->
+<!--                  </template>-->
+<!--                </el-dialog>-->
+<!--              </div>-->
               <div class="changeBtn" @click="changeProMod">
                 <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
                 style="width: 20px; height: 20px; margin-top: 5px">
@@ -300,9 +303,9 @@ export default {
     addNewTeamBtn () {
       this.addTeamDialog = true;
     },
-    addNewProjectBtn () {
-      this.addProDialog = true;
-    },
+    // addNewProjectBtn () {
+    //   this.addProDialog = true;
+    // },
     addNewTeam () {
       let url = '/team/' + this.info.uname
       console.log(this.newName)
@@ -331,37 +334,37 @@ export default {
         this.newPro_team = 0;
       });
     },
-    // changeProMod () {
-    //   this.proMod ^= 1;
-    //   if(this.proMod===1){
-    //     this.projects = []
-    //     this.numProjects = 0
-    //     for (let i=0; i<this.numTeams; i++){
-    //       this.$axios.get('/projects/doing/'+this.teams[i].tid
-    //       ).then(response =>{
-    //         this.pp = response.data.data
-    //         this.numProjects += response.data.data.length
-    //         for(let j=0; j<response.data.data.length; j++){
-    //         this.projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
-    //         }
-    //       })
-    //     }
-    //   }
-    //   else {
-    //     this.t_projects = []
-    //     this.numt_Projects = 0
-    //     for (let i=0; i<this.numTeams; i++){
-    //       this.$axios.get('/projects/trash/'+this.teams[i].tid
-    //       ).then(response =>{
-    //         this.pp = response.data.data
-    //         this.numt_Projects += response.data.data.length
-    //         for(let j=0; j<response.data.data.length; j++){
-    //         this.t_projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
-    //         }
-    //       })
-    //     }
-    //   }
-    // },
+    changeProMod () {
+      this.proMod ^= 1;
+      if(this.proMod===1){
+        this.projects = []
+        this.numProjects = 0
+        for (let i=0; i<this.numTeams; i++){
+          this.$axios.get('/projects/doing/'+this.teams[i].tid
+          ).then(response =>{
+            this.pp = response.data.data
+            this.numProjects += response.data.data.length
+            for(let j=0; j<response.data.data.length; j++){
+            this.projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
+            }
+          })
+        }
+      }
+      else {
+        this.t_projects = []
+        this.numt_Projects = 0
+        for (let i=0; i<this.numTeams; i++){
+          this.$axios.get('/projects/trash/'+this.teams[i].tid
+          ).then(response =>{
+            this.pp = response.data.data
+            this.numt_Projects += response.data.data.length
+            for(let j=0; j<response.data.data.length; j++){
+            this.t_projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
+            }
+          })
+        }
+      }
+    },
     Quit () {
       ElMessage({
         message: '退出登录',
@@ -414,12 +417,14 @@ export default {
     border-radius: 40px;
     margin: 20px auto 50px;
   }
-
-  .Aside .Personal, .Enterprise, .Project {
+  .Personal, .Enterprise, .Project {
+    position: relative;
+    left: 0;
+    top: 0;
     height: 55px;
     width: 60px;
-    padding-top: 20px;
-    margin: 15px auto auto auto;
+    padding-top: 10px;
+    margin: 15px auto;
     border-radius: 5px;
     transition: 0.5s;
   }
@@ -432,6 +437,16 @@ export default {
 
   .Aside .Cancellation {
     margin-top: 220px;
+  }
+
+  .curView {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    background: rgba(144, 144, 144, 0.4);
   }
 
   .Main {
@@ -513,7 +528,7 @@ export default {
     float: left;
     margin: 20px;
     width: 16%;
-    height: 140px;
+    height: 130px;
     border-radius: 10px;
     border: black solid;
     text-align: left;
