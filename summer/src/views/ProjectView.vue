@@ -3,18 +3,21 @@
   <div class="ProjectInfo">
     <el-container>
       <el-header class="ProjectHeader">
-        <img src="../assets/头像.jpg" class="ProjectImg">
+        <img src="../assets/bgimg.png" class="ProjectImg">
         <div class="ProjectIntro">
           <div class="ProjectName">
             <div>
               <span>项目名：</span>
               <span style="font-weight: 700">{{project.pname}}</span>
+              <span style="margin-left:30px">团队名：</span>
+              <span style="font-weight: 700">{{teamName}}</span>
             </div>
           </div>
         </div>
         <div class="ProjectBtn">
-          <el-button type="primary" round @click="RenameProBtn">重命名项目</el-button>
-          <el-button type="primary" round class="delBtn" @click="delProject">删除项目</el-button>
+          <el-button type="primary" class="copyBtn" @click="copyProBtn">复制项目</el-button>
+          <el-button type="primary" @click="RenameProBtn">重命名项目</el-button>
+          <el-button type="primary" class="delBtn" @click="delProject">删除项目</el-button>
           <el-dialog v-model="dialogFormVisible" title="输入新项目名">
             <el-form>
               <el-form-item label="Promotion name" :label-width="140">
@@ -41,7 +44,7 @@
                   <path fill="currentColor" d="M480 672V352a32 32 0 1 1 64 0v320a32 32 0 0 1-64 0z"></path>
                   <path fill="currentColor" d="M512 896a384 384 0 1 0 0-768 384 384 0 0 0 0 768zm0 64a448 448 0 1 1 0-896 448 448 0 0 1 0 896z"></path>
                 </svg>
-                <div class="plusChar">新建文档</div>
+<!--                <div class="plusChar">新建文档</div>-->
                 <el-dialog v-model="addFileDialog">
                   <el-form>
                     <el-form-item label="文档名" :label-width="100">
@@ -75,6 +78,8 @@
 
 <script>
 /* eslint-disable */
+
+import {ElMessage} from "element-plus";
 
 export default {
   data () {
@@ -112,6 +117,19 @@ export default {
       ).then(response =>{
         this.documents = response.data.data.documents
         this.numDocuments = response.data.data.documents.length
+      })
+    },
+    copyProBtn() {
+      this.$axios.get('/projects/copy/' + this.projectId, {
+        params: {
+          pid: this.projectId
+        }
+      }).then(response=> {
+        // console.log(response)
+        ElMessage({
+          message: '复制成功',
+          type: 'success'
+        })
       })
     },
     delProject () {
@@ -157,8 +175,8 @@ export default {
         pid: this.projectId,
       }).then(response =>{
         console.log(response)
-        console.log(this.newFile)
-        console.log(this.documents)
+        // console.log(this.newFile)
+        // console.log(this.documents)
         this.documents.push({content: '', did: response.data.data, dname: this.newFile, pid: this.projectId});
         console.log(this.documents)
         this.numDocuments ++;
@@ -191,7 +209,8 @@ export default {
           ac : this.userAccount,
           d_id : this.documents[id-1].did,
           p_id : this.projectId,
-          p_name : this.project.pname
+          p_name : this.project.pname,
+          teamName: this.teamName
         }
       })
     }
@@ -261,6 +280,14 @@ export default {
     margin-right: 80px;
   }
 
+  .ProjectBtn .copyBtn{
+    margin-right: 10px !important;
+  }
+
+  .ProjectBtn .delBtn {
+    margin-left: 10px !important;
+  }
+
   .Link {
     line-height: 103px;
     display: inline-block;
@@ -291,7 +318,6 @@ export default {
     border-radius: 20px;
     margin-top: 10px;
     background: white;
-    overflow: auto;
     /*background: rgba(255, 255, 255, 0.2);*/
   }
 
@@ -316,8 +342,8 @@ export default {
     display: inline-block;
     float: left;
     margin: 20px;
-    width: 10%;
-    height: 150px;
+    width: 8%;
+    height: 50px;
     border-radius: 5px;
     background: transparent -webkit-linear-gradient(right, lightgreen 0%, lightblue 100%);
     border: black solid;
@@ -331,9 +357,9 @@ export default {
 
   .ProDoc .plusIcon {
     display: block;
-    width: 50px;
-    height: 50px;
-    margin: 30px auto;
+    width: 40px;
+    height: 40px;
+    margin: 5px auto;
   }
 
   .ProDoc .plusChar {
@@ -345,7 +371,7 @@ export default {
 
   .ProjectMain .DocName {
     display: block;
-    margin-top: 20px;
+    line-height: 50px;
     font-size: 20px;
     font-weight: 700;
     text-align: center;

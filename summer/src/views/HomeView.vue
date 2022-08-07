@@ -46,13 +46,16 @@
             </div>
             <el-form :model="info" label-width="120px" size="large" class="Format">
               <el-form-item label="用户名" class="Form-line">
-                <el-input v-model="info.uname" />
+                <el-input v-model="newUname" />
               </el-form-item>
               <el-form-item label="姓名" class="Form-line">
                 <el-input v-model="info.unickname" />
               </el-form-item>
               <el-form-item label="邮箱" class="Form-line">
                 <el-input v-model="info.email" />
+              </el-form-item>
+              <el-form-item label="密码" class="Form-line">
+                <el-input v-model="info.password"  type="password"/>
               </el-form-item>
               <el-form-item>
                 <el-button :plain="true" type="primary" @click="Submit" class="changeInfoBtn">确认修改</el-button>
@@ -179,6 +182,7 @@ export default {
       addTeamDialog : false,
       addProDialog : false,
       newPro_team : 0,
+      newUname: '',
       newName : '',
       proMod : 1,
     }
@@ -205,6 +209,7 @@ export default {
       this.$axios.get('/user/info/' + this.account
       ).then(response=> {
         this.info = response.data.data
+        this.newUname = this.info.uname
       })
       this.option = 1;
     },
@@ -250,12 +255,36 @@ export default {
       this.option = 3;
     },
     Submit () {
-      ElMessage({
-        message: '修改成功',
-        type: 'success',
+      this.$axios.post('/user/info/' + this.info.uname, {
+        email: this.info.email,
+        password: this.info.password,
+        profilePic: "",
+        uid: 0,
+        uname: this.newUname,
+        unickname: this.info.unickname
+      }).then(response=> {
+        console.log(response)
+        this.newName = ''
+        if(response.data.flag === true){
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+        }
+        else {
+          ElMessage({
+            message: '修改失败，'+response.data.msg,
+            type: 'warning',
+          })
+        }
       })
     },
     Revoke () {
+      this.showPersonalInfo()
+      ElMessage({
+        message: '撤回修改',
+        type: 'success',
+      })
     },
     toTeamView (id, name) {
       this.$router.push({

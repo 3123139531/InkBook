@@ -34,7 +34,7 @@
           <el-input v-model="ruleForm.name" maxlength="5" />
         </el-form-item>
         <el-form-item label="密码" prop="pwd">
-          <el-input v-model="ruleForm.pwd" type="password" />
+          <el-input v-model="ruleForm.pwd" type="password" placeholder="至少6位且包含数字、字母"/>
         </el-form-item>
         <el-form-item label="确认密码" prop="cpwd">
           <el-input v-model="ruleForm.cpwd" type="password" />
@@ -119,18 +119,27 @@ export default {
         uid: 0,
         uname: this.ruleForm.name,
         unickname: this.ruleForm.username
-      }).then(function (response) {
+      }).then(response=> {
         console.log(response);
-        ElMessage({
-          message: '注册成功,即将跳转到登录页面',
-          type: 'success',
-        })
+        if(response.data.flag === true){
+          ElMessage({
+            message: '注册成功,即将跳转到登录页面',
+            type: 'success',
+          })
+          setInterval(()=>{
+            this.$router.push({
+              name: 'Login',
+            })
+          }, 2000)
+        }
+        else {
+          ElMessage({
+            message: '密码需要至少6位数，且需包含至少一个数字及一个英文字母',
+            type: 'warning',
+          })
+        }
       })
-      setInterval(()=>{
-        this.$router.push({
-          name: 'Login',
-        })
-      }, 2000)
+
     }
   }
 }

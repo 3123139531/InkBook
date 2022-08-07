@@ -45,17 +45,7 @@
         </span>
         <table class="proNav">
           <tr>
-            <th>
-              <span title="点击以此排序" @click="sortById">项目编号</span>
-              <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
-                   class="sortImg" v-if="sortType===1">
-                <path fill="currentColor" d="m192 384 320 384 320-384z"></path>
-              </svg>
-              <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
-                   class="sortImg" v-if="sortType===2">
-                <path fill="currentColor" d="M512 320 192 704h639.936z"></path>
-              </svg>
-            </th>
+            <th>项目编号</th>
             <th>
               <span title="点击以此排序" @click="sortByName">项目名称</span>
               <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
@@ -67,15 +57,27 @@
                 <path fill="currentColor" d="m192 384 320 384 320-384z"></path>
               </svg>
             </th>
+            <th>项目状态</th>
             <th>
-              <span title="点击以此排序" @click="sortByStatus">项目状态</span>
+              <span title="点击以此排序" @click="sortByCreate">创建时间</span>
+              <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
+                   class="sortImg" v-if="sortType===1">
+                <path fill="currentColor" d="m192 384 320 384 320-384z"></path>
+              </svg>
+              <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
+                   class="sortImg" v-if="sortType===2">
+                <path fill="currentColor" d="M512 320 192 704h639.936z"></path>
+              </svg>
+            </th>
+            <th>
+              <span title="点击以此排序" @click="sortByModify">修改时间</span>
               <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
                    class="sortImg" v-if="sortType===5">
                 <path fill="currentColor" d="m192 384 320 384 320-384z"></path>
               </svg>
               <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
                    class="sortImg" v-if="sortType===6">
-                <path fill="currentColor" d="m192 384 320 384 320-384z"></path>
+                <path fill="currentColor" d="M512 320 192 704h639.936z"></path>
               </svg>
             </th>
             <th>项目详情</th>
@@ -86,6 +88,8 @@
             <td v-if="proShow[i-1].status==='doing'">进行中</td>
             <td v-else-if="proShow[i-1].status==='done'">已完成</td>
             <td v-else>已回收</td>
+            <td>{{ proShow[i-1].createTime }}</td>
+            <td>{{ proShow[i-1].modifyTime }}</td>
             <td class="proDetailLink" @click="toProjectView(i-1)">项目详情</td>
           </tr>
         </table>
@@ -155,7 +159,7 @@ export default {
     },
     getProjects() {
       this.$axios.get('/projects/doing/'+this.team.teamId).then(response =>{
-        // console.log(response)
+        console.log(response)
         this.projects = response.data.data
         this.numPro = this.projects.length
 
@@ -179,7 +183,7 @@ export default {
         console.log(this.numShow)
       }
     },
-    sortById(){
+    sortByCreate(){
       if(this.sortType>2){
         this.sortType = 1
         for (let i=0; i<this.numShow; i++){
@@ -215,12 +219,12 @@ export default {
         this.proShow.reverse()
       }
     },
-    sortByStatus(){
+    sortByModify(){
       if(this.sortType<5){
         this.sortType = 5
         for (let i=0; i<this.numShow; i++){
           for (let j=0; j<this.numShow-1-i; j++){
-            if(this.proShow[j].pid < this.proShow[j+1].pid){
+            if(this.proShow[j].modifyTime < this.proShow[j+1].modifyTime){
               let tmp = this.proShow[j]
               this.proShow[j] = this.proShow[j+1]
               this.proShow[j+1] = tmp
@@ -452,10 +456,14 @@ export default {
 
 .proNav th {
   display: inline-block;
-  width: 25%;
+  width: 18%;
   padding: 0;
   line-height: 40px;
   font-size: 17px;
+}
+
+.proNav th:first-child {
+  width: 10%;
 }
 
 .proNav th span {
@@ -471,11 +479,15 @@ export default {
 
 .proNav td {
   display: inline-block;
-  width: 25%;
+  width: 18%;
   padding: 0;
   line-height: 40px;
   font-size: 15px;
   border-top: 1px black solid;
+}
+
+.proNav td:first-child{
+  width: 10%;
 }
 
 .proNav tr:nth-child(even) {

@@ -86,19 +86,29 @@ export default {
         uid: 0,
         uname: this.loginForm.username,
         unickname: '0',
-      }).then(function (response) {
-        // console.log(response);
-        ElMessage({
-          message: '登录成功',
-          type: 'success',
-        });
-      })
-      this.$router.push({
-        name: 'home',
-        params: {
-          ac : this.loginForm.username
+      }).then(response=> {
+        console.log(response);
+        var message = response.data.data
+        if(response.data.flag === true){
+          ElMessage({
+            message: '登录成功',
+            type: 'success',
+          });
+          this.$router.push({
+            name: 'home',
+            params: {
+              ac : this.loginForm.username
+            }
+          })
+        }
+        else {
+          ElMessage({
+            message: message,
+            type: 'warning',
+          });
         }
       })
+
     },
   }
 }
