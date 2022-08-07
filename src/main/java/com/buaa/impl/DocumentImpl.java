@@ -18,7 +18,7 @@ public class DocumentImpl implements DocumentService {
         document.setDPid(pid);
         document.setDName(name);
         documentMapper.insertDocument(document);
-        document = documentMapper.getDocumentByName(name);
+//        document = documentMapper.getDocumentByName(name);
         return document.getDid();
     }
 

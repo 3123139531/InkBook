@@ -11,10 +11,11 @@ import java.util.List;
 @Mapper
 public interface DocumentMapper extends BaseMapper<Document> {
 
-    @Insert("insert into document (d_pid, d_content) values (#{pid}, #{content})")
+    @Insert("insert into document (d_pid, d_name) values (#{dPid}, #{dName})")
+    @Options(useGeneratedKeys = true, keyProperty = "did")
     void insertDocument(Document document);
 
-    @Select("select * from document where d_name = #{name}")
+    @Select("select * from document where d_name = #{dName}")
     Document getDocumentByName(String name);
 
     @Update("update document set d_content = #{content} where d_id = #{did}")
