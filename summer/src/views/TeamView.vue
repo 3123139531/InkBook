@@ -16,6 +16,12 @@
             </span>
           </div>
         </div>
+        <div class="TeamManageNav">
+          <div class="title">团队管理</div>
+          <span class="teamMem">成员管理</span>
+          <span class="teamPro" @click="toProManage">项目管理</span>
+          <span class="teamDoc" @click="toDocCenter">文档中心</span>
+        </div>
         <el-descriptions
             title="团队信息"
             direction="vertical"
@@ -46,14 +52,14 @@
             stripe
             class="MemDetail"
         >
-          <el-table-column prop="uname" label="用户名" width="262"/>
-          <el-table-column prop="uid" label="用户号" width="262" />
-          <el-table-column prop="unickname" label="姓名" width="262"/>
-          <el-table-column prop="email" label="邮箱" width="262"/>
-          <el-table-column prop="identity" label="身份" width="262"/>
+          <el-table-column prop="uname" label="用户名" width="270"/>
+          <el-table-column prop="uid" label="用户号" width="270" />
+          <el-table-column prop="unickname" label="姓名" width="270"/>
+          <el-table-column prop="email" label="邮箱" width="270"/>
+          <el-table-column prop="identity" label="身份" width="270"/>
         </el-table>
         <div v-if="userIdentity!=='队员'">
-          <div style="font:normal bold 20px/30px Georgia, serif;">成员管理</div>
+          <div style="font:normal bold 20px/30px Georgia, serif">成员管理</div>
           <div class="MemManageNav">
             <span class="ModifyMem" @click="AppointManagerBtn">
               任命管理员
@@ -116,7 +122,7 @@
       </el-main>
     </el-container>
   </div>
-  <el-button class="toHomepageBtn" @click="toHomeView">
+  <el-button class="toHomepageBtn" @click="toHomeView" title="返回首页">
     <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" style="width: 15px; height: 20px">
       <path fill="currentColor" d="M512 128 128 447.936V896h255.936V640H640v256h255.936V447.936z"></path>
     </svg>
@@ -150,11 +156,9 @@ export default {
   },
   mounted () {
     this.init()
-    console.log(this.acc)
   },
   methods : {
     init () {
-      this.acc = this.$route.params.ac
       this.userAccount = this.$route.params.userAccount;
       this.teamId = this.$route.params.teamId;
       this.team.name = this.$route.params.teamName;
@@ -167,7 +171,7 @@ export default {
           team_id : this.teamId
         }
       }).then(response=> {
-        console.log(response);
+        // console.log(response);
         this.team.members = response.data.data;
         this.team.numMembers = this.team.members.length;
         for (let i = 0; i < this.team.numMembers; i++) {
@@ -183,17 +187,17 @@ export default {
         }
       });
     },
-    JurisdictionError () {
-      ElMessage.error('您没有此权限');
-    },
-    QuitTeam () {
-      this.$router.push({
-        name : 'home',
-        params : {
-          account : this.acc
-        }
-      })
-    },
+    // JurisdictionError () {
+    //   ElMessage.error('您没有此权限');
+    // },
+    // QuitTeam () {
+    //   this.$router.push({
+    //     name : 'home',
+    //     params : {
+    //       account : this.acc
+    //     }
+    //   })
+    // },
     AppointManagerBtn () {
       this.ManageMod = 1;
       this.dialogVisible = true;
@@ -286,7 +290,41 @@ export default {
       this.$router.push({
         name: 'home',
         params : {
-          ac : this.acc
+          ac : this.userAccount
+        }
+      })
+    },
+    toProManage() {
+      var leader = ''
+      for(let i=0; i<this.team.numMembers; i++){
+        if(this.team.members[i].identity === '创建者')
+          leader = this.team.members[i].uname
+      }
+      this.$router.push({
+        name: 'proManage',
+        params : {
+          userAccount: this.userAccount,
+          teamId : this.teamId,
+          teamName: this.team.name,
+          leader: leader,
+          numMembers: this.team.numMembers
+        }
+      })
+    },
+    toDocCenter() {
+      var leader = ''
+      for(let i=0; i<this.team.numMembers; i++){
+        if(this.team.members[i].identity === '创建者')
+          leader = this.team.members[i].uname
+      }
+      this.$router.push({
+        name: 'docCenter',
+        params : {
+          userAccount: this.userAccount,
+          teamId : this.teamId,
+          teamName: this.team.name,
+          leader: leader,
+          numMembers: this.team.numMembers
         }
       })
     }
@@ -348,6 +386,56 @@ export default {
     margin-top: 30px;
   }
 
+  .TeamManageNav {
+    display: inline-block;
+    float: left;
+    margin-left: 100px;
+    height: 60%;
+    margin-top: 3%;
+    width: 300px;
+    border: 1px black solid;
+  }
+
+  .TeamManageNav .title {
+    font-family: '黑体', sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px black solid;
+  }
+
+  .TeamManageNav .teamPro,
+  .TeamManageNav .teamDoc,
+  .TeamManageNav .teamMem {
+    display: inline-block;
+    margin-top: 25px;
+    width: 30%;
+    height: 30px;
+    line-height: 30px;
+    font-family: '微软雅黑', sans-serif;
+    font-size: 16px;
+  }
+
+  .TeamManageNav .teamMem {
+    border-right: 1px black solid;
+  }
+
+  .TeamManageNav .teamDoc {
+    border-left: 1px black solid;
+  }
+
+  .TeamManageNav .teamMem {
+    background: rgba(144, 144, 144, 0.3);
+  }
+
+  .TeamManageNav .teamPro:hover,
+  .TeamManageNav .teamDoc:hover{
+    background: rgba(144, 144, 144, 0.3);
+    cursor: pointer;
+    color: #1890ff;
+  }
+
   .TeamDetail {
     width: 300px;
     float: right;
@@ -368,7 +456,7 @@ export default {
   }
 
   .TeamMain {
-    height: 480px;
+    height: 100%;
     overflow: auto;
     border: 1px black solid;
     border-radius: 20px;
@@ -380,9 +468,9 @@ export default {
   .MemDetail {
     display: inline-block;
     float: left;
-    width: 100%;
+    width: 1400px;
     padding-left: 15px;
-    margin-bottom: 20px;
+    margin: 0 auto;
   }
 
   .TeamMain tr {
@@ -428,6 +516,7 @@ export default {
   .KickMem:hover,
   .InviteMem:hover {
     color: whitesmoke;
+    cursor: pointer;
   }
 
   .MemManage {

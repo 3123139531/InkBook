@@ -6,8 +6,10 @@
         <img src="../assets/头像.jpg" class="ProjectImg">
         <div class="ProjectIntro">
           <div class="ProjectName">
-            <span>项目名：</span>
-            <span style="font-weight: 700">{{project.pname}}</span>
+            <div>
+              <span>项目名：</span>
+              <span style="font-weight: 700">{{project.pname}}</span>
+            </div>
           </div>
         </div>
         <div class="ProjectBtn">
@@ -57,9 +59,16 @@
       </el-main>
     </el-container>
   </div>
-  <el-button class="toHomepageBtn" @click="toHomeView">
-    <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" style="width: 15px; height: 20px">
+  <el-button class="toHomepageBtn" @click="toHomeView" title="返回首页">
+    <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
+         style="width: 15px; height: 20px">
       <path fill="currentColor" d="M512 128 128 447.936V896h255.936V640H640v256h255.936V447.936z"></path>
+    </svg>
+  </el-button>
+  <el-button class="toTeamViewBtn" @click="toTeamView" title="返回团队页面">
+    <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
+         style="width: 15px; height: 20px">
+      <path fill="currentColor" d="M192 413.952V896h640V413.952L512 147.328 192 413.952zM139.52 374.4l352-293.312a32 32 0 0 1 40.96 0l352 293.312A32 32 0 0 1 896 398.976V928a32 32 0 0 1-32 32H160a32 32 0 0 1-32-32V398.976a32 32 0 0 1 11.52-24.576z"></path>
     </svg>
   </el-button>
 </template>
@@ -70,8 +79,8 @@
 export default {
   data () {
     return {
-      userAccount: '2',
-      userIdentity: '管理员',
+      userAccount: '',
+      teamName: '',
 
       projectId: 0,
       project : {},
@@ -92,10 +101,12 @@ export default {
     init () {
       this.projectId = this.$route.params.p_id
       this.userAccount = this.$route.params.ac
+      this.teamName = this.$route.params.teamName
+      console.log(this.teamName)
       this.$axios.get('/projects/'+this.projectId
       ).then(response =>{
         this.project = response.data.data
-        console.log(this.project)
+        // console.log(this.project)
       })
       this.$axios.get('/documents/project/'+this.projectId
       ).then(response =>{
@@ -119,7 +130,7 @@ export default {
       this.$router.push({
         name : 'home',
         params : {
-          account : this.userAccount
+          ac: this.userAccount,
         }
       })
     },
@@ -160,6 +171,16 @@ export default {
         name: 'home',
         params : {
           ac : this.userAccount
+        }
+      })
+    },
+    toTeamView() {
+      this.$router.push({
+        name: 'team',
+        params : {
+          userAccount : this.userAccount,
+          teamId: this.project.tid,
+          teamName: this.teamName
         }
       })
     },
@@ -264,7 +285,7 @@ export default {
   }
 
   .ProjectMain {
-    height: 580px;
+    height: 100%;
     overflow: auto;
     border: 1px black solid;
     border-radius: 20px;
@@ -276,8 +297,19 @@ export default {
 
   .toHomepageBtn {
     position: absolute;
-    left: 10px;
+    left: 15px;
     top: 20px;
+  }
+
+  .toTeamViewBtn {
+    position: absolute;
+    left: 15px;
+    top: 70px;
+    margin-left: 0;
+  }
+
+  .el-button+.el-button{
+    margin-left: 0;
   }
 
   .ProDoc {

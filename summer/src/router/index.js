@@ -5,6 +5,8 @@ import Project from '../views/ProjectView.vue'
 import File from '../views/FileView.vue'
 import Login from '../views/LoginView.vue'
 import Register from '../views/RegisterView.vue'
+import ProManage from "@/views/ProManage";
+import DocCenter from "@/views/DocCenter";
 
 const routes = [
   {
@@ -36,7 +38,17 @@ const routes = [
     path: '/file',
     name: 'file',
     component: File
-  }
+  },
+  {
+    path: '/proManage',
+    name: 'proManage',
+    component: ProManage
+  },
+  {
+    path: '/docCenter',
+    name: 'docCenter',
+    component: DocCenter
+  },
 ]
 
 const router = createRouter({

@@ -268,24 +268,24 @@ export default {
         }
       })
     },
-    toProjectView1 (id) {
-      this.$router.push({
-        name: 'project',
-        params: {
-          p_id: this.projects[id-1].pid,
-          ac: this.account
-        }
-      })
-    },
-    toProjectView2 (id) {
-      this.$router.push({
-        name: 'project',
-        params: {
-          p_id: this.t_projects[id-1].pid,
-          ac: this.account
-        }
-      })
-    },
+    // toProjectView1 (id) {
+    //   this.$router.push({
+    //     name: 'project',
+    //     params: {
+    //       p_id: this.projects[id-1].pid,
+    //       ac: this.account
+    //     }
+    //   })
+    // },
+    // toProjectView2 (id) {
+    //   this.$router.push({
+    //     name: 'project',
+    //     params: {
+    //       p_id: this.t_projects[id-1].pid,
+    //       ac: this.account
+    //     }
+    //   })
+    // },
     addNewTeamBtn () {
       this.addTeamDialog = true;
     },
@@ -307,50 +307,50 @@ export default {
         this.newName = '';
       });
     },
-    addNewPro() {
-      this.$axios.post('/projects',{
-        pname: this.newName,
-        tid: this.newPro_team,
-      }).then(response =>{
-        console.log(response)
-        this.projects.push({pid: response.data.data, tid: this.newPro_team, status: 'doing', pname: this.newName});
-        this.numProjects ++;
-        this.addProDialog = false;
-        this.newName = '';
-        this.newPro_team = 0;
-      });
-    },
-    changeProMod () {
-      this.proMod ^= 1;
-      if(this.proMod===1){
-        this.projects = []
-        this.numProjects = 0
-        for (let i=0; i<this.numTeams; i++){
-          this.$axios.get('/projects/doing/'+this.teams[i].tid
-          ).then(response =>{
-            this.pp = response.data.data
-            this.numProjects += response.data.data.length
-            for(let j=0; j<response.data.data.length; j++){
-            this.projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
-            }
-          })
-        }
-      }
-      else {
-        this.t_projects = []
-        this.numt_Projects = 0
-        for (let i=0; i<this.numTeams; i++){
-          this.$axios.get('/projects/trash/'+this.teams[i].tid
-          ).then(response =>{
-            this.pp = response.data.data
-            this.numt_Projects += response.data.data.length
-            for(let j=0; j<response.data.data.length; j++){
-            this.t_projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
-            }
-          })
-        }
-      }
-    },
+    // addNewPro() {
+    //   this.$axios.post('/projects',{
+    //     pname: this.newName,
+    //     tid: this.newPro_team,
+    //   }).then(response =>{
+    //     console.log(response)
+    //     this.projects.push({pid: response.data.data, tid: this.newPro_team, status: 'doing', pname: this.newName});
+    //     this.numProjects ++;
+    //     this.addProDialog = false;
+    //     this.newName = '';
+    //     this.newPro_team = 0;
+    //   });
+    // },
+    // changeProMod () {
+    //   this.proMod ^= 1;
+    //   if(this.proMod===1){
+    //     this.projects = []
+    //     this.numProjects = 0
+    //     for (let i=0; i<this.numTeams; i++){
+    //       this.$axios.get('/projects/doing/'+this.teams[i].tid
+    //       ).then(response =>{
+    //         this.pp = response.data.data
+    //         this.numProjects += response.data.data.length
+    //         for(let j=0; j<response.data.data.length; j++){
+    //         this.projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
+    //         }
+    //       })
+    //     }
+    //   }
+    //   else {
+    //     this.t_projects = []
+    //     this.numt_Projects = 0
+    //     for (let i=0; i<this.numTeams; i++){
+    //       this.$axios.get('/projects/trash/'+this.teams[i].tid
+    //       ).then(response =>{
+    //         this.pp = response.data.data
+    //         this.numt_Projects += response.data.data.length
+    //         for(let j=0; j<response.data.data.length; j++){
+    //         this.t_projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
+    //         }
+    //       })
+    //     }
+    //   }
+    // },
     Quit () {
       ElMessage({
         message: '退出登录',
@@ -501,7 +501,7 @@ export default {
     display: inline-block;
     float: left;
     margin: 20px;
-    width: 21%;
+    width: 16%;
     height: 140px;
     border-radius: 10px;
     border: black solid;
@@ -522,7 +522,7 @@ export default {
     display: inline-block;
     float: left;
     margin: 20px;
-    width: 20%;
+    width: 16%;
     height: 140px;
     border-radius: 10px;
     border: black solid;
