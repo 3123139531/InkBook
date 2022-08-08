@@ -1,5 +1,6 @@
 package com.buaa.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.buaa.mapper.DocumentMapper;
 import com.buaa.pojo.Document;
 import com.buaa.service.DocumentService;
@@ -21,6 +22,14 @@ public class DocumentImpl implements DocumentService {
 //        document = documentMapper.getDocumentByName(name);
         return document.getDid();
     }
+
+    @Override
+    public boolean deleteDocumentById(int did) {
+        QueryWrapper<Document> qw = new QueryWrapper<>();
+        qw.eq("d_id", did);
+        return documentMapper.delete(qw) > 0;
+    }
+
 
     @Override
     public boolean setDocumentContent(int did, String content) {
@@ -45,6 +54,14 @@ public class DocumentImpl implements DocumentService {
         return documentMapper.selectByProject(pid);
 
 
+    }
+
+    @Override
+    public boolean checkNameRepeat(int pid, String name) {
+        Document document = new Document();
+        document.setDPid(pid);
+        document.setDName(name);
+        return documentMapper.checkNameRepeat(document) != null;
     }
 
     @Override

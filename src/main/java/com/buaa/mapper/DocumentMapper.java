@@ -29,4 +29,8 @@ public interface DocumentMapper extends BaseMapper<Document> {
 
     @Select("select * from document where d_id = #{did}")
     Document selectByDid(int did);
+
+    @Select("select * from document where d_pid = #{dPid} and d_name = #{dName}")
+    Document checkNameRepeat(Document document);
+
 }

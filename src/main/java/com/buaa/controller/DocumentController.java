@@ -4,6 +4,7 @@ package com.buaa.controller;
 import com.buaa.controller.utils.R;
 import com.buaa.pojo.Document;
 import com.buaa.service.DocumentService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,10 +23,17 @@ public class DocumentController {
     public R createDocument(@RequestBody Document document) {
         int pid = document.getDPid();
         String name = document.getDName();
-//        if(documentService.checkNameRepeat(tid, name))
-//            return new R(false, "项目内已有同名文档，请改名！");
+        if(documentService.checkNameRepeat(pid, name))
+            return new R(false, "项目内已有同名文档，请改名！");
         return new R(true, documentService.createDocument(pid,name),
                 "新文档创建成功！");
+    }
+
+    @ApiOperation(value = "将对应did的文档删除")
+    @DeleteMapping("/{did}")
+    public R removeDocument(@PathVariable int did) {
+        return new R(documentService.deleteDocumentById(did), null,
+                "成功删除文档！");
     }
 
     @PutMapping("/content")

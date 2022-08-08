@@ -16,4 +16,6 @@ public interface DocumentService {
     boolean renameDocument(int did, String name);
     List<Document> selectByProject(int pid);
     Document selectByDid(int did);
+    boolean checkNameRepeat(int pid, String name);
+    boolean deleteDocumentById(int did);
 }
