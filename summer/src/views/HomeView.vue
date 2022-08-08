@@ -3,7 +3,8 @@
     <el-container>
       <el-aside class="Aside">
         <div class="Portrait">
-          <img src="../assets/头像.jpg" alt="头像" class="portrait">
+          <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+               alt="头像" id="portrait1">
         </div>
         <div class="Personal" @click="showPersonalInfo">
           <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" style="height: 22px; width: 22px">
@@ -34,19 +35,19 @@
           <div v-if="option===1" class="PersonalInfo">
             <el-header class="Header">个人信息</el-header>
             <div class="PersonalPortrait">
-              <img src="../assets/头像.jpg" alt="头像" class="portrait">
+              <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+                   alt="头像" id="portrait2">
               <el-upload
-                  v-model:file="file"
+                  v-model:file-list="fileList"
                   ref="upload"
-                  class="upload-demo"
-                  action="http://101.42.246.11/user/info/{uname}"
-                  :show-file-list="true"
-                  :auto-upload="true"
-                  :limit="1"
+                  class="avatar-uploader"
+                  action="#"
+                  accept="image/png,image/jpg,image/jpeg"
+                  :http-request="submitUpload"
+                  :show-file-list="false"
               >
                 <template #trigger>
-                  <el-button type="primary" class="changePortraitBtn"
-                             @click="submitUpload">更换头像</el-button>
+                  <el-button type="primary" class="changePortraitBtn">更换头像</el-button>
                 </template>
               </el-upload>
             </div>
@@ -190,10 +191,8 @@ export default {
       newName : '',
       proMod : 1,
 
-      file : {
-          name: '',
-          url: '',
-      },
+      fileList: [],
+      file: {}
     }
   },
   mounted() {
@@ -211,6 +210,7 @@ export default {
       this.$axios.get('/user/info/' + this.account
       ).then(response=> {
         this.info = response.data.data
+        document.getElementById('portrait1').src = this.info.profilePic
       });
     },
     showPersonalInfo () {
@@ -219,6 +219,8 @@ export default {
       ).then(response=> {
         this.info = response.data.data
         this.newUname = this.info.uname
+        document.getElementById('portrait1').src = this.info.profilePic
+        document.getElementById('portrait2').src = this.info.profilePic
       })
       this.option = 1;
     },
@@ -263,19 +265,46 @@ export default {
       }
       this.option = 3;
     },
-    submitUpload() {
+    submitUpload(file) {
+      this.file = file.file
       console.log(this.file)
+      let formData = new FormData();
+      formData.append('file', this.file);
+      this.$axios.post('/upload/cos', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(response=>{
+        console.log(response)
+        if(response.data.flag===true){
+          this.info.profilePic = response.data.data
+          document.getElementById('portrait1').src = this.info.profilePic
+          document.getElementById('portrait2').src = this.info.profilePic
+          this.Submit()
+        }
+        else {
+          ElMessage({
+            message: '修改失败',
+            type: 'error'
+          })
+        }
+      }).catch(err=>{
+        ElMessage({
+          message: '修改失败',
+          type: 'error'
+        })
+      })
     },
     Submit () {
       this.$axios.post('/user/info/' + this.info.uname, {
         email: this.info.email,
         password: this.info.password,
-        profilePic: "",
+        profilePic: this.info.profilePic,
         uid: 0,
         uname: this.newUname,
         unickname: this.info.unickname
       }).then(response=> {
-        console.log(response)
+        // console.log(response)
         this.newName = ''
         if(response.data.flag === true){
           ElMessage({
@@ -388,15 +417,8 @@ export default {
 </script>
 
 <style scoped>
-    .background-img {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    margin-left: -50%;
-  }
 
-  .Homepage {
+.Homepage {
     position: relative;
     top: 20px;
     display: block;
@@ -419,7 +441,7 @@ export default {
     margin-bottom: 20px;
   }
 
-  .Aside .portrait {
+  .Aside #portrait1 {
     display: block;
     width: 80px;
     height: 80px;
@@ -492,7 +514,7 @@ export default {
     padding-right: 10px;
   }
 
-  .PersonalInfo .portrait {
+  .PersonalInfo #portrait2 {
     position: absolute;
     left: 150px;
     top: 200px;

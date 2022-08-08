@@ -87,7 +87,7 @@ export default {
         uname: this.loginForm.username,
         unickname: '0',
       }).then(response=> {
-        console.log(response);
+        // console.log(response);
         var message = response.data.data
         if(response.data.flag === true){
           ElMessage({
