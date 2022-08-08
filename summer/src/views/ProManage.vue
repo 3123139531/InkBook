@@ -57,7 +57,19 @@
                 <path fill="currentColor" d="m192 384 320 384 320-384z"></path>
               </svg>
             </th>
-            <th>项目状态</th>
+            <th>
+              <el-dropdown trigger="click">
+                <span title="点击进行筛选">{{ this.statusShow }}</span>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item @click="showAll">全部</el-dropdown-item>
+                    <el-dropdown-item @click="showDoing">进行中</el-dropdown-item>
+                    <el-dropdown-item @click="showFinish" >已完成</el-dropdown-item>
+                    <el-dropdown-item @click="showTrash">已回收</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </th>
             <th>
               <span title="点击以此排序" @click="sortByCreate">创建时间</span>
               <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
@@ -80,17 +92,22 @@
                 <path fill="currentColor" d="M512 320 192 704h639.936z"></path>
               </svg>
             </th>
-            <th>项目详情</th>
+            <th></th>
           </tr>
           <tr v-for="i in numShow" key="i" class="proInfo">
             <td>{{ proShow[i-1].pid }}</td>
             <td>{{ proShow[i-1].pname }}</td>
-            <td v-if="proShow[i-1].status==='doing'">进行中</td>
-            <td v-else-if="proShow[i-1].status==='finish'">已完成</td>
-            <td v-else>已回收</td>
+            <td v-if="proShow[i-1].status==='doing'" style="color: #1890ff">进行中</td>
+            <td v-else-if="proShow[i-1].status==='finish'" style="color: red">已完成</td>
+            <td v-else style="color: grey">已回收</td>
             <td>{{ proShow[i-1].createTime }}</td>
             <td>{{ proShow[i-1].modifyTime }}</td>
-            <td class="proDetailLink" @click="toProjectView(i-1)">项目详情</td>
+            <td>
+              <span class="proDetailLink" style="margin-right: 10px"
+                    @click="toProjectView(i-1)">项目详情</span>
+              <span class="proDetailLink" v-if="proShow[i-1].status==='doing'"
+                    @click="finishPro(i-1)">结束项目</span>
+            </td>
           </tr>
         </table>
         <el-button type="primary" class="addProBtn" @click="addNewProBtn">新建项目</el-button>
@@ -139,7 +156,8 @@ export default {
       searchClicked: false,
       proShow: [],
       numShow: 0,
-      sortType : 1,
+      statusShow: '项目状态',
+      sortType : 0,
 
       addProDialog: false,
       newProName: ''
@@ -173,20 +191,22 @@ export default {
             for(let i=0; i<response.data.data.length; i++)
               this.projects.push(response.data.data[i])
             this.numPro = this.projects.length
+
             this.proShow = this.projects
             this.numShow = this.numPro
+            this.sortByCreate()
           })
         })
       })
-
-
-
     },
     searchPro() {
-      console.log(this.searchName)
+      // console.log(this.searchName)
       this.searchClicked = !this.searchClicked
-      if(this.searchName==='')
+      if(this.searchName===''){
+        this.projects = []
+        this.sortType = 0
         this.getProjects()
+      }
       else {
         this.numShow = 0
         for(let i=0; i<this.numPro; i++){
@@ -194,15 +214,15 @@ export default {
             this.proShow[this.numShow++] = this.projects[i]
         }
         this.searchName = ''
-        console.log(this.numShow)
+        console.log(this.projects)
       }
     },
     sortByCreate(){
-      if(this.sortType>2){
+      if(this.sortType>2 || this.sortType<1){
         this.sortType = 1
         for (let i=0; i<this.numShow; i++){
           for (let j=0; j<this.numShow-1-i; j++){
-            if(this.proShow[j].pid < this.proShow[j+1].pid){
+            if(this.proShow[j].createTime < this.proShow[j+1].createTime){
               let tmp = this.proShow[j]
               this.proShow[j] = this.proShow[j+1]
               this.proShow[j+1] = tmp
@@ -251,6 +271,51 @@ export default {
         this.proShow.reverse()
       }
     },
+    showAll() {
+      this.statusShow = '项目状态'
+      this.projects = []
+      this.sortType = 0
+      this.getProjects()
+      // console.log(this.projects)
+    },
+    showDoing() {
+      this.statusShow = '进行中'
+      this.numShow = 0
+      for(let i=0; i<this.numPro; i++){
+        if(this.projects[i].status === 'doing')
+          this.proShow[this.numShow++] = this.projects[i]
+      }
+      // console.log(this.projects)
+    },
+    showFinish() {
+      this.statusShow = '已完成'
+      this.numShow = 0
+      for(let i=0; i<this.numPro; i++){
+        if(this.projects[i].status === 'finish')
+          this.proShow[this.numShow++] = this.projects[i]
+      }
+      // console.log(this.projects)
+    },
+    showTrash() {
+      this.statusShow = '已回收'
+      this.numShow = 0
+      for(let i=0; i<this.numPro; i++){
+        if(this.projects[i].status === 'trash')
+          this.proShow[this.numShow++] = this.projects[i]
+      }
+      // console.log(this.projects)
+    },
+    finishPro(i) {
+      this.$axios.put('/projects/finish/' + this.projects[i].pid, {
+        pid: this.projects[i].pid
+      }).then(response=>{
+        ElMessage({
+          message: '项目已完成',
+          type: 'success'
+        })
+        this.projects[i].status = 'finish'
+      })
+    },
     addNewProBtn() {
       this.addProDialog = true
     },
@@ -264,7 +329,6 @@ export default {
         this.getProjects()
         this.sortType = 1
         this.newProName = ''
-        this.newProTeam = 0
       })
       ElMessage({
         message: '创建项目成功',
@@ -474,6 +538,15 @@ export default {
   padding: 0;
   line-height: 40px;
   font-size: 17px;
+}
+
+.proNav th span {
+  display: inline-block;
+  width: 18%;
+  padding: 0;
+  line-height: 40px;
+  font-size: 17px;
+  color: black;
 }
 
 .proNav th:first-child {

@@ -18,7 +18,7 @@
           <el-button type="primary" class="delBtn" @click="delFile">删除文档</el-button>
           <el-dialog v-model="dialogFormVisible" title="输入新项目名">
             <el-form>
-              <el-form-item label="Promotion name" :label-width="140">
+              <el-form-item label="新项目名" :label-width="140">
                 <el-input v-model="newName" autocomplete="off" />
               </el-form-item>
             </el-form>
@@ -126,12 +126,14 @@ export default {
     },
     RenamePro () {
       this.$axios.put('/documents',{
+        dcontent: this.document.dcontent,
         did: this.documentId,
-        name: this.newName
+        dname: this.newName,
+        dpid: this.pid
       }).then(response =>{
         console.log(response)
       })
-      this.document.name = this.newName;
+      this.document.dname = this.newName;
       this.dialogFormVisible = false;
       this.newName = '';
     },

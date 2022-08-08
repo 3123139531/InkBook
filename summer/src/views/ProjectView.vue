@@ -15,22 +15,31 @@
           </div>
         </div>
         <div class="ProjectBtn">
-          <el-button type="primary" class="copyBtn" @click="copyProBtn">复制项目</el-button>
-          <el-button type="primary" @click="RenameProBtn">重命名项目</el-button>
-          <el-button type="primary" class="delBtn" @click="delProject">删除项目</el-button>
-          <el-dialog v-model="dialogFormVisible" title="输入新项目名">
-            <el-form>
-              <el-form-item label="Promotion name" :label-width="140">
-                <el-input v-model="newName" autocomplete="off" />
-              </el-form-item>
-            </el-form>
-            <template #footer>
+          <div v-if="project.status==='doing'">
+            <el-button type="primary" class="copyBtn" @click="copyProBtn">复制项目</el-button>
+            <el-button type="primary" @click="RenameProBtn">重命名项目</el-button>
+            <el-button type="primary" class="delBtn" @click="delProject">删除项目</el-button>
+            <el-dialog v-model="dialogFormVisible" title="输入新项目名">
+              <el-form>
+                <el-form-item label="Promotion name" :label-width="140">
+                  <el-input v-model="newName" autocomplete="off" />
+                </el-form-item>
+              </el-form>
+              <template #footer>
               <span class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
                 <el-button type="primary" @click="RenamePro">确认</el-button>
               </span>
-            </template>
-          </el-dialog>
+              </template>
+            </el-dialog>
+          </div>
+          <div v-else-if="project.status==='finish'">
+            <el-button type="primary" class="delBtn" @click="delProject">删除项目</el-button>
+          </div>
+          <div v-else>
+            <el-button type="primary" class="delBtn" @click="recoverProject">恢复项目</el-button>
+            <el-button type="primary" class="delBtn" @click="delProject">彻底删除</el-button>
+          </div>
         </div>
       </el-header>
       <el-main class="ProjectMain">
@@ -38,7 +47,7 @@
         <div v-for="i in numDocuments" class="ProDoc" :key="i" @click="toFileView(i)">
           <span class="DocName">{{documents[i-1].dname}}</span>
         </div>
-        <div class="ProDoc" @click="addNewFileBtn">
+        <div class="ProDoc" @click="addNewFileBtn" v-if="project.status==='doing'">
           <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" class="plusIcon">
                   <path fill="currentColor" d="M352 480h320a32 32 0 1 1 0 64H352a32 32 0 0 1 0-64z"></path>
                   <path fill="currentColor" d="M480 672V352a32 32 0 1 1 64 0v320a32 32 0 0 1-64 0z"></path>
@@ -107,12 +116,15 @@ export default {
       this.projectId = this.$route.params.p_id
       this.userAccount = this.$route.params.ac
       this.teamName = this.$route.params.teamName
-      console.log(this.teamName)
+      // console.log(this.teamName)
       this.$axios.get('/projects/'+this.projectId
       ).then(response =>{
         this.project = response.data.data
         // console.log(this.project)
       })
+      this.getDocs()
+    },
+    getDocs() {
       this.$axios.get('/documents/project/'+this.projectId
       ).then(response =>{
         this.documents = response.data.data.documents
@@ -132,6 +144,18 @@ export default {
         })
       })
     },
+    recoverProject() {
+      this.$axios.put('/projects/doing/'+this.projectId,{
+        pid: this.projectId
+      }).then(response =>{
+        console.log(response)
+        ElMessage({
+          message: '恢复成功',
+          type: 'success'
+        })
+        this.project.status = 'doing'
+      })
+    },
     delProject () {
       if(this.project.status==='trash'){
         this.$axios.delete('/projects/!/'+this.projectId
@@ -145,6 +169,10 @@ export default {
           console.log(response)
         })
       }
+      ElMessage({
+        message: '删除成功',
+        type: 'success'
+      })
       this.toTeamView()
     },
     RenameProBtn () {
@@ -166,17 +194,23 @@ export default {
     },
     addNewFile() {
       this.$axios.post('/documents',{
-        name: this.newFile,
-        pid: this.projectId,
+        dcontent: "",
+        did: 0,
+        dname: this.newFile,
+        dpid: this.projectId
       }).then(response =>{
         console.log(response)
         // console.log(this.newFile)
         // console.log(this.documents)
-        this.documents.push({content: '', did: response.data.data, dname: this.newFile, pid: this.projectId});
-        console.log(this.documents)
-        this.numDocuments ++;
-        this.addFileDialog = false;
-        this.newFile = '';
+        if(response.data.flag===true){
+          ElMessage({
+            message: '文档创建成功',
+            type: 'success'
+          })
+        }
+        this.getDocs()
+        this.addFileDialog = false
+        this.newFile = ''
       });
     },
     toHomeView () {

@@ -36,14 +36,17 @@
             <div class="PersonalPortrait">
               <img src="../assets/头像.jpg" alt="头像" class="portrait">
               <el-upload
+                  v-model:file="file"
                   ref="upload"
                   class="upload-demo"
-                  action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-                  :limit="1"
+                  action="http://101.42.246.11/user/info/{uname}"
+                  :show-file-list="true"
                   :auto-upload="true"
+                  :limit="1"
               >
                 <template #trigger>
-                  <el-button type="primary" class="changePortraitBtn">更换头像</el-button>
+                  <el-button type="primary" class="changePortraitBtn"
+                             @click="submitUpload">更换头像</el-button>
                 </template>
               </el-upload>
             </div>
@@ -164,9 +167,7 @@
 
 <script>
 /* eslint-disable */
-import { thisTypeAnnotation } from '@babel/types';
 import { ElMessage } from 'element-plus'
-import { captureRejectionSymbol } from 'events';
 
 export default {
   data () {
@@ -188,6 +189,11 @@ export default {
       newUname: '',
       newName : '',
       proMod : 1,
+
+      file : {
+          name: '',
+          url: '',
+      },
     }
   },
   mounted() {
@@ -256,6 +262,9 @@ export default {
         }
       }
       this.option = 3;
+    },
+    submitUpload() {
+      console.log(this.file)
     },
     Submit () {
       this.$axios.post('/user/info/' + this.info.uname, {
