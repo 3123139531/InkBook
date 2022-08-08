@@ -17,4 +17,6 @@ public interface UserService {
 
     // 用户点击注册链接判断token是否过期
     public boolean eqToken(String token);
+
+    User selectUserById(int id);
 }

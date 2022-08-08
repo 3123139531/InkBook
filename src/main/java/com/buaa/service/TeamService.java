@@ -1,5 +1,7 @@
 package com.buaa.service;
 
+import com.buaa.controller.utils.InviteRequest;
+import com.buaa.controller.utils.TwoUserParam;
 import com.buaa.pojo.Team;
 import com.buaa.pojo.User;
 
@@ -24,4 +26,6 @@ public interface TeamService {
     public User[] getTeamMembers(Team team);
 
     public boolean isMember(Team team, User user);
+
+    boolean sendInvite(int tid, InviteRequest users);
 }

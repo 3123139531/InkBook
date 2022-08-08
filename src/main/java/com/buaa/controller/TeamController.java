@@ -1,18 +1,18 @@
 package com.buaa.controller;
 
+import com.buaa.controller.utils.ChangePositionParam;
+import com.buaa.controller.utils.InviteRequest;
 import com.buaa.controller.utils.R;
+import com.buaa.controller.utils.TwoUserParam;
 import com.buaa.pojo.*;
 import com.buaa.service.TeamService;
 import com.buaa.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -51,17 +51,6 @@ public class TeamController {
         return r;
     }
 
-//    @ApiOperation(value = "获取用户所在的全部团队列表")
-//    @GetMapping("/team")
-//    public R showUserTeam(HttpSession session){
-//        String username = session.getAttribute("username").toString();
-//        User user = userService.findUserByName(username);
-//        //return
-//        R r = new R();
-//        r.setData(teamService.getUserTeams(user));
-//        r.setFlag(true);
-//        return r;
-//    }
 
     @ApiOperation(value = "获取用户所在的全部团队列表")
     @GetMapping("/team/{user_name}")
@@ -73,23 +62,6 @@ public class TeamController {
         r.setFlag(true);
         return r;
     }
-
-//    @ApiOperation(value = "创建团队")
-//    @PostMapping("/team")
-//    public R insertTeam(@RequestParam("team_name") String team_name, @RequestParam("team_brief") String team_description, HttpSession session){
-//        Team team = new Team();
-//        team.setTname(team_name);
-//        team.setTbrief(team_description);
-//
-//        String username = session.getAttribute("username").toString();
-//        User creator = userService.findUserByName(username);
-//
-//        //return
-//        R r = new R();
-//        r.setData(teamService.createTeam(team,creator));
-//        r.setFlag(true);
-//        return r;
-//    }
 
 
     @ApiOperation(value = "创建团队")
@@ -114,13 +86,6 @@ public class TeamController {
         return r;
     }
 
-//    @ApiOperation(value = "邀请用户加入团队")
-//    @PostMapping("/team/{team_id}")
-//    public void inviteUserToTeam(@PathVariable("team_id") int t_id,@RequestParam("username") String username){
-//        Team team = teamService.selectTeamById(t_id);
-//        User user = userService.findUserByName(username);
-//        teamService.addTeamMember(team,user);
-//    }
 
     @ApiOperation(value = "邀请用户加入团队")
     @PostMapping("/team/{team_id}/members")
@@ -142,20 +107,6 @@ public class TeamController {
         //TODO: 发送消息而不是直接邀请
     }
 
-//    @ApiOperation(value = "团队移除用户")
-//    @DeleteMapping("/team/{team_id}")
-//    public void removeUserFromTeam(@PathVariable("team_id") int t_id,@RequestParam("username") String username){
-//        Team team = teamService.selectTeamById(t_id);
-//        User user = userService.findUserByName(username);
-//        teamService.removeTeamMember(team,user);
-//    }
-
-//    @ApiOperation(value = "团队移除用户")
-//    @DeleteMapping("/team/{team_id}")
-//    public void removeUserFromTeam(@PathVariable("team_id") int t_id,@RequestBody User user){
-//        Team team = teamService.selectTeamById(t_id);
-//        teamService.removeTeamMember(team,user);
-//    }
 
     @ApiOperation(value = "团队移除用户")
     @DeleteMapping("/team/{team_id}/members")
@@ -183,45 +134,14 @@ public class TeamController {
         }
     }
 
+    @ApiOperation(value = "向成员发送加入团队的邀请")
+    @PostMapping("/invite/{tid}")
+    public R sendInvite(@PathVariable("tid") int tid, @RequestBody InviteRequest users) {
+        Team team = new Team();
+        team.setTname("admin group");
+        teamService.sendInvite(tid, users);
+        return new R(true, "发送成功，请等待对方查看");
+    }
+
 }
 
-class TwoUserParam{
-    String uName1;
-    String uName2;
-
-    public String getuName1() {
-        return uName1;
-    }
-
-    public void setuName1(String uName1) {
-        this.uName1 = uName1;
-    }
-
-    public String getuName2() {
-        return uName2;
-    }
-
-    public void setuName2(String uName2) {
-        this.uName2 = uName2;
-    }
-}
-class ChangePositionParam{
-    TwoUserParam twoUserParam;
-    int targetPosition;
-
-    public TwoUserParam getTwoUserParam() {
-        return twoUserParam;
-    }
-
-    public void setTwoUserParam(TwoUserParam twoUserParam) {
-        this.twoUserParam = twoUserParam;
-    }
-
-    public int getTargetPosition() {
-        return targetPosition;
-    }
-
-    public void setTargetPosition(int targetPosition) {
-        this.targetPosition = targetPosition;
-    }
-}

@@ -1,13 +1,19 @@
 package com.buaa.impl;
 
+import com.buaa.controller.utils.InviteRequest;
+import com.buaa.controller.utils.TwoUserParam;
 import com.buaa.pojo.Team;
 import com.buaa.pojo.TeamMember;
 import com.buaa.pojo.User;
 import com.buaa.mapper.TeamMapper;
 import com.buaa.mapper.TeamMemberMapper;
 import com.buaa.service.TeamService;
+import com.buaa.service.UserService;
+import com.buaa.utils.CodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 @Service
 public class TeamServiceImpl implements TeamService {
@@ -15,6 +21,12 @@ public class TeamServiceImpl implements TeamService {
     TeamMapper teamMapper;
     @Autowired
     TeamMemberMapper teamMemberMapper;
+
+    @Resource
+    UserService userService;
+
+    @Resource
+    private CodeUtils codeUtils;
 
     public Team selectTeamById(int id){
         return teamMapper.selectTeamByID(id);
@@ -93,5 +105,13 @@ public class TeamServiceImpl implements TeamService {
         member.setUId(uid);
         if(teamMemberMapper.isMember(member)>0) return true;
         else return false;
+    }
+
+    @Override
+    public boolean sendInvite(int tid, InviteRequest users) {
+        Team team = selectTeamById(tid);
+        User user = userService.selectUserById(users.getInvited());
+        String inviter = userService.selectUserById(users.getInviter()).getUName();
+        return codeUtils.sendInvite(user, inviter, team);
     }
 }

@@ -48,4 +48,9 @@ public class UserServiceImpl implements UserService {
             return false;
         }
     }
+
+    @Override
+    public User selectUserById(int id) {
+        return userMapper.selectUserById(id);
+    }
 }

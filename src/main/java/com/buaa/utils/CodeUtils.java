@@ -5,7 +5,9 @@ import cn.hutool.extra.template.Template;
 import cn.hutool.extra.template.TemplateConfig;
 import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.TemplateUtil;
+import com.buaa.pojo.Team;
 import com.buaa.pojo.User;
+import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.mail.internet.MimeMessage;
+import java.io.StringWriter;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -48,12 +52,6 @@ public class CodeUtils {
             Template template = engine.getTemplate("EmailTemplate.html");
             String html =template.render(Dict.create().set("href", "http://101.42.246.11/lookCode/" + token));
 
-//            String html = "<html>\n" +
-//                    "<body>\n" +
-//                    "<p>您好，您的账号正在注册墨书</p>\n" +
-//                    "<a href=\"http://101.42.246.11/lookCode/" + token + "\">点此链接进行注册</a>" +
-//                    "</body>\n" +
-//                    "</html>";
             messageHelper.setText(html, true); // 邮箱内容
             System.out.println("邮件内容设置成功");
             System.out.println(message);
@@ -75,5 +73,43 @@ public class CodeUtils {
     // 根据token查询用户的信息
     public User findUser(String token){
         return redisTemplate.opsForValue().get(token);
+    }
+
+    public boolean sendInvite(User user, String inviter, Team team) {
+        System.out.println(user);
+        System.out.println(inviter);
+        System.out.println(team);
+        MimeMessage message = mailSender.createMimeMessage();
+        try{
+            MimeMessageHelper messageHelper = new MimeMessageHelper(message);
+            //发送方的邮箱地址
+            messageHelper.setFrom(from);
+            // 接收方的邮箱地址
+            messageHelper.setTo(user.getEmail());
+            // 邮箱标题
+            messageHelper.setSubject("InkBook团队邀请");
+
+            TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("templates", TemplateConfig.ResourceMode.CLASSPATH));
+            Template template = engine.getTemplate("InviteTemplate.html");
+            Map<String, Object> model = Maps.newHashMap();
+            model.put("username", user.getUNickname());
+            model.put("inviter", inviter);
+            model.put("team", team.getTname());
+            model.put("href", "https://www.jianfast.com/");
+            StringWriter out = new StringWriter();
+            template.render(model, out);
+
+            String html = out.toString();
+
+            messageHelper.setText(html, true); // 邮箱内容
+//            System.out.println(message);
+            mailSender.send(message);  // 发送邮箱
+            System.out.println("发送成功");
+            return true;
+        }catch (Exception e){
+            System.out.println("发送失败");
+            e.printStackTrace();
+            return false;
+        }
     }
 }

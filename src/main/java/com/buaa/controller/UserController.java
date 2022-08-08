@@ -101,7 +101,11 @@ public class UserController {
         else {
             if(isValidPassword(user.getPassword())) {
 //                userService.insertRegisteredUser(user);
-                return sendCode(user);
+                boolean flag = userService.sendCode(user);
+                if (flag)
+                    return new R(true, "邮件发送成功，请前往您的邮箱进行注册验证");
+                else
+                    return new R(false, "邮件发送失败");
             }
             else{
                 R r = new R();
@@ -160,14 +164,15 @@ public class UserController {
         }
     }
 
-    public R sendCode(User user){
+//    @PostMapping("testMail")
+//    public R sendCode(@RequestBody User user){
 //        System.out.println(user);
-        boolean flag = userService.sendCode(user);
-        if (flag)
-            return new R(true, "邮件发送成功，请前往您的邮箱进行注册验证");
-        else
-            return new R(false, "邮件发送失败");
-    }
+//        boolean flag = userService.sendCode(user);
+//        if (flag)
+//            return new R(true, "邮件发送成功，请前往您的邮箱进行注册验证");
+//        else
+//            return new R(false, "邮件发送失败");
+//    }
 
     @ApiOperation(value = "验证token")
     // 判断是否注册成功

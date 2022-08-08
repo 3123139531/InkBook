@@ -24,4 +24,7 @@ public interface UserMapper {
 
     @Update("update user set profile_pic = #{profilePic} where u_name = #{uName}")
     public User updateUserProfilePic(User user);
+
+    @Select("select * from user where u_id = #{id}")
+    User selectUserById(int id);
 }
