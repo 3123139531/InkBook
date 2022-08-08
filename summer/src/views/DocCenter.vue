@@ -37,6 +37,27 @@
       </el-header>
       <el-main class="TeamMain">
         <div style="font:normal bold 20px/30px Georgia, serif; margin-bottom: 10px;">文档中心</div>
+        <div class="docTree">
+          <div style="text-align: center; border-bottom: 1px black solid">进行中项目</div>
+          <el-tree :data="dataDoing"
+                   :props="defaultProps"
+                   :highlight-current="true"
+          />
+        </div>
+        <div class="docTree">
+          <div style="text-align: center; border-bottom: 1px black solid">已完成项目</div>
+          <el-tree :data="dataFinish"
+                   :props="defaultProps"
+                   :highlight-current="true"
+          />
+        </div>
+        <div class="docTree">
+          <div style="text-align: center; border-bottom: 1px black solid">已回收项目</div>
+          <el-tree :data="dataTrash"
+                   :props="defaultProps"
+                   :highlight-current="true"
+          />
+        </div>
       </el-main>
     </el-container>
   </div>
@@ -61,6 +82,14 @@ export default {
         leader: '',
         numMembers: 0
       },
+
+      dataDoing: [],
+      dataFinish: [],
+      dataTrash: [],
+      defaultProps : {
+        label: 'name',
+        children: 'docs'
+      }
     }
   },
   mounted () {
@@ -68,11 +97,105 @@ export default {
   },
   methods : {
     init () {
-      this.userAccount = this.$route.params.userAccount;
-      this.team.leader = this.$route.params.leader;
-      this.team.teamId = this.$route.params.teamId;
-      this.team.name = this.$route.params.teamName;
-      this.team.numMembers = this.$route.params.numMembers;
+      this.userAccount = this.$route.query.userAccount;
+      this.team.leader = this.$route.query.leader;
+      this.team.teamId = this.$route.query.teamId;
+      this.team.name = this.$route.query.teamName;
+      this.team.numMembers = this.$route.query.numMembers;
+      this.getTree()
+      console.log(this.data)
+    },
+    getTree() {
+      this.getDoingTree()
+      this.getFinishTree()
+      this.getTrashTree()
+    },
+    getDoingTree() {
+      this.$axios.get('/projects/doing/' + this.team.teamId, {
+        params: {
+          tid: this.team.teamId
+        }
+      }).then(response=>{
+        let projects = response.data.data
+        let numPro = projects.length
+        for(let i=0; i<numPro; i++){
+          this.$axios.get('/documents/project/'+projects[i].pid
+          ).then(res=>{
+            // console.log(res)
+            let docoments = res.data.data.documents
+            let numDoc = docoments.length
+
+            let docTreeNode = []
+            for(let j=0; j<numDoc; j++){
+              docTreeNode.push({
+                name: docoments[j].dname
+              })
+            }
+            this.dataDoing.push({
+              name: projects[i].pname,
+              docs: docTreeNode
+            })
+          })
+        }
+      })
+    },
+    getFinishTree() {
+      this.$axios.get('/projects/finish/' + this.team.teamId, {
+        params: {
+          tid: this.team.teamId
+        }
+      }).then(response=>{
+        let projects = response.data.data
+        let numPro = projects.length
+        for(let i=0; i<numPro; i++){
+          this.$axios.get('/documents/project/'+projects[i].pid
+          ).then(res=>{
+            // console.log(res)
+            let docoments = res.data.data.documents
+            let numDoc = docoments.length
+
+            let docTreeNode = []
+            for(let j=0; j<numDoc; j++){
+              docTreeNode.push({
+                name: docoments[j].dname
+              })
+            }
+            this.dataFinish.push({
+              name: projects[i].pname,
+              docs: docTreeNode
+            })
+          })
+        }
+      })
+    },
+    getTrashTree() {
+      this.$axios.get('/projects/trash/' + this.team.teamId, {
+        params: {
+          tid: this.team.teamId
+        }
+      }).then(response=>{
+        let projects = response.data.data
+        let numPro = projects.length
+        for(let i=0; i<numPro; i++){
+          this.$axios.get('/documents/project/'+projects[i].pid
+          ).then(res=>{
+            // console.log(res)
+            let docoments = res.data.data.documents
+            let numDoc = docoments.length
+
+            let docTreeNode = []
+            for(let j=0; j<numDoc; j++){
+              docTreeNode.push({
+                name: docoments[j].dname
+              })
+            }
+            this.dataTrash.push({
+              name: projects[i].pname,
+              docs: docTreeNode
+            })
+          })
+        }
+      })
     },
     toHomeView () {
       this.$router.push({
@@ -110,12 +233,12 @@ export default {
 
 <style scoped>
 .background-img {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(144, 144, 144, 0.2);
+  background: rgba(144, 144, 144, 0.2) scroll;
 }
 
 .TeamInfo {
@@ -220,7 +343,7 @@ export default {
 }
 
 .TeamMain {
-  height: 100%;
+  height: 680px;
   overflow: auto;
   border: 1px black solid;
   border-radius: 20px;
@@ -234,8 +357,31 @@ export default {
   line-height: 40px;
 }
 
+.docTree {
+  display: inline-block;
+  float: left;
+  width: 30%;
+  font-size: 16px !important;
+  font-family: '微软雅黑',sans-serif;
+  border: 1px black solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-left: 1%;
+  background: rgba(144, 144, 144, 0.1);
+}
+
+.prefix {
+  color: var(--el-color-primary);
+  margin-right: 10px;
+  height: 40px;
+  line-height: 40px;
+}
+.prefix.is-leaf {
+  color: var(--el-color-success);
+}
+
 .toHomepageBtn {
-  position: absolute;
+  position: fixed;
   left: 10px;
   top: 20px;
   background: white;

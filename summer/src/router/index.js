@@ -7,6 +7,7 @@ import Login from '../views/LoginView.vue'
 import Register from '../views/RegisterView.vue'
 import ProManage from "@/views/ProManage";
 import DocCenter from "@/views/DocCenter";
+import test from "@/views/test.vue"
 
 const routes = [
   {
@@ -48,6 +49,11 @@ const routes = [
     path: '/docCenter',
     name: 'docCenter',
     component: DocCenter
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: test
   },
 ]
 

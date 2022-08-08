@@ -127,6 +127,7 @@ export default {
     getDocs() {
       this.$axios.get('/documents/project/'+this.projectId
       ).then(response =>{
+        console.log(response)
         this.documents = response.data.data.documents
         this.numDocuments = response.data.data.documents.length
       })
@@ -254,7 +255,7 @@ export default {
   }
 
   .background-img {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -351,13 +352,13 @@ export default {
   }
 
   .toHomepageBtn {
-    position: absolute;
+    position: fixed;
     left: 15px;
     top: 20px;
   }
 
   .toTeamViewBtn {
-    position: absolute;
+    position: fixed;
     left: 15px;
     top: 70px;
     margin-left: 0;

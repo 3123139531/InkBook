@@ -166,11 +166,11 @@ export default {
   }
 
   .background-img {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 890px;
+    height: 100%;
     background: rgba(144, 144, 144, 0.2);
   }
 
@@ -250,7 +250,7 @@ export default {
   }
 
   .FileMain {
-    height: 100%;
+    height: 760px;
     overflow: auto;
     padding: 30px;
     border: 1px black solid;
@@ -267,13 +267,13 @@ export default {
   }
 
   .toHomepageBtn {
-    position: absolute;
+    position: fixed;
     left: 15px;
     top: 20px;
   }
 
   .toProViewBtn {
-    position: absolute;
+    position: fixed;
     left: 15px;
     top: 70px;
     margin-left: 0;

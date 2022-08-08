@@ -389,7 +389,7 @@ export default {
 
 <style scoped>
     .background-img {
-    position: absolute;
+    position: fixed;
     top: 0;
     width: 100%;
     height: 100%;
@@ -398,9 +398,9 @@ export default {
 
   .Homepage {
     position: relative;
-    top: 10px;
+    top: 20px;
     display: block;
-    height: 700px;
+    height: 100%;
     width: 90%;
     margin: 0 auto;
   }
@@ -446,6 +446,7 @@ export default {
 
   .Aside .Cancellation {
     margin-top: 220px;
+    margin-bottom: 20px;
   }
 
   .curView {
@@ -459,7 +460,7 @@ export default {
   }
 
   .Main {
-    height: 680px;
+    height: 100%;
     background: white;
     background: rgba(144, 144, 144, 0.2);
     /*background: rgba(255, 255, 255, 0.4);*/

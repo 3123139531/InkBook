@@ -53,9 +53,9 @@
             class="MemDetail"
         >
           <el-table-column prop="uname" label="用户名" width="270"/>
-          <el-table-column prop="uid" label="用户编号" width="270" />
+          <el-table-column prop="uid" label="用户编号" width="220" />
           <el-table-column prop="unickname" label="姓名" width="270"/>
-          <el-table-column prop="email" label="邮箱" width="270"/>
+          <el-table-column prop="email" label="邮箱" width="280"/>
           <el-table-column prop="identity" label="身份" width="270"/>
         </el-table>
         <div v-if="userIdentity!=='队员'">
@@ -319,7 +319,7 @@ export default {
       }
       this.$router.push({
         name: 'docCenter',
-        params : {
+        query : {
           userAccount: this.userAccount,
           teamId : this.teamId,
           teamName: this.team.name,
@@ -334,7 +334,7 @@ export default {
 
 <style scoped>
   .background-img {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -539,7 +539,7 @@ export default {
   }
 
   .toHomepageBtn {
-    position: absolute;
+    position: fixed;
     left: 10px;
     top: 20px;
     background: white;

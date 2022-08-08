@@ -43,7 +43,7 @@
           <el-button class="searchBtn" v-if="!searchClicked" @click="searchPro">搜索</el-button>
           <el-button class="searchBtn" v-else @click="searchPro">取消</el-button>
         </span>
-        <table class="proNav">
+        <table class="proNav" v-if="numShow!==0">
           <tr>
             <th>项目编号</th>
             <th>
@@ -109,7 +109,9 @@
                     @click="finishPro(i-1)">结束项目</span>
             </td>
           </tr>
+
         </table>
+        <el-empty :image-size="100" v-else/>
         <el-button type="primary" class="addProBtn" @click="addNewProBtn">新建项目</el-button>
         <el-dialog v-model="addProDialog">
           <el-form>
@@ -210,7 +212,9 @@ export default {
       else {
         this.numShow = 0
         for(let i=0; i<this.numPro; i++){
-          if(this.projects[i].pname === this.searchName)
+          let str1 = this.projects[i].pname
+          let str2 = this.searchName
+          if((str1.indexOf(str2) >= 0))
             this.proShow[this.numShow++] = this.projects[i]
         }
         this.searchName = ''
@@ -356,12 +360,12 @@ export default {
     toDocCenter() {
       this.$router.push({
         name: 'docCenter',
-        params : {
+        query : {
           userAccount: this.userAccount,
           teamId : this.team.teamId,
           teamName: this.team.name,
           leader: this.team.leader,
-          numMembers: this.team.numMembers
+          numMembers: this.team.numMembers,
         }
       })
     },
@@ -381,7 +385,7 @@ export default {
 
 <style scoped>
 .background-img {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -496,6 +500,7 @@ export default {
   border: 1px black solid;
   border-radius: 20px;
   margin-top: 10px;
+  margin-bottom: 10px;
   background: white;
   /*background: rgba(200, 200, 200, 0.5);*/
 }
@@ -503,6 +508,7 @@ export default {
 .mainTitle {
   display: inline-block;
   font:normal bold 20px/30px Georgia, serif;
+  margin-top: 10px;
   margin-bottom: 10px;
   margin-left: 22%;
 }
@@ -510,6 +516,7 @@ export default {
 .search {
   display: inline-block;
   float: right;
+  margin-top: 10px;
   margin-right: 2.5%;
   width: 260px;
 }
@@ -525,6 +532,7 @@ export default {
   display: inline-block;
   border: 1px black solid;
   width: 95%;
+  margin-top: 10px;
 }
 
 .proNav tr {
@@ -606,7 +614,7 @@ export default {
 }
 
 .toHomepageBtn {
-  position: absolute;
+  position: fixed;
   left: 10px;
   top: 20px;
   background: white;
