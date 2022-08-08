@@ -137,8 +137,6 @@ public class TeamController {
     @ApiOperation(value = "向成员发送加入团队的邀请")
     @PostMapping("/invite/{tid}")
     public R sendInvite(@PathVariable("tid") int tid, @RequestBody InviteRequest users) {
-        Team team = new Team();
-        team.setTname("admin group");
         teamService.sendInvite(tid, users);
         return new R(true, "发送成功，请等待对方查看");
     }
