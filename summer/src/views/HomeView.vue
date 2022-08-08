@@ -210,7 +210,8 @@ export default {
       this.$axios.get('/user/info/' + this.account
       ).then(response=> {
         this.info = response.data.data
-        document.getElementById('portrait1').src = this.info.profilePic
+        if(this.info.profilePic!=null && this.info.profilePic!=='')
+          document.getElementById('portrait1').src = this.info.profilePic
       });
     },
     showPersonalInfo () {
@@ -219,8 +220,10 @@ export default {
       ).then(response=> {
         this.info = response.data.data
         this.newUname = this.info.uname
-        document.getElementById('portrait1').src = this.info.profilePic
-        document.getElementById('portrait2').src = this.info.profilePic
+        if(this.info.profilePic!=null && this.info.profilePic!==''){
+          document.getElementById('portrait1').src = this.info.profilePic
+          document.getElementById('portrait2').src = this.info.profilePic
+        }
       })
       this.option = 1;
     },
@@ -278,9 +281,11 @@ export default {
         console.log(response)
         if(response.data.flag===true){
           this.info.profilePic = response.data.data
-          document.getElementById('portrait1').src = this.info.profilePic
-          document.getElementById('portrait2').src = this.info.profilePic
-          this.Submit()
+          if(this.info.profilePic!=null && this.info.profilePic!==''){
+            document.getElementById('portrait1').src = this.info.profilePic
+            document.getElementById('portrait2').src = this.info.profilePic
+            this.Submit()
+          }
         }
         else {
           ElMessage({
