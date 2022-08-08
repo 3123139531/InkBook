@@ -143,5 +143,13 @@ public class TeamController {
         return new R(true, "发送成功，请等待对方查看");
     }
 
+    @ApiOperation(value = "临时接口，用于邀请加入团队")
+    @GetMapping("/invite/temp/{uid}/{tid}")
+    public R inviteJoin(@PathVariable int uid, @PathVariable int tid) {
+        Team team = teamService.selectTeamById(tid);
+        User invited = userService.selectUserById(uid);
+        teamService.addTeamMember(team, invited);
+        return new R (true, "邀请成功");
+    }
 }
 
