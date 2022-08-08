@@ -32,6 +32,10 @@ spring:
           enabled: false
     suffix: .html
     template-loader-path: classpath:/templates/
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 mybatis-plus:
   global-config:
