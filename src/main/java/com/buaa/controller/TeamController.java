@@ -110,7 +110,7 @@ public class TeamController {
 
     @ApiOperation(value = "团队移除用户")
     @DeleteMapping("/team/{team_id}/members")
-    public void removeUserFromTeam(@PathVariable("team_id") int t_id,@RequestBody TwoUserParam twoUsers){
+    public R removeUserFromTeam(@PathVariable("team_id") int t_id,@RequestBody TwoUserParam twoUsers){
         Team team = teamService.selectTeamById(t_id);
         User kicker = userService.findUserByName(twoUsers.getuName1());
         int kickerPosition = teamService.selectMemberPosition(team,kicker);
@@ -118,12 +118,14 @@ public class TeamController {
         int userToKickPosition = teamService.selectMemberPosition(team,userToKick);
         if(kickerPosition >=2 && kickerPosition>userToKickPosition) {
             teamService.removeTeamMember(team, userToKick);
+            return new R(true,"成员移除成功");
         }
+        else return new R(false, "权限不够移除该用户");
     }
 
     @ApiOperation(value = "修改团队成员权限")
     @PutMapping("/team/{team_id}/members")
-    public void changeUserPosition(@PathVariable("team_id") int t_id,@RequestBody ChangePositionParam p){
+    public R changeUserPosition(@PathVariable("team_id") int t_id,@RequestBody ChangePositionParam p){
         Team team = teamService.selectTeamById(t_id);
         User changer = userService.findUserByName(p.getTwoUserParam().getuName1());
         User toChange = userService.findUserByName(p.getTwoUserParam().getuName2());
@@ -131,7 +133,9 @@ public class TeamController {
         int changerPosition = teamService.selectMemberPosition(team,changer);
         if(changerPosition>=2 && targetPosition<3) {
             teamService.updateMemberPosition(team, toChange, targetPosition);
+            return new R(true,"成员权限修改成功");
         }
+        else return new R(false, "权限不够修改该用户权限");
     }
 
     @ApiOperation(value = "向成员发送加入团队的邀请")
