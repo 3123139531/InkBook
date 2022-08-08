@@ -104,14 +104,30 @@ export default {
       })
     },
     delFile () {
-      this.$router.push({
-        name : 'project',
-        params : {
-          p_id: this.pid,
-          ac: this.userAccount,
-          teamName: this.teamName
+      this.$axios.delete('/documents/'+this.documentId,
+      ).then(response =>{
+        if(response.data.flag === true){
+          ElMessage({
+            message: '删除成功',
+            type: 'success'
+          })
+          this.$router.push({
+            name : 'project',
+            params : {
+              p_id: this.pid,
+              ac: this.userAccount,
+              teamName: this.teamName
+            }
+          })
+        }
+        else {
+          ElMessage({
+            message: '删除失败',
+            type: 'error'
+          })
         }
       })
+
     },
     saveFile () {
       this.$axios.get('/documents',{
@@ -224,29 +240,6 @@ export default {
   .ProjectBtn .renameBtn,
   .ProjectBtn .delBtn {
     margin-left: 10px !important;
-  }
-
-  .Link {
-    line-height: 103px;
-    display: inline-block;
-  }
-
-  .Prototype,
-  .UML-link {
-    display: inline-block;
-    width: 100px;
-    border-left: 1px black solid;
-    border-right: 1px black solid;
-    margin-left: 1px;
-    border-radius: 5px;
-    font-size: 18px;
-    color: black;
-    transition: 0.5s;
-  }
-
-  .Prototype:hover,
-  .UML-link:hover {
-    background: rgba(144, 144, 144, 0.5);
   }
 
   .FileMain {
