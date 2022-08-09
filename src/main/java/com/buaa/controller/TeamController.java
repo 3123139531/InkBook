@@ -138,6 +138,12 @@ public class TeamController {
         else return new R(false, "权限不够修改该用户权限");
     }
 
+//    @ApiOperation(value = "向成员发送加入团队的邀请")
+//    @PostMapping("/invite/{tid}")
+//    public R sendInvite(@PathVariable("tid") int tid, @RequestBody InviteRequest users) {
+//        teamService.sendInvite(tid, users);
+//        return new R(true, "发送成功，请等待对方查看");
+//    }
     @ApiOperation(value = "向成员发送加入团队的邀请")
     @PostMapping("/invite/{tid}")
     public R sendInvite(@PathVariable("tid") int tid, @RequestBody InviteRequest users) {
@@ -145,11 +151,19 @@ public class TeamController {
         return new R(true, "发送成功，请等待对方查看");
     }
 
+//    @ApiOperation(value = "临时接口，用于邀请加入团队")
+//    @GetMapping("/invite/temp/{uid}/{tid}")
+//    public R inviteJoin(@PathVariable int uid, @PathVariable int tid) {
+//        Team team = teamService.selectTeamById(tid);
+//        User invited = userService.selectUserById(uid);
+//        teamService.addTeamMember(team, invited);
+//        return new R (true, "邀请成功");
+//    }
     @ApiOperation(value = "临时接口，用于邀请加入团队")
-    @GetMapping("/invite/temp/{uid}/{tid}")
-    public R inviteJoin(@PathVariable int uid, @PathVariable int tid) {
+    @GetMapping("/invite/temp/{user_name}/{tid}")
+    public R inviteJoin(@PathVariable("user_name") String username, @PathVariable int tid) {
         Team team = teamService.selectTeamById(tid);
-        User invited = userService.selectUserById(uid);
+        User invited = userService.findUserByName(username);
         teamService.addTeamMember(team, invited);
         return new R (true, "邀请成功");
     }

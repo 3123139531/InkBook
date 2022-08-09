@@ -110,8 +110,10 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public boolean sendInvite(int tid, InviteRequest users) {
         Team team = selectTeamById(tid);
-        User user = userService.selectUserById(users.getInvited());
-        String inviter = userService.selectUserById(users.getInviter()).getUName();
-        return codeUtils.sendInvite(user, inviter, team);
+        User invited = userService.findUserByName(users.getInvited());
+//        int inviterId = userService.findUserByName(users.getInviter()).getUId();
+//        User user = userService.selectUserById(users.getInvited());
+//        String inviter = userService.selectUserById(users.getInviter()).getUName();
+        return codeUtils.sendInvite(invited, users.getInviter(), team);
     }
 }

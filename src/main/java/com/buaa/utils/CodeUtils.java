@@ -95,7 +95,8 @@ public class CodeUtils {
             model.put("username", user.getUNickname());
             model.put("inviter", inviter);
             model.put("team", team.getTname());
-            model.put("href", "http://101.42.246.11/invite/temp/" + user.getUId() + "/" + team.getTid());
+//            model.put("href", "http://101.42.246.11/invite/temp/" + user.getUId() + "/" + team.getTid());
+            model.put("href", "http://101.42.246.11/invite/temp/" + user.getUName() + "/" + team.getTid());
             StringWriter out = new StringWriter();
             template.render(model, out);
 
