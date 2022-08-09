@@ -44,6 +44,10 @@ public class DocumentController {
 
     @PutMapping
     public R renameDocument(@RequestBody Document document) {
+        int pid = document.getDPid();
+        String name = document.getDName();
+        if(documentService.checkNameRepeat(pid, name))
+            return new R(false, "项目内已有同名文档，请改名！");
         return new R(documentService.renameDocument(document.getDid(), document.getDName()),
                 null, "文档名称已变更");
     }
