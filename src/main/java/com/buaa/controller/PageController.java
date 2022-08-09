@@ -17,7 +17,7 @@ public class PageController {
     @Resource
     private PageService pageService;
 
-    @ApiOperation(value = "创建页面，需指定所在项目id，页面名称，返回新页面的id")
+    @ApiOperation(value = "创建页面，需指定所在项目id，页面名称，页面json内容，返回值为新页面的id")
     @PutMapping
     public R createPage(@RequestBody MyPage page) {
         if(pageService.checkNameRepeat(page.getPgName(), page.getPgPid()))

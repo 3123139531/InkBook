@@ -1,6 +1,8 @@
 package com.buaa.controller;
 
 import com.buaa.controller.utils.R;
+import com.buaa.mapper.DocumentMapper;
+import com.buaa.pojo.Document;
 import com.buaa.pojo.Project;
 import com.buaa.service.ProjectService;
 import io.swagger.annotations.Api;
@@ -19,6 +21,9 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    private DocumentMapper documentMapper;
+
     /**
      * 新建项目
      * @param "组号tid, 项目名pName"
@@ -31,7 +36,12 @@ public class ProjectController {
         String name = project.getPName();
         if(projectService.checkNameRepeat(tid, name))
             return new R(false, "组内已有同名项目，请改名！");
-        return new R(true, projectService.createProject(tid,name),
+        int newId = projectService.createProject(tid,name);
+        Document document = new Document();
+        document.setDName("UML");
+        document.setDPid(newId);
+        documentMapper.insertDocument(document);
+        return new R(true, newId,
                 "新项目创建成功！");
     }
 
