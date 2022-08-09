@@ -38,26 +38,17 @@
       <el-main class="TeamMain">
         <div style="font:normal bold 20px/30px Georgia, serif; margin-bottom: 10px;">文档中心</div>
         <div class="docTree">
-          <div style="text-align: center; border-bottom: 1px black solid">进行中项目</div>
-          <el-tree :data="dataDoing"
+          <div style="text-align: center; border-bottom: 1px black solid">文档</div>
+          <el-tree :data="data"
                    :props="defaultProps"
                    :highlight-current="true"
+                   @node-click="showEditor"
           />
         </div>
-        <div class="docTree">
-          <div style="text-align: center; border-bottom: 1px black solid">已完成项目</div>
-          <el-tree :data="dataFinish"
-                   :props="defaultProps"
-                   :highlight-current="true"
-          />
+        <div class="docEditor">
+          <div id="vditor"></div>
         </div>
-        <div class="docTree">
-          <div style="text-align: center; border-bottom: 1px black solid">已回收项目</div>
-          <el-tree :data="dataTrash"
-                   :props="defaultProps"
-                   :highlight-current="true"
-          />
-        </div>
+        <el-button type="primary" class="saveBtn" v-if="isDoc" @click="saveFile">保存文档</el-button>
       </el-main>
     </el-container>
   </div>
@@ -70,6 +61,9 @@
 
 <script>
 /* eslint-disable */
+import Vditor from "vditor"
+import "vditor/dist/index.css"
+import {ElMessage} from "element-plus";
 
 export default {
   data () {
@@ -83,13 +77,35 @@ export default {
         numMembers: 0
       },
 
+      data: [
+        {
+          name: '团队文档',
+          children: []
+        },
+        {
+          name: '进行中项目',
+          children: []
+        },
+        {
+          name: '已完成项目',
+          children: []
+        },
+        {
+          name: '已回收项目',
+          children: []
+        }
+      ],
       dataDoing: [],
       dataFinish: [],
       dataTrash: [],
       defaultProps : {
         label: 'name',
-        children: 'docs'
-      }
+        children: 'children'
+      },
+
+      curNode: {},
+      text: '',
+      isDoc: false
     }
   },
   mounted () {
@@ -103,12 +119,17 @@ export default {
       this.team.name = this.$route.query.teamName;
       this.team.numMembers = this.$route.query.numMembers;
       this.getTree()
-      console.log(this.data)
+      // console.log(this.data)
+      this.setEditor()
     },
     getTree() {
+      this.getTeamDoc()
       this.getDoingTree()
       this.getFinishTree()
       this.getTrashTree()
+    },
+    getTeamDoc() {
+
     },
     getDoingTree() {
       this.$axios.get('/projects/doing/' + this.team.teamId, {
@@ -128,13 +149,16 @@ export default {
             let docTreeNode = []
             for(let j=0; j<numDoc; j++){
               docTreeNode.push({
+                id: docoments[j].did,
                 name: docoments[j].dname
               })
             }
             this.dataDoing.push({
+              id: projects[i].pid,
               name: projects[i].pname,
-              docs: docTreeNode
+              children: docTreeNode
             })
+            this.data[1].children = this.dataDoing
           })
         }
       })
@@ -157,13 +181,16 @@ export default {
             let docTreeNode = []
             for(let j=0; j<numDoc; j++){
               docTreeNode.push({
+                id: docoments[j].did,
                 name: docoments[j].dname
               })
             }
             this.dataFinish.push({
+              id: projects[i].pid,
               name: projects[i].pname,
-              docs: docTreeNode
+              children: docTreeNode
             })
+            this.data[2].children = this.dataFinish
           })
         }
       })
@@ -186,13 +213,68 @@ export default {
             let docTreeNode = []
             for(let j=0; j<numDoc; j++){
               docTreeNode.push({
+                id: docoments[j].did,
                 name: docoments[j].dname
               })
             }
             this.dataTrash.push({
+              id: projects[i].pid,
               name: projects[i].pname,
-              docs: docTreeNode
+              children: docTreeNode
             })
+            this.data[3].children = this.dataTrash
+          })
+        }
+      })
+    },
+    showEditor(data, node, el) {
+      // console.log(data)
+      // console.log(node)
+      // console.log(el)
+      this.curNode = data
+      if(node.isLeaf===true && node.level===3){
+        this.$axios.get('/documents/' + data.id
+        ).then(response=> {
+          // console.log(response)
+          this.text = response.data.data.dcontent
+          this.isDoc = true
+          this.setEditor()
+        })
+      }
+      else{
+        this.text = '选中节点并非文档'
+        this.isDoc = false
+        this.setEditor()
+      }
+    },
+    setEditor() {
+      this.contentEditor = new Vditor("vditor",{
+        height:680,
+        mode:'ir',
+        toolbarConfig:{
+          pin:true
+        },
+        cache:{
+          enable:false
+        },
+        after:()=>{
+          this.contentEditor.setValue(this.text)
+        }
+      })
+    },
+    saveFile () {
+      console.log(this.curNode)
+      console.log(this.text)
+      this.$axios.put('/documents/content',{
+        dcontent: this.text,
+        did: this.curNode.id,
+        dname: this.curNode.name,
+        dpid: 0
+      }).then(response=> {
+        if(response.data.flag === true){
+          ElMessage({
+            message: '保存成功',
+            type: 'success'
           })
         }
       })
@@ -200,7 +282,7 @@ export default {
     toHomeView () {
       this.$router.push({
         name: 'home',
-        params : {
+        query : {
           ac : this.userAccount
         }
       })
@@ -208,7 +290,7 @@ export default {
     toTeamView() {
       this.$router.push({
         name: 'team',
-        params : {
+        query : {
           userAccount : this.userAccount,
           teamId : this.team.teamId,
           teamName : this.team.name
@@ -218,7 +300,7 @@ export default {
     toProManage() {
       this.$router.push({
         name: 'proManage',
-        params : {
+        query : {
           userAccount: this.userAccount,
           teamId : this.team.teamId,
           teamName: this.team.name,
@@ -343,11 +425,12 @@ export default {
 }
 
 .TeamMain {
-  height: 680px;
+  height: 780px;
   overflow: auto;
   border: 1px black solid;
   border-radius: 20px;
   margin-top: 10px;
+  margin-bottom: 10px;
   background: white;
   /*background: rgba(200, 200, 200, 0.5);*/
 }
@@ -360,7 +443,7 @@ export default {
 .docTree {
   display: inline-block;
   float: left;
-  width: 30%;
+  width: 20%;
   font-size: 16px !important;
   font-family: '微软雅黑',sans-serif;
   border: 1px black solid;
@@ -368,6 +451,20 @@ export default {
   padding: 10px;
   margin-left: 1%;
   background: rgba(144, 144, 144, 0.1);
+}
+
+.docEditor {
+  display: inline-block;
+  float: right;
+  height: 680px;
+  width: 75%;
+  border: 1px black solid;
+  border-radius: 5px;
+}
+
+.saveBtn {
+  display: inline-block;
+  margin-top: 20px;
 }
 
 .prefix {

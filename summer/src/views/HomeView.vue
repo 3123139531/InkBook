@@ -20,13 +20,6 @@
           <div style="font-size: 14px; font-weight: bold">团队</div>
           <div class="curView" v-if="option===2"></div>
         </div>
-        <div class="Project" @click="showProject">
-          <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" style="height: 22px; width: 22px">
-            <path fill="currentColor" d="M128 192v640h768V320H485.76L357.504 192H128zm-32-64h287.872l128.384 128H928a32 32 0 0 1 32 32v576a32 32 0 0 1-32 32H96a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32z"></path>
-          </svg>
-          <div style="font-size: 14px; font-weight: bold">项目</div>
-          <div class="curView" v-if="option===3"></div>
-        </div>
         <el-button type="primary" round class="Cancellation" @click="Quit">注销</el-button>
       </el-aside>
       <el-container>
@@ -101,65 +94,6 @@
               </el-dialog>
             </div>
           </div>
-<!--          参与项目-->
-          <div v-if="option===3" class="PersonalProjects">
-            <div v-if="proMod===1">
-              <el-header class="Header">参与项目</el-header>
-              <div v-for="i in numProjects" :key='i'>
-                <div class="divisionBox" @click="toProjectView1(i)">
-                  <span class="innerChar">项目名称：{{projects[i-1].pname}}</span>
-                  <span class="innerChar">团队编号：{{projects[i-1].tid}}</span>
-                </div>
-              </div>
-<!--              <div class="newBox" @click="addNewProjectBtn">-->
-<!--                <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" class="plusIcon">-->
-<!--                  <path fill="currentColor" d="M352 480h320a32 32 0 1 1 0 64H352a32 32 0 0 1 0-64z"></path>-->
-<!--                  <path fill="currentColor" d="M480 672V352a32 32 0 1 1 64 0v320a32 32 0 0 1-64 0z"></path>-->
-<!--                  <path fill="currentColor" d="M512 896a384 384 0 1 0 0-768 384 384 0 0 0 0 768zm0 64a448 448 0 1 1 0-896 448 448 0 0 1 0 896z"></path>-->
-<!--                </svg>-->
-<!--                <div class="plusChar">新建项目</div>-->
-<!--                <el-dialog v-model="addProDialog">-->
-<!--                  <el-form>-->
-<!--                    <el-form-item label="团队编号" :label-width="100">-->
-<!--                      <el-input v-model="newPro_team" autocomplete="off" />-->
-<!--                    </el-form-item>-->
-<!--                    <el-form-item label="项目名" :label-width="100">-->
-<!--                      <el-input v-model="newName" autocomplete="off" />-->
-<!--                    </el-form-item>-->
-<!--                  </el-form>-->
-<!--                  <template #footer>-->
-<!--                    <span class="dialog-footer">-->
-<!--                      <el-button @click="addProDialog = false">取消</el-button>-->
-<!--                      <el-button type="primary" @click="addNewPro">确认</el-button>-->
-<!--                    </span>-->
-<!--                  </template>-->
-<!--                </el-dialog>-->
-<!--              </div>-->
-              <div class="changeBtn" @click="changeProMod">
-                <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
-                style="width: 20px; height: 20px; margin-top: 5px">
-                  <path fill="currentColor" d="M878.08 448H241.92l-96 384h636.16l96-384zM832 384v-64H485.76L357.504 192H128v448l57.92-231.744A32 32 0 0 1 216.96 384H832zm-24.96 512H96a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32h287.872l128.384 128H864a32 32 0 0 1 32 32v96h23.04a32 32 0 0 1 31.04 39.744l-112 448A32 32 0 0 1 807.04 896z"></path>
-                </svg>
-                <div style="text-align: center">回收站</div>
-              </div>
-            </div>
-            <div v-else>
-              <el-header class="Header">项目回收站</el-header>
-              <div v-for="i in numt_Projects" :key='i'>
-                <div class="divisionBox" @click="toProjectView2(i)">
-                  <span class="innerChar">项目名称：{{t_projects[i-1].pname}}</span>
-                  <span class="innerChar">团队编号：{{t_projects[i-1].tid}}</span>
-                </div>
-              </div>
-              <div class="changeBtn" @click="changeProMod">
-                <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
-                     style="width: 20px; height: 20px; margin-top: 5px">
-                  <path fill="currentColor" d="M878.08 448H241.92l-96 384h636.16l96-384zM832 384v-64H485.76L357.504 192H128v448l57.92-231.744A32 32 0 0 1 216.96 384H832zm-24.96 512H96a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32h287.872l128.384 128H864a32 32 0 0 1 32 32v96h23.04a32 32 0 0 1 31.04 39.744l-112 448A32 32 0 0 1 807.04 896z"></path>
-                </svg>
-                <div style="text-align: center">项目</div>
-              </div>
-            </div>
-          </div>
         </el-main>
       </el-container>
     </el-container>
@@ -201,7 +135,7 @@ export default {
   methods: {
     init () {
       // console.log(this.$route)
-      this.account = this.$route.params.ac
+      this.account = this.$route.query.ac
       this.$axios.get('/team/' + this.account
       ).then(response=> {
         this.teams = response.data.data;
@@ -335,7 +269,7 @@ export default {
     toTeamView (id, name) {
       this.$router.push({
         name: 'team',
-        params: {
+        query: {
           ac: this.account,
           userAccount: this.info.uname,
           teamId: id,
@@ -453,21 +387,24 @@ export default {
     border-radius: 40px;
     margin: 20px auto 50px;
   }
-  .Personal, .Enterprise, .Project {
+  .Personal, .Enterprise{
     position: relative;
     left: 0;
     top: 0;
     height: 55px;
     width: 60px;
     padding-top: 10px;
-    margin: 15px auto;
+    margin: 30px auto;
     border-radius: 5px;
     transition: 0.5s;
   }
 
+.Personal{
+  margin-top: 100px;
+}
+
   .Aside .Personal:hover,
-  .Aside .Enterprise:hover,
-  .Aside .Project:hover {
+  .Aside .Enterprise:hover {
     background: rgba(144, 144, 144, 0.4);
   }
 

@@ -93,10 +93,10 @@ export default {
   },
   methods : {
     init () {
-      this.userAccount = this.$route.params.ac
-      this.documentId = this.$route.params.d_id
-      this.pid = this.$route.params.p_id
-      this.teamName = this.$route.params.teamName
+      this.userAccount = this.$route.query.ac
+      this.documentId = this.$route.query.d_id
+      this.pid = this.$route.query.p_id
+      this.teamName = this.$route.query.teamName
       this.$axios.get('/documents/'+this.documentId
       ).then(response =>{
         this.document = response.data.data
@@ -113,7 +113,7 @@ export default {
           })
           this.$router.push({
             name : 'project',
-            params : {
+            query : {
               p_id: this.pid,
               ac: this.userAccount,
               teamName: this.teamName
@@ -156,7 +156,7 @@ export default {
     toHomeView () {
       this.$router.push({
         name: 'home',
-        params : {
+        query : {
           ac : this.userAccount
         }
       })
@@ -164,7 +164,7 @@ export default {
     toProjectView () {
       this.$router.push({
         name: 'project',
-        params : {
+        query : {
           ac : this.userAccount,
           p_id : this.pid,
           teamName: this.teamName

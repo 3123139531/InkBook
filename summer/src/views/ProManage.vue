@@ -170,11 +170,11 @@ export default {
   },
   methods : {
     init () {
-      this.userAccount = this.$route.params.userAccount;
-      this.team.leader = this.$route.params.leader;
-      this.team.teamId = this.$route.params.teamId;
-      this.team.name = this.$route.params.teamName;
-      this.team.numMembers = this.$route.params.numMembers;
+      this.userAccount = this.$route.query.userAccount;
+      this.team.leader = this.$route.query.leader;
+      this.team.teamId = this.$route.query.teamId;
+      this.team.name = this.$route.query.teamName;
+      this.team.numMembers = this.$route.query.numMembers;
       this.getProjects()
     },
     getProjects() {
@@ -342,7 +342,7 @@ export default {
     toHomeView () {
       this.$router.push({
         name: 'home',
-        params : {
+        query : {
           ac : this.userAccount
         }
       })
@@ -350,7 +350,7 @@ export default {
     toTeamView() {
       this.$router.push({
         name: 'team',
-        params : {
+        query : {
           userAccount : this.userAccount,
           teamId : this.team.teamId,
           teamName : this.team.name
@@ -372,7 +372,7 @@ export default {
     toProjectView(id) {
       this.$router.push({
         name: 'project',
-        params: {
+        query: {
           p_id: this.projects[id].pid,
           ac: this.userAccount,
           teamName: this.team.name

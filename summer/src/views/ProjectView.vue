@@ -113,9 +113,9 @@ export default {
   },
   methods : {
     init () {
-      this.projectId = this.$route.params.p_id
-      this.userAccount = this.$route.params.ac
-      this.teamName = this.$route.params.teamName
+      this.projectId = this.$route.query.p_id
+      this.userAccount = this.$route.query.ac
+      this.teamName = this.$route.query.teamName
       // console.log(this.teamName)
       this.$axios.get('/projects/'+this.projectId
       ).then(response =>{
@@ -217,7 +217,7 @@ export default {
     toHomeView () {
       this.$router.push({
         name: 'home',
-        params : {
+        query : {
           ac : this.userAccount
         }
       })
@@ -225,7 +225,7 @@ export default {
     toTeamView() {
       this.$router.push({
         name: 'team',
-        params : {
+        query : {
           userAccount : this.userAccount,
           teamId: this.project.tid,
           teamName: this.teamName
@@ -235,7 +235,7 @@ export default {
     toFileView (id) {
       this.$router.push({
         name: 'file',
-        params : {
+        query : {
           ac : this.userAccount,
           d_id : this.documents[id-1].did,
           p_id : this.projectId,

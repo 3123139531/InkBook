@@ -159,9 +159,9 @@ export default {
   },
   methods : {
     init () {
-      this.userAccount = this.$route.params.userAccount;
-      this.teamId = this.$route.params.teamId;
-      this.team.name = this.$route.params.teamName;
+      this.userAccount = this.$route.query.userAccount;
+      this.teamId = this.$route.query.teamId;
+      this.team.name = this.$route.query.teamName;
       this.getMembers()
     },
     getMembers () {
@@ -289,7 +289,7 @@ export default {
     toHomeView () {
       this.$router.push({
         name: 'home',
-        params : {
+        query : {
           ac : this.userAccount
         }
       })
@@ -302,7 +302,7 @@ export default {
       }
       this.$router.push({
         name: 'proManage',
-        params : {
+        query : {
           userAccount: this.userAccount,
           teamId : this.teamId,
           teamName: this.team.name,

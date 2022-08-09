@@ -96,7 +96,7 @@ export default {
           });
           this.$router.push({
             name: 'home',
-            params: {
+            query: {
               ac : this.loginForm.username
             }
           })
