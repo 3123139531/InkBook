@@ -5,10 +5,25 @@ import Project from '../views/ProjectView.vue'
 import File from '../views/FileView.vue'
 import Login from '../views/LoginView.vue'
 import Register from '../views/RegisterView.vue'
+import ProManage from "@/views/ProManage";
+import DocCenter from "@/views/DocCenter";
+import HomeInit from "@/views/HomeInit.vue";
+import ForSkip from "@/views/ForSkip.vue";
+import Design from "../views/DesignView.vue"
 
 const routes = [
   {
     path: '/',
+    name: 'init',
+    component: HomeInit
+  },
+  {
+    path: '/skip',
+    name: 'skip',
+    component: ForSkip
+  },
+  {
+    path: '/login',
     name: 'login',
     component: Login
   },
@@ -36,6 +51,21 @@ const routes = [
     path: '/file',
     name: 'file',
     component: File
+  },
+  {
+    path: '/proManage',
+    name: 'proManage',
+    component: ProManage
+  },
+  {
+    path: '/docCenter',
+    name: 'docCenter',
+    component: DocCenter
+  },
+  {
+    path: '/design',
+    name: 'design',
+    component: Design
   }
 ]
 

@@ -1,28 +1,30 @@
 <template>
-  <img src="../assets/background.png" class="background-img">
   <div class="Homepage">
     <el-container>
       <el-aside class="Aside">
         <div class="Portrait">
-          <img src="../assets/头像.jpg" alt="头像" class="portrait">
+          <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+               alt="头像" id="portrait1">
         </div>
         <div class="Personal" @click="showPersonalInfo">
           <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" style="height: 22px; width: 22px">
             <path fill="currentColor" d="M628.736 528.896A416 416 0 0 1 928 928H96a415.872 415.872 0 0 1 299.264-399.104L512 704l116.736-175.104zM720 304a208 208 0 1 1-416 0 208 208 0 0 1 416 0z"></path>
           </svg>
           <div style="font-size: 14px; font-weight: bold">信息</div>
+          <div class="curView" v-if="option===1"></div>
         </div>
         <div class="Enterprise" @click="showEnterprise">
           <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" style="height: 22px; width: 22px">
             <path fill="currentColor" d="M192 413.952V896h640V413.952L512 147.328 192 413.952zM139.52 374.4l352-293.312a32 32 0 0 1 40.96 0l352 293.312A32 32 0 0 1 896 398.976V928a32 32 0 0 1-32 32H160a32 32 0 0 1-32-32V398.976a32 32 0 0 1 11.52-24.576z"></path>
           </svg>
           <div style="font-size: 14px; font-weight: bold">团队</div>
+          <div class="curView" v-if="option===2"></div>
         </div>
-        <div class="Project" @click="showProject">
+        <div class="Enterprise" @click="toInit">
           <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" style="height: 22px; width: 22px">
-            <path fill="currentColor" d="M128 192v640h768V320H485.76L357.504 192H128zm-32-64h287.872l128.384 128H928a32 32 0 0 1 32 32v576a32 32 0 0 1-32 32H96a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32z"></path>
+            <path fill="currentColor" d="M512 64a448 448 0 1 1 0 896.064A448 448 0 0 1 512 64zm67.2 275.072c33.28 0 60.288-23.104 60.288-57.344s-27.072-57.344-60.288-57.344c-33.28 0-60.16 23.104-60.16 57.344s26.88 57.344 60.16 57.344zM590.912 699.2c0-6.848 2.368-24.64 1.024-34.752l-52.608 60.544c-10.88 11.456-24.512 19.392-30.912 17.28a12.992 12.992 0 0 1-8.256-14.72l87.68-276.992c7.168-35.136-12.544-67.2-54.336-71.296-44.096 0-108.992 44.736-148.48 101.504 0 6.784-1.28 23.68.064 33.792l52.544-60.608c10.88-11.328 23.552-19.328 29.952-17.152a12.8 12.8 0 0 1 7.808 16.128L388.48 728.576c-10.048 32.256 8.96 63.872 55.04 71.04 67.84 0 107.904-43.648 147.456-100.416z"></path>
           </svg>
-          <div style="font-size: 14px; font-weight: bold">项目</div>
+          <div style="font-size: 14px; font-weight: bold">介绍</div>
         </div>
         <el-button type="primary" round class="Cancellation" @click="Quit">注销</el-button>
       </el-aside>
@@ -32,13 +34,16 @@
           <div v-if="option===1" class="PersonalInfo">
             <el-header class="Header">个人信息</el-header>
             <div class="PersonalPortrait">
-              <img src="../assets/头像.jpg" alt="头像" class="portrait">
+              <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+                   alt="头像" id="portrait2">
               <el-upload
+                  v-model:file-list="fileList"
                   ref="upload"
-                  class="upload-demo"
-                  action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-                  :limit="1"
-                  :auto-upload="true"
+                  class="avatar-uploader"
+                  action="#"
+                  accept="image/png,image/jpg,image/jpeg"
+                  :http-request="submitUpload"
+                  :show-file-list="false"
               >
                 <template #trigger>
                   <el-button type="primary" class="changePortraitBtn">更换头像</el-button>
@@ -47,13 +52,16 @@
             </div>
             <el-form :model="info" label-width="120px" size="large" class="Format">
               <el-form-item label="用户名" class="Form-line">
-                <el-input v-model="info.uname" />
+                <el-input v-model="newUname" />
               </el-form-item>
               <el-form-item label="姓名" class="Form-line">
                 <el-input v-model="info.unickname" />
               </el-form-item>
               <el-form-item label="邮箱" class="Form-line">
                 <el-input v-model="info.email" />
+              </el-form-item>
+              <el-form-item label="密码" class="Form-line">
+                <el-input v-model="info.password"  type="password"/>
               </el-form-item>
               <el-form-item>
                 <el-button :plain="true" type="primary" @click="Submit" class="changeInfoBtn">确认修改</el-button>
@@ -65,7 +73,7 @@
           <div v-if="option===2" class="PersonalEnterprises">
             <el-header class="Header">所在团队</el-header>
             <div v-for="i in numTeams" :key="i">
-              <div class="divisionBox" @click="toTeamView(i)">
+              <div class="divisionBox" @click="toTeamView(teams[i-1].tid, teams[i-1].tname)">
                 <span class="innerChar">团队名称：{{teams[i-1].tname}}</span>
                 <span class="innerChar">团队编号：{{teams[i-1].tid}}</span>
               </div>
@@ -92,65 +100,6 @@
               </el-dialog>
             </div>
           </div>
-<!--          参与项目-->
-          <div v-if="option===3" class="PersonalProjects">
-            <div v-if="proMod===1">
-              <el-header class="Header">参与项目</el-header>
-              <div v-for="i in numProjects" :key='i'>
-                <div class="divisionBox" @click="toProjectView1(i)">
-                  <span class="innerChar">项目名称：{{projects[i-1].pname}}</span>
-                  <span class="innerChar">团队编号：{{projects[i-1].tid}}</span>
-                </div>
-              </div>
-              <div class="newBox" @click="addNewProjectBtn">
-                <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" class="plusIcon">
-                  <path fill="currentColor" d="M352 480h320a32 32 0 1 1 0 64H352a32 32 0 0 1 0-64z"></path>
-                  <path fill="currentColor" d="M480 672V352a32 32 0 1 1 64 0v320a32 32 0 0 1-64 0z"></path>
-                  <path fill="currentColor" d="M512 896a384 384 0 1 0 0-768 384 384 0 0 0 0 768zm0 64a448 448 0 1 1 0-896 448 448 0 0 1 0 896z"></path>
-                </svg>
-                <div class="plusChar">新建项目</div>
-                <el-dialog v-model="addProDialog">
-                  <el-form>
-                    <el-form-item label="团队编号" :label-width="100">
-                      <el-input v-model="newPro_team" autocomplete="off" />
-                    </el-form-item>
-                    <el-form-item label="项目名" :label-width="100">
-                      <el-input v-model="newName" autocomplete="off" />
-                    </el-form-item>
-                  </el-form>
-                  <template #footer>
-                    <span class="dialog-footer">
-                      <el-button @click="addProDialog = false">取消</el-button>
-                      <el-button type="primary" @click="addNewPro">确认</el-button>
-                    </span>
-                  </template>
-                </el-dialog>
-              </div>
-              <div class="changeBtn" @click="changeProMod">
-                <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
-                style="width: 20px; height: 20px; margin-top: 5px">
-                  <path fill="currentColor" d="M878.08 448H241.92l-96 384h636.16l96-384zM832 384v-64H485.76L357.504 192H128v448l57.92-231.744A32 32 0 0 1 216.96 384H832zm-24.96 512H96a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32h287.872l128.384 128H864a32 32 0 0 1 32 32v96h23.04a32 32 0 0 1 31.04 39.744l-112 448A32 32 0 0 1 807.04 896z"></path>
-                </svg>
-                <div style="text-align: center">回收站</div>
-              </div>
-            </div>
-            <div v-else>
-              <el-header class="Header">项目回收站</el-header>
-              <div v-for="i in numt_Projects" :key='i'>
-                <div class="divisionBox" @click="toProjectView2(i)">
-                  <span class="innerChar">项目名称：{{t_projects[i-1].pname}}</span>
-                  <span class="innerChar">团队编号：{{t_projects[i-1].tid}}</span>
-                </div>
-              </div>
-              <div class="changeBtn" @click="changeProMod">
-                <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
-                     style="width: 20px; height: 20px; margin-top: 5px">
-                  <path fill="currentColor" d="M878.08 448H241.92l-96 384h636.16l96-384zM832 384v-64H485.76L357.504 192H128v448l57.92-231.744A32 32 0 0 1 216.96 384H832zm-24.96 512H96a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32h287.872l128.384 128H864a32 32 0 0 1 32 32v96h23.04a32 32 0 0 1 31.04 39.744l-112 448A32 32 0 0 1 807.04 896z"></path>
-                </svg>
-                <div style="text-align: center">项目</div>
-              </div>
-            </div>
-          </div>
         </el-main>
       </el-container>
     </el-container>
@@ -159,9 +108,7 @@
 
 <script>
 /* eslint-disable */
-import { thisTypeAnnotation } from '@babel/types';
 import { ElMessage } from 'element-plus'
-import { captureRejectionSymbol } from 'events';
 
 export default {
   data () {
@@ -180,8 +127,12 @@ export default {
       addTeamDialog : false,
       addProDialog : false,
       newPro_team : 0,
+      newUname: '',
       newName : '',
       proMod : 1,
+
+      fileList: [],
+      file: {}
     }
   },
   mounted() {
@@ -189,33 +140,44 @@ export default {
   },
   methods: {
     init () {
-      console.log(this.$route)
-      this.account = this.$route.params.ac
+      // console.log(this.$route)
+      this.account = this.$route.query.ac
       this.$axios.get('/team/' + this.account
-      ).then(response=> { 
+      ).then(response=> {
         this.teams = response.data.data;
         this.numTeams = this.teams.length;
       });
-    },
-    showPersonalInfo () {
-      console.log(this.account)
       this.$axios.get('/user/info/' + this.account
       ).then(response=> {
         this.info = response.data.data
+        if(this.info.profilePic!=null && this.info.profilePic!=='')
+          document.getElementById('portrait1').src = this.info.profilePic
+      });
+    },
+    showPersonalInfo () {
+      // console.log(this.account)
+      this.$axios.get('/user/info/' + this.account
+      ).then(response=> {
+        this.info = response.data.data
+        this.newUname = this.info.uname
+        if(this.info.profilePic!=null && this.info.profilePic!==''){
+          document.getElementById('portrait1').src = this.info.profilePic
+          document.getElementById('portrait2').src = this.info.profilePic
+        }
       })
       this.option = 1;
     },
     showEnterprise () {
-      console.log(this.account)
+      // console.log(this.account)
       this.$axios.get('/team/' + this.account
-      ).then(response=> { 
+      ).then(response=> {
         this.teams = response.data.data;
         this.numTeams = this.teams.length;
       });
       this.option = 2;
     },
     showProject () {
-      console.log(this.account)
+      // console.log(this.account)
       if(this.proMod===1){
         this.projects = []
         this.numProjects = 0
@@ -246,60 +208,101 @@ export default {
       }
       this.option = 3;
     },
+    submitUpload(file) {
+      this.file = file.file
+      console.log(this.file)
+      let formData = new FormData();
+      formData.append('file', this.file);
+      this.$axios.post('/upload/cos', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(response=>{
+        console.log(response)
+        if(response.data.flag===true){
+          this.info.profilePic = response.data.data
+          if(this.info.profilePic!=null && this.info.profilePic!==''){
+            document.getElementById('portrait1').src = this.info.profilePic
+            document.getElementById('portrait2').src = this.info.profilePic
+            this.Submit()
+          }
+        }
+        else {
+          ElMessage({
+            message: '修改失败',
+            type: 'error'
+          })
+        }
+      }).catch(err=>{
+        ElMessage({
+          message: '修改失败',
+          type: 'error'
+        })
+      })
+    },
     Submit () {
-      ElMessage({
-        message: '修改成功',
-        type: 'success',
+      this.$axios.post('/user/info/' + this.info.uname, {
+        email: this.info.email,
+        password: this.info.password,
+        profilePic: this.info.profilePic,
+        uid: 0,
+        uname: this.newUname,
+        unickname: this.info.unickname
+      }).then(response=> {
+        // console.log(response)
+        this.newName = ''
+        if(response.data.flag === true){
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+        }
+        else {
+          ElMessage({
+            message: '修改失败，'+response.data.msg,
+            type: 'warning',
+          })
+        }
       })
     },
     Revoke () {
+      this.showPersonalInfo()
+      ElMessage({
+        message: '撤回修改',
+        type: 'success',
+      })
     },
-    toTeamView (id) {
+    toTeamView (id, name) {
       this.$router.push({
         name: 'team',
-        params: {
+        query: {
           ac: this.account,
-          teamId: id
-        }
-      })
-    },
-    toProjectView1 (id) {
-      this.$router.push({
-        name: 'project',
-        params: {
-          p_id: this.projects[id-1].pid,
-          ac: this.account
-        }
-      })
-    },
-    toProjectView2 (id) {
-      this.$router.push({
-        name: 'project',
-        params: {
-          p_id: this.t_projects[id-1].pid,
-          ac: this.account
+          userAccount: this.info.uname,
+          teamId: id,
+          teamName : name
         }
       })
     },
     addNewTeamBtn () {
       this.addTeamDialog = true;
     },
-    addNewProjectBtn () {
-      this.addProDialog = true;
-    },
+    // addNewProjectBtn () {
+    //   this.addProDialog = true;
+    // },
     addNewTeam () {
-      this.teams.push({id: 0, EName: this.newName});
-      this.numTeams ++;
-
-      var data = {
-        name : this.newName,
-      };
-      this.$axios.post("/team/{team_id}", JSON.stringify(data)).then(function (request) {
-        console.log(request.data)
+      let url = '/team/' + this.info.uname
+      console.log(this.newName)
+      this.$axios.post(url,{
+        tbrief: "string",
+        tid: 0,
+        tname: this.newName,
+        user_name: this.info.uname
+      }).then(response =>{
+        console.log(response)
+        this.showEnterprise();
+        this.addProDialog = false;
+        this.newName = '';
       });
-
-      this.addTeamDialog = false;
-      this.newName = '';
     },
     addNewPro() {
       this.$axios.post('/projects',{
@@ -314,37 +317,6 @@ export default {
         this.newPro_team = 0;
       });
     },
-    changeProMod () {
-      this.proMod ^= 1;
-      if(this.proMod===1){
-        this.projects = []
-        this.numProjects = 0
-        for (let i=0; i<this.numTeams; i++){
-          this.$axios.get('/projects/doing/'+this.teams[i].tid
-          ).then(response =>{
-            this.pp = response.data.data
-            this.numProjects += response.data.data.length
-            for(let j=0; j<response.data.data.length; j++){
-            this.projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
-            }
-          })
-        }
-      }
-      else {
-        this.t_projects = []
-        this.numt_Projects = 0
-        for (let i=0; i<this.numTeams; i++){
-          this.$axios.get('/projects/trash/'+this.teams[i].tid
-          ).then(response =>{
-            this.pp = response.data.data
-            this.numt_Projects += response.data.data.length
-            for(let j=0; j<response.data.data.length; j++){
-            this.t_projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
-            }
-          })
-        }
-      }
-    },
     Quit () {
       ElMessage({
         message: '退出登录',
@@ -353,25 +325,23 @@ export default {
       this.$router.push({
         name: 'login',
       })
+    },
+    toInit() {
+      this.$router.push({
+        name: 'init'
+      })
     }
   }
 }
 </script>
 
 <style scoped>
-    .background-img {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    margin-left: -50%;
-  }
 
-  .Homepage {
+.Homepage {
     position: relative;
-    top: 10px;
+    top: 20px;
     display: block;
-    height: 700px;
+    height: 100%;
     width: 90%;
     margin: 0 auto;
   }
@@ -381,46 +351,59 @@ export default {
     width: 100px;
     box-shadow: 5px 0 5px #888888;
     border: 1px solid black;
-    background: white;
+    background: rgba(144, 144, 144, 0.2);
     /*background: rgba(255, 255, 255, 0.4);*/
     color: black;
   }
 
-  .Aside .Portrait {
-    margin-bottom: 20px;
-  }
-
-  .Aside .portrait {
+  .Aside #portrait1 {
     display: block;
     width: 80px;
     height: 80px;
     border-radius: 40px;
-    margin: 20px auto 50px;
+    margin: 20px auto;
   }
 
-  .Aside .Personal, .Enterprise, .Project {
+  .Personal, .Enterprise{
+    position: relative;
+    left: 0;
+    top: 0;
     height: 55px;
     width: 60px;
-    padding-top: 20px;
-    margin: 15px auto auto auto;
+    padding-top: 10px;
+    margin: 10px auto;
     border-radius: 5px;
     transition: 0.5s;
   }
 
+  .Personal{
+    margin-top: 100px;
+  }
+
   .Aside .Personal:hover,
-  .Aside .Enterprise:hover,
-  .Aside .Project:hover {
+  .Aside .Enterprise:hover {
     background: rgba(144, 144, 144, 0.4);
   }
 
   .Aside .Cancellation {
-    margin-top: 220px;
+    margin-top: 200px;
+    margin-bottom: 20px;
+  }
+
+  .curView {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    background: rgba(144, 144, 144, 0.4);
   }
 
   .Main {
-    height: 680px;
+    height: 100%;
     background: white;
-    overflow: auto;
+    background: rgba(144, 144, 144, 0.2);
     /*background: rgba(255, 255, 255, 0.4);*/
   }
 
@@ -441,9 +424,16 @@ export default {
     width: 99%;
     height: 99%;
     border: 2px black solid;
+    background: white;
+    overflow: auto;
   }
 
-  .PersonalInfo .portrait {
+  .Form-line {
+    padding-top: 10px;
+    padding-right: 10px;
+  }
+
+  .PersonalInfo #portrait2 {
     position: absolute;
     left: 150px;
     top: 200px;
@@ -478,6 +468,8 @@ export default {
   }
 
   .changeInfoBtn {
+    width: 80px;
+    height: 40px;
     margin-top: 10px;
     margin-right: 10px;
   }
@@ -486,8 +478,8 @@ export default {
     display: inline-block;
     float: left;
     margin: 20px;
-    width: 21%;
-    height: 140px;
+    width: 16%;
+    height: 130px;
     border-radius: 10px;
     border: black solid;
     text-align: left;
@@ -507,7 +499,7 @@ export default {
     display: inline-block;
     float: left;
     margin: 20px;
-    width: 20%;
+    width: 16%;
     height: 140px;
     border-radius: 10px;
     border: black solid;

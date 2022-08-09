@@ -1,5 +1,5 @@
 <template>
-  <img src="../assets/bgimg.png" class="background-img">
+  <span class="background-img"></span>
   <div class="login" >
     <el-form
         ref="loginForm"
@@ -70,14 +70,7 @@ export default {
       },
     }
   },
-  mounted () {
-    this.init()
-  },
   methods: {
-    init () {
-      this.loginForm.username = this.$route.params.n
-      console.log(this.loginForm.username)
-    },
     handleLogin() {
       if(this.loginForm.username==='' || this.loginForm.password===''){
         ElMessage({
@@ -93,19 +86,28 @@ export default {
         uid: 0,
         uname: this.loginForm.username,
         unickname: '0',
-      }).then(function (response) {
-        // console.log(response);
-        ElMessage({
-          message: '登录成功',
-          type: 'success',
-        });
-      })
-      this.$router.push({
-        name: 'home',
-        params: {
-          ac : this.loginForm.username
+      }).then(response=> {
+        var message = response.data.data
+        if(response.data.flag === true){
+          ElMessage({
+            message: '登录成功',
+            type: 'success',
+          });
+          this.$router.push({
+            name: 'home',
+            query: {
+              ac : this.loginForm.username
+            }
+          })
+        }
+        else {
+          ElMessage({
+            message: message,
+            type: 'warning',
+          });
         }
       })
+
     },
   }
 }
@@ -113,15 +115,16 @@ export default {
 
 <style scoped rel="stylesheet/scss" lang="scss">
 .background-img {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  background: rgba(144, 144, 144, 0.2);
 }
 .login {
   position: relative;
-  top: 10px;
+  top: 30px;
   display: inline-block;
   align-items: center;
   background: white;
