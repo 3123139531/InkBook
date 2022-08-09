@@ -7,6 +7,7 @@ import lombok.Data;
 public class Doc {
     private int docid;
     private int dFid;
+    private int dTid;
     private String dName;
     private String dContent;
 }
