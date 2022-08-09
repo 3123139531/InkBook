@@ -6,13 +6,12 @@
         <div class="title" style="color: rgb(40, 40, 40);">注册墨书</div>
         <span class="login">
           <em class="bold" style="color: rgb(40, 40, 40)">已有账号？</em>
-          <a href="/#/">
+          <a href="/">
             <el-button type="primary" size="small">登录</el-button>
           </a>
         </span>
       </header>
     </article>
-
     <section>
       <el-form
           ref="ruleForm"
@@ -108,36 +107,27 @@ export default {
           || this.ruleForm.username==='' || this.ruleForm.cpwd===''){
         ElMessage({
           message: '请填写所有信息',
-          type: 'danger',
+          type: 'error',
         });
         return;
       }
+      // console.log(this.ruleForm)
       this.$axios.post("user/register", {
         email: this.ruleForm.email,
         password: this.ruleForm.pwd,
         profilePic: '',
         uid: 0,
-        uname: this.ruleForm.name,
-        unickname: this.ruleForm.username
+        uname: this.ruleForm.username,
+        unickname: this.ruleForm.name
       }).then(response=> {
-        console.log(response);
-        if(response.data.flag === true){
-          ElMessage({
-            message: '注册成功,即将跳转到登录页面',
-            type: 'success',
-          })
-          setInterval(()=>{
-            this.$router.push({
-              name: 'Login',
-            })
-          }, 2000)
-        }
-        else {
-          ElMessage({
-            message: '密码需要至少6位数，且需包含至少一个数字及一个英文字母',
-            type: 'warning',
-          })
-        }
+        // console.log(response);
+        ElMessage({
+          message: response.data.msg,
+          type: (response.data.flag)?'success':'error'
+        })
+        setTimeout(this.$router.push({
+          name: 'login'
+        }), 1000)
       })
 
     }

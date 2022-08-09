@@ -153,11 +153,18 @@ export default {
         dname: this.newName,
         dpid: this.pid
       }).then(response =>{
-        console.log(response)
+        if(response.data.flag === true){
+          this.document.dname = this.newName;
+        }
+        ElMessage({
+          message: response.data.msg,
+          type: (response.data.flag)?'success':'error'
+        })
+        this.dialogFormVisible = false;
+        this.newName = '';
       })
-      this.document.dname = this.newName;
-      this.dialogFormVisible = false;
-      this.newName = '';
+
+
     },
     toHomeView () {
       this.$router.push({

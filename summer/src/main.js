@@ -11,6 +11,6 @@ import VueAxios from 'vue-axios'
 const app = createApp(App)
 app.use(store).use(router).use(ElementPlus).use(VueAxios,axios)
 
-axios.defaults.baseURL = 'http://101.42.246.11'
+axios.defaults.baseURL = 'http://101.42.246.11:81'
 app.config.globalProperties.$axios = axios
 app.mount('#app')

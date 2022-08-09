@@ -7,10 +7,22 @@ import Login from '../views/LoginView.vue'
 import Register from '../views/RegisterView.vue'
 import ProManage from "@/views/ProManage";
 import DocCenter from "@/views/DocCenter";
+import HomeInit from "@/views/HomeInit.vue";
+import ForSkip from "@/views/ForSkip.vue";
 
 const routes = [
   {
     path: '/',
+    name: 'init',
+    component: HomeInit
+  },
+  {
+    path: '/skip',
+    name: 'skip',
+    component: ForSkip
+  },
+  {
+    path: '/login',
     name: 'login',
     component: Login
   },

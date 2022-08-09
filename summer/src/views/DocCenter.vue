@@ -38,6 +38,8 @@
       <el-main class="TeamMain">
         <div style="font:normal bold 20px/30px Georgia, serif; margin-bottom: 10px;">文档中心</div>
         <el-button type="primary" class="saveBtn" v-if="isDoc" @click="saveFile">保存文档</el-button>
+        <el-button type="primary" class="saveBtn" v-if="isTeamDoc" @click="saveTeamDoc">保存文档</el-button>
+        <el-button type="primary" class="delBtn" v-if="isTeamDoc" @click="delFIle">删除文档</el-button>
         <div class="docTree">
           <div style="text-align: center; border-bottom: 1px black solid">文档</div>
           <el-tree :data="data"
@@ -49,9 +51,25 @@
         <div class="docEditor">
           <div id="vditor"></div>
         </div>
+        <el-button class="teamDocBtn" type="primary"
+                   @click="newTeamDocBtn">新建团队文档</el-button>
+        <el-dialog v-model="newTeamDocFlag" title="输入新文档名">
+          <el-form>
+            <el-form-item>
+              <el-input v-model="newName" autocomplete="off" />
+            </el-form-item>
+          </el-form>
+          <template #footer>
+              <span class="dialog-footer">
+                <el-button @click="newTeamDocFlag = false">取消</el-button>
+                <el-button type="primary" @click="newTeamDoc">确认</el-button>
+              </span>
+          </template>
+        </el-dialog>
       </el-main>
     </el-container>
   </div>
+
   <el-button class="toHomepageBtn" @click="toHomeView" title="返回首页">
     <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" style="width: 15px; height: 20px">
       <path fill="currentColor" d="M512 128 128 447.936V896h255.936V640H640v256h255.936V447.936z"></path>
@@ -80,7 +98,12 @@ export default {
       data: [
         {
           name: '团队文档',
-          children: []
+          children: [
+            {
+              id: '',
+              name: 'test'
+            }
+          ]
         },
         {
           name: '进行中项目',
@@ -105,7 +128,11 @@ export default {
 
       curNode: {},
       text: '',
-      isDoc: false
+      isDoc: false,
+      isTeamDoc: false,
+
+      newName: '',
+      newTeamDocFlag: false
     }
   },
   mounted () {
@@ -232,6 +259,8 @@ export default {
       // console.log(node)
       // console.log(el)
       this.curNode = data
+      this.isDoc = false
+      this.isTeamDoc = false
       if(node.isLeaf===true && node.level===3){
         this.$axios.get('/documents/' + data.id
         ).then(response=> {
@@ -241,9 +270,11 @@ export default {
           this.setEditor()
         })
       }
+      else if(node.parent.data.name==='团队文档'){
+        this.isTeamDoc = true
+      }
       else{
         this.text = '选中节点并非文档'
-        this.isDoc = false
         this.setEditor()
       }
     },
@@ -263,8 +294,8 @@ export default {
       })
     },
     saveFile () {
-      console.log(this.curNode)
-      console.log(this.text)
+      // console.log(this.curNode)
+      // console.log(this.text)
       this.$axios.put('/documents/content',{
         dcontent: this.text,
         did: this.curNode.id,
@@ -278,6 +309,19 @@ export default {
           })
         }
       })
+    },
+    saveTeamDoc() {
+
+    },
+    delFIle() {
+
+    },
+    newTeamDocBtn() {
+      this.newTeamDocFlag = true
+    },
+    newTeamDoc() {
+      this.newTeamDocFlag = false
+      this.newName = ''
     },
     toHomeView () {
       this.$router.push({
@@ -465,9 +509,21 @@ export default {
   border-radius: 5px;
 }
 
+.teamDocBtn {
+  position: absolute;
+  left: 2.5%;
+  top: 20px;
+}
+
 .saveBtn {
   position: absolute;
   right: 2.5%;
+  top: 20px;
+}
+
+.delBtn {
+  position: absolute;
+  left: 12%;
   top: 20px;
 }
 
