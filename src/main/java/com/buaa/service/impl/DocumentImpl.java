@@ -1,4 +1,4 @@
-package com.buaa.impl;
+package com.buaa.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.buaa.mapper.DocumentMapper;

@@ -1,4 +1,4 @@
-package com.buaa.impl;
+package com.buaa.service.impl;
 
 import com.buaa.controller.utils.InviteRequest;
 import com.buaa.controller.utils.TwoUserParam;
