@@ -3,11 +3,9 @@
     <!-- header -->
     <div class="h-title">
       <div class="div-title">
-
         <div class="music-control" @click="musicCtrol">
           <img v-if="!musicState" src="~@/assets/img/music.png" alt="" />
           <img v-else src="~@/assets/img/music.png" alt="" />
-
         </div>
         <audio ref="audio" controls hidden>
           <source src="~@/assets/music/777888.mp3" type="audio/mpeg" />
@@ -19,17 +17,13 @@
           src="~@/assets/music/777888.mp3"
         ></iframe> -->
       </div>
-
     </div>
     <!-- 轮播图 -->
     <slide-show></slide-show>
-
     <!-- 主体 -->
     <div class="main-area">
       <!-- 简介 -->
       <profile></profile>
-
-
       <!-- 长引用 -->
       <div class="quote-wrap">
         <blockquote>
@@ -106,7 +100,6 @@ export default {
       hour,
       minute,
       second,
-
       musicCtrol,
     };
   },

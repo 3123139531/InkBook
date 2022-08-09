@@ -187,17 +187,6 @@ export default {
         }
       });
     },
-    // JurisdictionError () {
-    //   ElMessage.error('您没有此权限');
-    // },
-    // QuitTeam () {
-    //   this.$router.push({
-    //     name : 'home',
-    //     params : {
-    //       account : this.acc
-    //     }
-    //   })
-    // },
     AppointManagerBtn () {
       this.ManageMod = 1;
       this.dialogVisible = true;
@@ -249,27 +238,39 @@ export default {
       })
     },
     InviteMem () {
-      this.$axios.post("/team/" + this.teamId + '/members', {
-        team_id : this.teamId,
-        uName1: this.userAccount,
-        uName2: this.userInvited
+      this.$axios.post('/invite/' + this.teamId, {
+        invited: this.userInvited,
+        inviter: this.userAccount
       }).then(response=> {
-        console.log(response);
-        this.userInvited = ''
-        if(response.data.msg === '成功邀请'){
+        console.log(response)
+        if(response.data.flag===true){
           ElMessage({
-            message: response.data.msg,
-            type: 'success',
-          })
-          this.getMembers()
-        }
-        else {
-          ElMessage({
-            message: response.data.msg,
-            type: 'warning',
+            message: '邀请发送成功，等待对方处理',
+            type: 'success'
           })
         }
-      });
+      })
+      // this.$axios.post("/team/" + this.teamId + '/members', {
+      //   team_id : this.teamId,
+      //   uName1: this.userAccount,
+      //   uName2: this.userInvited
+      // }).then(response=> {
+      //   console.log(response);
+      //   this.userInvited = ''
+      //   if(response.data.msg === '成功邀请'){
+      //     ElMessage({
+      //       message: response.data.msg,
+      //       type: 'success',
+      //     })
+      //     this.getMembers()
+      //   }
+      //   else {
+      //     ElMessage({
+      //       message: response.data.msg,
+      //       type: 'warning',
+      //     })
+      //   }
+      // });
     },
     KickMem (i) {
       this.$axios.delete("/team/" + this.teamId + '/members', {

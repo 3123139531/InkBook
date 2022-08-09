@@ -6,7 +6,7 @@
         <div class="title" style="color: rgb(40, 40, 40);">注册墨书</div>
         <span class="login">
           <em class="bold" style="color: rgb(40, 40, 40)">已有账号？</em>
-          <a href="/">
+          <a href="/login">
             <el-button type="primary" size="small">登录</el-button>
           </a>
         </span>

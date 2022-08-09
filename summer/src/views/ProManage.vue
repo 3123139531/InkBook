@@ -41,7 +41,7 @@
           <el-input v-model="searchName" placeholder="输入项目名搜索项目"
           style="display:inline-block; float: left; width: 200px"/>
           <el-button class="searchBtn" v-if="!searchClicked" @click="searchPro">搜索</el-button>
-          <el-button class="searchBtn" v-else @click="searchPro">取消</el-button>
+          <el-button class="searchBtn" v-else @click="showAll">取消</el-button>
         </span>
         <table class="proNav" v-if="numShow!==0">
           <tr>

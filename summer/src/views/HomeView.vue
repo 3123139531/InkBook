@@ -20,6 +20,12 @@
           <div style="font-size: 14px; font-weight: bold">团队</div>
           <div class="curView" v-if="option===2"></div>
         </div>
+        <div class="Enterprise" @click="toInit">
+          <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" style="height: 22px; width: 22px">
+            <path fill="currentColor" d="M512 64a448 448 0 1 1 0 896.064A448 448 0 0 1 512 64zm67.2 275.072c33.28 0 60.288-23.104 60.288-57.344s-27.072-57.344-60.288-57.344c-33.28 0-60.16 23.104-60.16 57.344s26.88 57.344 60.16 57.344zM590.912 699.2c0-6.848 2.368-24.64 1.024-34.752l-52.608 60.544c-10.88 11.456-24.512 19.392-30.912 17.28a12.992 12.992 0 0 1-8.256-14.72l87.68-276.992c7.168-35.136-12.544-67.2-54.336-71.296-44.096 0-108.992 44.736-148.48 101.504 0 6.784-1.28 23.68.064 33.792l52.544-60.608c10.88-11.328 23.552-19.328 29.952-17.152a12.8 12.8 0 0 1 7.808 16.128L388.48 728.576c-10.048 32.256 8.96 63.872 55.04 71.04 67.84 0 107.904-43.648 147.456-100.416z"></path>
+          </svg>
+          <div style="font-size: 14px; font-weight: bold">介绍</div>
+        </div>
         <el-button type="primary" round class="Cancellation" @click="Quit">注销</el-button>
       </el-aside>
       <el-container>
@@ -311,37 +317,6 @@ export default {
         this.newPro_team = 0;
       });
     },
-    changeProMod () {
-      this.proMod ^= 1;
-      if(this.proMod===1){
-        this.projects = []
-        this.numProjects = 0
-        for (let i=0; i<this.numTeams; i++){
-          this.$axios.get('/projects/doing/'+this.teams[i].tid
-          ).then(response =>{
-            this.pp = response.data.data
-            this.numProjects += response.data.data.length
-            for(let j=0; j<response.data.data.length; j++){
-            this.projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
-            }
-          })
-        }
-      }
-      else {
-        this.t_projects = []
-        this.numt_Projects = 0
-        for (let i=0; i<this.numTeams; i++){
-          this.$axios.get('/projects/trash/'+this.teams[i].tid
-          ).then(response =>{
-            this.pp = response.data.data
-            this.numt_Projects += response.data.data.length
-            for(let j=0; j<response.data.data.length; j++){
-            this.t_projects.push({pid: this.pp[j].pid, tid: this.pp[j].tid, status: this.pp[j].status, pname: this.pp[j].pname})
-            }
-          })
-        }
-      }
-    },
     Quit () {
       ElMessage({
         message: '退出登录',
@@ -349,6 +324,11 @@ export default {
       })
       this.$router.push({
         name: 'login',
+      })
+    },
+    toInit() {
+      this.$router.push({
+        name: 'init'
       })
     }
   }
@@ -376,17 +356,14 @@ export default {
     color: black;
   }
 
-  .Aside .Portrait {
-    margin-bottom: 20px;
-  }
-
   .Aside #portrait1 {
     display: block;
     width: 80px;
     height: 80px;
     border-radius: 40px;
-    margin: 20px auto 50px;
+    margin: 20px auto;
   }
+
   .Personal, .Enterprise{
     position: relative;
     left: 0;
@@ -394,14 +371,14 @@ export default {
     height: 55px;
     width: 60px;
     padding-top: 10px;
-    margin: 30px auto;
+    margin: 10px auto;
     border-radius: 5px;
     transition: 0.5s;
   }
 
-.Personal{
-  margin-top: 100px;
-}
+  .Personal{
+    margin-top: 100px;
+  }
 
   .Aside .Personal:hover,
   .Aside .Enterprise:hover {
@@ -409,7 +386,7 @@ export default {
   }
 
   .Aside .Cancellation {
-    margin-top: 220px;
+    margin-top: 200px;
     margin-bottom: 20px;
   }
 
