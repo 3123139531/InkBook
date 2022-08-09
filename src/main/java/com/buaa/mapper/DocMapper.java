@@ -5,6 +5,8 @@ import com.buaa.pojo.Doc;
 import com.buaa.pojo.Document;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 
 @Mapper
 public interface DocMapper extends BaseMapper<Doc> {
@@ -17,5 +19,14 @@ public interface DocMapper extends BaseMapper<Doc> {
 
     @Update("update doc set d_name = #{dName} where doc_id = #{docid}")
     void renameDoc(Doc doc);
+
+    @Update("update doc set d_content = #{dContent} where doc_id = #{docid}")
+    void updateContent(Doc doc);
+
+    @Select("select * from doc where d_tid = #{dTid}")
+    List<Doc> selectByTeamId(int dTid);
+
+    @Select("select * from doc where d_fid = #{dFid}")
+    List<Doc> selectByFloderId(int dFid);
 
 }

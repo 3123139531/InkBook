@@ -8,6 +8,8 @@ import com.buaa.mapper.DocMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class DocImpl implements DocService {
@@ -51,4 +53,22 @@ public class DocImpl implements DocService {
         return true;
     }
 
+    @Override
+    public boolean updateContent(int docid,String content){
+        Doc doc = new Doc();
+        doc.setDocid(docid);
+        doc.setDContent(content);
+        docMapper.updateContent(doc);
+        return true;
+    }
+
+    @Override
+    public List<Doc> selectByTeamId(int tid){
+        return docMapper.selectByTeamId(tid);
+    }
+
+    @Override
+    public List<Doc> selectByFolderId(int dfid){
+        return docMapper.selectByFloderId(dfid);
+    }
 }

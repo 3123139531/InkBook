@@ -31,10 +31,25 @@ public class DocController {
         return new R(docService.renameDoc(doc.getDocid(),doc.getDName()),null,"文档已经重命名");
     }
 
+    @PutMapping("/content")
+    public R updateContent(@RequestBody Doc doc) {
+        return new R(docService.updateContent(doc.getDocid(),doc.getDContent()),null,"文档内容已经更新");
+    }
+
+
 
     @DeleteMapping("/{docid}")
     public R deleteDoc(@PathVariable int docid){
         return new R(docService.deleteDocById(docid),"null","文档删除成功");
     }
 
+    @GetMapping("team/{tid}")
+    public R getDocsByTeam(@PathVariable int tid){
+        return new R(true,docService.selectByTeamId(tid),"获取成功");
+    }
+
+    @GetMapping("/fd/{dfid}")
+    public R getDocsByFolder(@PathVariable int dfid){
+        return new R(true,docService.selectByFolderId(dfid),"获取成功");
+    }
 }
