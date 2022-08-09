@@ -9,16 +9,21 @@
             <span>文档名：</span>
             <span style="font-weight: 700">{{document.dname}}</span>
             <span style="margin-left:30px">项目名：</span>
-            <span style="font-weight: 700">{{$route.params.p_name}}</span>
+            <span style="font-weight: 700">{{$route.query.p_name}}</span>
           </div>
         </div>
         <div class="ProjectBtn">
           <el-button type="primary" @click="saveFile">保存文档</el-button>
-          <el-button type="primary" class="renameBtn" @click="renameFileBtn">重命名文档</el-button>
-          <el-button type="primary" class="delBtn" @click="delFile">删除文档</el-button>
-          <el-dialog v-model="dialogFormVisible" title="输入新项目名">
+          <el-button type="primary" class="renameBtn" v-if="document.dname==='UML'">
+            <a href="https://online.visual-paradigm.com/cn/" target="_blank">前往绘制</a>
+          </el-button>
+          <el-button type="primary" class="renameBtn"
+                     @click="renameFileBtn" v-if="document.dname!=='UML'">重命名文档</el-button>
+          <el-button type="primary" class="delBtn"
+                     @click="delFile" v-if="document.dname!=='UML'">删除文档</el-button>
+          <el-dialog v-model="dialogFormVisible" title="输入新文档名">
             <el-form>
-              <el-form-item label="新项目名" :label-width="140">
+              <el-form-item>
                 <el-input v-model="newName" autocomplete="off" />
               </el-form-item>
             </el-form>
@@ -96,6 +101,7 @@ export default {
       this.userAccount = this.$route.query.ac
       this.documentId = this.$route.query.d_id
       this.pid = this.$route.query.p_id
+      this.p_name = this.$route.query.p_name
       this.teamName = this.$route.query.teamName
       this.$axios.get('/documents/'+this.documentId
       ).then(response =>{
@@ -179,6 +185,7 @@ export default {
   a {
     font-style: normal;
     text-decoration: none;
+    color: white;
   }
 
   .background-img {
@@ -267,13 +274,13 @@ export default {
 
   .toProViewBtn {
     position: fixed;
-    left: 15px;
+    left: 5px;
     top: 70px;
     margin-left: 0;
   }
 
   .el-button+.el-button{
-    margin-left: 0;
+    margin-left: 10px;
   }
   .ProDoc {
     display: inline-block;

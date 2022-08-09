@@ -456,11 +456,12 @@ export default {
   }
 
   .TeamMain {
-    height: 100%;
+    height: 580px;
     overflow: auto;
     border: 1px black solid;
     border-radius: 20px;
     margin-top: 10px;
+    margin-bottom: 10px;
     background: white;
     /*background: rgba(200, 200, 200, 0.5);*/
   }

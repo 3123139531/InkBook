@@ -19,15 +19,15 @@
             <el-button type="primary" class="copyBtn" @click="copyProBtn">复制项目</el-button>
             <el-button type="primary" @click="RenameProBtn">重命名项目</el-button>
             <el-button type="primary" class="delBtn" @click="delProject">删除项目</el-button>
-            <el-dialog v-model="dialogFormVisible" title="输入新项目名">
+            <el-dialog v-model="ProDialog" title="输入新项目名">
               <el-form>
-                <el-form-item label="Promotion name" :label-width="140">
+                <el-form-item>
                   <el-input v-model="newName" autocomplete="off" />
                 </el-form-item>
               </el-form>
               <template #footer>
               <span class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取消</el-button>
+                <el-button @click="ProDialog = false">取消</el-button>
                 <el-button type="primary" @click="RenamePro">确认</el-button>
               </span>
               </template>
@@ -43,31 +43,62 @@
         </div>
       </el-header>
       <el-main class="ProjectMain">
-        <div style="font:normal 700 20px/30px Georgia, serif;">项目文档</div>
-        <div v-for="i in numDocuments" class="ProDoc" :key="i" @click="toFileView(i)">
-          <span class="DocName">{{documents[i-1].dname}}</span>
-        </div>
-        <div class="ProDoc" @click="addNewFileBtn" v-if="project.status==='doing'">
-          <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" class="plusIcon">
-                  <path fill="currentColor" d="M352 480h320a32 32 0 1 1 0 64H352a32 32 0 0 1 0-64z"></path>
-                  <path fill="currentColor" d="M480 672V352a32 32 0 1 1 64 0v320a32 32 0 0 1-64 0z"></path>
-                  <path fill="currentColor" d="M512 896a384 384 0 1 0 0-768 384 384 0 0 0 0 768zm0 64a448 448 0 1 1 0-896 448 448 0 0 1 0 896z"></path>
-                </svg>
-<!--                <div class="plusChar">新建文档</div>-->
-                <el-dialog v-model="addFileDialog">
-                  <el-form>
-                    <el-form-item label="文档名" :label-width="100">
-                      <el-input v-model="newFile" autocomplete="off" />
-                    </el-form-item>
-                  </el-form>
-                  <template #footer>
-                    <span class="dialog-footer">
-                      <el-button @click="addFileDialog = false">取消</el-button>
-                      <el-button type="primary" @click="addNewFile">确认</el-button>
-                    </span>
-                  </template>
-                </el-dialog>
-        </div>
+        <div style="font:normal 700 20px/30px Georgia, serif; text-align: center">项目文档</div>
+<!--        <div v-for="i in numDocuments" class="ProDoc" :key="i" @click="toFileView(i)">-->
+<!--          <span class="DocName">{{documents[i-1].dname}}</span>-->
+<!--        </div>-->
+        <table class="docTable">
+          <tr>
+            <th>文档名</th>
+            <th>操作</th>
+          </tr>
+          <tr v-for="i in numDocuments" key="i">
+            <td>{{documents[i-1].dname}}</td>
+            <td>
+              <span @click="toFileView(i)">编辑文档</span>
+              <span @click="delFile(i)" v-if="documents[i-1].dname!=='UML'">删除文档</span>
+            </td>
+          </tr>
+        </table>
+        <el-tooltip
+            class="box-item"
+            effect="dark"
+            content="点击新建项目"
+            placement="right"
+        >
+          <div class="ProDoc" @click="addNewFileBtn" v-if="project.status==='doing'">
+            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8="" class="plusIcon">
+              <path fill="currentColor" d="M352 480h320a32 32 0 1 1 0 64H352a32 32 0 0 1 0-64z"></path>
+              <path fill="currentColor" d="M480 672V352a32 32 0 1 1 64 0v320a32 32 0 0 1-64 0z"></path>
+              <path fill="currentColor" d="M512 896a384 384 0 1 0 0-768 384 384 0 0 0 0 768zm0 64a448 448 0 1 1 0-896 448 448 0 0 1 0 896z"></path>
+            </svg>
+            <!--                <div class="plusChar">新建文档</div>-->
+          </div>
+        </el-tooltip>
+        <el-tooltip
+            class="box-item"
+            effect="dark"
+            content="点击编辑项目原型"
+            placement="right"
+        >
+          <div class="prototype" @click="" v-if="project.status==='doing'">
+            <span style="display: block; text-align: center; line-height: 40px; font-weight: bold"
+                  @click="toPrototype">项目原型</span>
+          </div>
+        </el-tooltip>
+        <el-dialog v-model="addFileDialog" title="输入新文档名">
+          <el-form>
+            <el-form-item>
+              <el-input v-model="newFile" autocomplete="off" />
+            </el-form-item>
+          </el-form>
+          <template #footer>
+              <span class="dialog-footer">
+                <el-button @click="addFileDialog = false">取消</el-button>
+                <el-button type="primary" @click="addNewFile">确认</el-button>
+              </span>
+          </template>
+        </el-dialog>
       </el-main>
     </el-container>
   </div>
@@ -104,7 +135,7 @@ export default {
 
       newName : '',
       newFile : '',
-      dialogFormVisible : false,
+      ProDialog : false,
       addFileDialog : false
     }
   },
@@ -127,7 +158,7 @@ export default {
     getDocs() {
       this.$axios.get('/documents/project/'+this.projectId
       ).then(response =>{
-        console.log(response)
+        // console.log(response)
         this.documents = response.data.data.documents
         this.numDocuments = response.data.data.documents.length
       })
@@ -177,7 +208,7 @@ export default {
       this.toTeamView()
     },
     RenameProBtn () {
-      this.dialogFormVisible = true;
+      this.ProDialog = true;
     },
     RenamePro () {
       this.$axios.put('/projects',{
@@ -187,7 +218,7 @@ export default {
         console.log(response)
       })
       this.project.pname = this.newName;
-      this.dialogFormVisible = false;
+      this.ProDialog = false;
       this.newName = '';
     },
     addNewFileBtn () {
@@ -213,6 +244,24 @@ export default {
         this.addFileDialog = false
         this.newFile = ''
       });
+    },
+    delFile (id) {
+      this.$axios.delete('/documents/'+this.documents[id-1].did,
+      ).then(response =>{
+        if(response.data.flag === true){
+          ElMessage({
+            message: '删除成功',
+            type: 'success'
+          })
+          this.getDocs()
+        }
+        else {
+          ElMessage({
+            message: '删除失败',
+            type: 'error'
+          })
+        }
+      })
     },
     toHomeView () {
       this.$router.push({
@@ -241,6 +290,14 @@ export default {
           p_id : this.projectId,
           p_name : this.project.pname,
           teamName: this.teamName
+        }
+      })
+    },
+    toPrototype() {
+      this.$router.push({
+        name: '',
+        query: {
+
         }
       })
     }
@@ -310,45 +367,75 @@ export default {
     margin-right: 80px;
   }
 
-  .ProjectBtn .copyBtn{
-    margin-right: 10px !important;
-  }
-
   .ProjectBtn .delBtn {
     margin-left: 10px !important;
   }
 
-  .Link {
-    line-height: 103px;
-    display: inline-block;
-  }
-
-  .Prototype,
-  .UML-link {
-    display: inline-block;
-    width: 100px;
-    border-left: 1px black solid;
-    border-right: 1px black solid;
-    margin-left: 1px;
-    border-radius: 5px;
-    font-size: 18px;
-    color: black;
-    transition: 0.5s;
-  }
-
-  .Prototype:hover,
-  .UML-link:hover {
-    background: rgba(144, 144, 144, 0.5);
-  }
-
   .ProjectMain {
-    height: 100%;
+    height: 580px;
     overflow: auto;
     border: 1px black solid;
     border-radius: 20px;
     margin-top: 10px;
     background: white;
     /*background: rgba(255, 255, 255, 0.2);*/
+  }
+
+  .docTable {
+    display: inline-block;
+    border: 1px black solid;
+    width: 60%;
+    margin-top: 10px;
+    /*margin-left: 16%;*/
+  }
+
+  .docTable tr {
+    display: block;
+    height: 40px;
+  }
+
+  .docTable tr th {
+    display: inline-block;
+    width: calc(50% - 1px);
+    padding: 0;
+    line-height: 40px;
+    font-size: 17px;
+  }
+
+  .docTable td {
+    display: inline-block;
+    width: calc(50% - 1px);
+    padding: 0;
+    line-height: 40px;
+    font-size: 15px;
+    border-top: 1px black solid;
+  }
+
+  .docTable tr th:first-child,
+  .docTable td:first-child {
+    border-right: 1px black solid;
+  }
+
+  .docTable td span {
+    margin-left: 10%;
+    cursor: pointer;
+    color: #1890ff;
+  }
+
+  .docTable td span:hover {
+    text-decoration: underline;
+  }
+
+  .docTable td span:first-child {
+    margin-left: 0;
+  }
+
+  .docTable tr:nth-child(even) {
+    background: rgba(144, 144, 144, 0.1);
+  }
+
+  .docTable tr:last-child {
+    border-bottom: 0;
   }
 
   .toHomepageBtn {
@@ -359,28 +446,34 @@ export default {
 
   .toTeamViewBtn {
     position: fixed;
-    left: 15px;
+    left: 5px;
     top: 70px;
     margin-left: 0;
   }
 
   .el-button+.el-button{
-    margin-left: 0;
+    margin-left: 10px;
   }
 
+  .prototype,
   .ProDoc {
-    display: inline-block;
-    float: left;
-    margin: 20px;
-    width: 8%;
-    height: 50px;
+    position: fixed;
+    top: 30%;
+    right: 15%;
+    width: 80px;
+    height: 40px;
     border-radius: 5px;
-    background: transparent -webkit-linear-gradient(right, lightgreen 0%, lightblue 100%);
     border: black solid;
     text-align: left;
     transition: 0.5s;
+    cursor: pointer;
   }
 
+  .prototype {
+    top: 40%;
+  }
+
+  .prototype:hover,
   .ProDoc:hover {
     box-shadow: 5px 5px 20px;
   }
@@ -389,7 +482,7 @@ export default {
     display: block;
     width: 40px;
     height: 40px;
-    margin: 5px auto;
+    margin: 1px auto;
   }
 
   .ProDoc .plusChar {

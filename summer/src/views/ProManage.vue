@@ -47,7 +47,14 @@
           <tr>
             <th>项目编号</th>
             <th>
-              <span title="点击以此排序" @click="sortByName">项目名称</span>
+              <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="点击以此排序"
+                  placement="top"
+              >
+                <span @click="sortByName">项目名称</span>
+              </el-tooltip>
               <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
                    class="sortImg" v-if="sortType===3">
                 <path fill="currentColor" d="m192 384 320 384 320-384z"></path>
@@ -59,7 +66,14 @@
             </th>
             <th>
               <el-dropdown trigger="click">
-                <span title="点击进行筛选">{{ this.statusShow }}</span>
+                <el-tooltip
+                    class="box-item"
+                    effect="dark"
+                    content="点击根据状态筛选"
+                    placement="top"
+                >
+                  <span>{{ this.statusShow }}</span>
+                </el-tooltip>
                 <template #dropdown>
                   <el-dropdown-menu>
                     <el-dropdown-item @click="showAll">全部</el-dropdown-item>
@@ -71,7 +85,14 @@
               </el-dropdown>
             </th>
             <th>
-              <span title="点击以此排序" @click="sortByCreate">创建时间</span>
+              <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="点击以此排序"
+                  placement="top"
+              >
+                <span @click="sortByCreate">创建时间</span>
+              </el-tooltip>
               <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
                    class="sortImg" v-if="sortType===1">
                 <path fill="currentColor" d="m192 384 320 384 320-384z"></path>
@@ -82,7 +103,14 @@
               </svg>
             </th>
             <th>
-              <span title="点击以此排序" @click="sortByModify">修改时间</span>
+              <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="点击以此排序"
+                  placement="top"
+              >
+                <span @click="sortByModify">修改时间</span>
+              </el-tooltip>
               <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-78e17ca8=""
                    class="sortImg" v-if="sortType===5">
                 <path fill="currentColor" d="m192 384 320 384 320-384z"></path>
@@ -210,6 +238,7 @@ export default {
         this.getProjects()
       }
       else {
+        this.proShow = []
         this.numShow = 0
         for(let i=0; i<this.numPro; i++){
           let str1 = this.projects[i].pname
@@ -284,6 +313,7 @@ export default {
     },
     showDoing() {
       this.statusShow = '进行中'
+      this.proShow = []
       this.numShow = 0
       for(let i=0; i<this.numPro; i++){
         if(this.projects[i].status === 'doing')
@@ -293,6 +323,7 @@ export default {
     },
     showFinish() {
       this.statusShow = '已完成'
+      this.proShow = []
       this.numShow = 0
       for(let i=0; i<this.numPro; i++){
         if(this.projects[i].status === 'finish')
@@ -302,6 +333,7 @@ export default {
     },
     showTrash() {
       this.statusShow = '已回收'
+      this.proShow = []
       this.numShow = 0
       for(let i=0; i<this.numPro; i++){
         if(this.projects[i].status === 'trash')
@@ -495,7 +527,7 @@ export default {
 }
 
 .TeamMain {
-  height: 100%;
+  height: 600px;
   overflow: auto;
   border: 1px black solid;
   border-radius: 20px;
@@ -609,6 +641,7 @@ export default {
 
 .addProBtn {
   margin-top: 20px;
+  margin-bottom: 20px;
   margin-right: 2.5%;
   float: right;
 }

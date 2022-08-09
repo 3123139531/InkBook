@@ -37,6 +37,7 @@
       </el-header>
       <el-main class="TeamMain">
         <div style="font:normal bold 20px/30px Georgia, serif; margin-bottom: 10px;">文档中心</div>
+        <el-button type="primary" class="saveBtn" v-if="isDoc" @click="saveFile">保存文档</el-button>
         <div class="docTree">
           <div style="text-align: center; border-bottom: 1px black solid">文档</div>
           <el-tree :data="data"
@@ -48,7 +49,6 @@
         <div class="docEditor">
           <div id="vditor"></div>
         </div>
-        <el-button type="primary" class="saveBtn" v-if="isDoc" @click="saveFile">保存文档</el-button>
       </el-main>
     </el-container>
   </div>
@@ -425,6 +425,9 @@ export default {
 }
 
 .TeamMain {
+  position: relative;
+  left: 0;
+  top: 0;
   height: 780px;
   overflow: auto;
   border: 1px black solid;
@@ -463,8 +466,9 @@ export default {
 }
 
 .saveBtn {
-  display: inline-block;
-  margin-top: 20px;
+  position: absolute;
+  right: 2.5%;
+  top: 20px;
 }
 
 .prefix {
