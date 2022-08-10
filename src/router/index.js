@@ -10,6 +10,7 @@ import DocCenter from "@/views/DocCenter";
 import HomeInit from "@/views/HomeInit.vue";
 import ForSkip from "@/views/ForSkip.vue";
 import Design from "../views/DesignView.vue"
+import SkipInvite from "@/views/SkipInvite";
 
 const routes = [
   {
@@ -21,6 +22,11 @@ const routes = [
     path: '/skip',
     name: 'skip',
     component: ForSkip
+  },
+  {
+    path: '/skipInvite/:uname/:tid',
+    name: 'skipInvite',
+    component: SkipInvite
   },
   {
     path: '/login',

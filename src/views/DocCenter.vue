@@ -293,6 +293,8 @@ export default {
       }
       else if(node.parent.data.name==='团队文档'){
         this.isTeamDoc = true
+        this.text = ''
+        this.setEditor()
       }
       else{
         this.text = '选中节点并非文档'

@@ -243,12 +243,13 @@ export default {
         inviter: this.userAccount
       }).then(response=> {
         console.log(response)
-        if(response.data.flag===true){
+        if(response.data.flag===true) {
           ElMessage({
             message: '邀请发送成功，等待对方处理',
             type: 'success'
           })
         }
+        this.dialogVisible = false
       })
       // this.$axios.post("/team/" + this.teamId + '/members', {
       //   team_id : this.teamId,
