@@ -3,7 +3,6 @@
   <div class="TeamInfo">
     <el-container>
       <el-header class="TeamHeader">
-        <img src="../assets/bgimg2.png" class="TeamImg">
         <div class="TeamIntro">
           <div class="TeamName">
             <span>队名：</span>
