@@ -3,7 +3,6 @@
   <div class="ProjectInfo">
     <el-container>
       <el-header class="ProjectHeader">
-        <img src="../assets/bgimg.png" class="ProjectImg">
         <div class="ProjectIntro">
           <div class="ProjectName">
             <span>文档名：</span>

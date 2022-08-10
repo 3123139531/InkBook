@@ -25,8 +25,8 @@ export default {
     leftTime() {
       this.initTime--
       if (this.initTime === 1) {
-        var uname = this.$route.quary.uname
-        var tid = this.$route.quary.t_id
+        var uname = this.$route.query.uname
+        var tid = this.$route.query.t_id
         console.log(uname)
         console.log(tid)
         this.$axios.get('/invite/temp/'+uname+'/'+tid

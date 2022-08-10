@@ -3,7 +3,6 @@
   <div class="ProjectInfo">
     <el-container>
       <el-header class="ProjectHeader">
-        <img src="../assets/bgimg.png" class="ProjectImg">
         <div class="ProjectIntro">
           <div class="ProjectName">
             <div>
@@ -306,7 +305,7 @@ export default {
     },
     addNewDesign() {
       this.$axios.put('/pages',{
-        pgContent: '',
+        pgContent: '{"assets":[],"styles":[],"pages":[{"frames":[{"component":{"type":"wrapper","stylable":["background","background-color","background-image","background-repeat","background-attachment","background-position","background-size"],"attributes":{"id":"i7qj"},"_undoexc":["status","open"]}}],"type":"main","id":"PIh8mTYr274kuTDf"}]}',
         pgName: this.newDesign,
         pgPid: this.project.pid
       }).then(response =>{
