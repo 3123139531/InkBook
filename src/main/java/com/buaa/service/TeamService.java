@@ -28,4 +28,8 @@ public interface TeamService {
     public boolean isMember(Team team, User user);
 
     boolean sendInvite(int tid, InviteRequest users);
+
+    public void deleteTeam(int tid);
+
+    public void updateTeamInfo(Team team);
 }

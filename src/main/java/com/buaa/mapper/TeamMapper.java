@@ -16,7 +16,16 @@ public interface TeamMapper {
     @Options(useGeneratedKeys = true, keyProperty = "tid")
     public void insertTeam(Team team);
 
-    @Delete("delete")
-    public void deleteTeam();
+    @Delete("delete * from team where t_id = #{tid}")
+    public void deleteTeam(Team team);
+
+    @Update("update team set t_name = #{tname}, t_brief = #{tbrief}")
+    public void updateTeamInfo(Team team);
+
+    @Update("update team set t_name = #{tname}")
+    public void updateTeamName(Team team);
+
+    @Update("update team set t_brief = #{tbrief}")
+    public void updateTeamBrief(Team team);
 
 }

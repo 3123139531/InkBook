@@ -86,16 +86,48 @@ public class TeamController {
         return r;
     }
 
+    @ApiOperation(value = "删除团队")
+    @DeleteMapping("/team/{user_name}")
+    public R deleteTeam(@PathVariable("user_name") String username, @RequestBody Team team){
+        User deleter = userService.findUserByName(username);
+        teamService.deleteTeam(team.getTid());
+        if(teamService.selectMemberPosition(team,deleter)!=3){
+            R r = new R();
+            r.setMsg("不够权限删除团队");
+            r.setFlag(false);
+            return r;
+        }
+        R r = new R();
+        r.setMsg("删除团队成功");
+        r.setFlag(true);
+        return r;
+    }
+
+    @ApiOperation(value = "修改团队信息")
+    @PutMapping("/team/{user_name}")
+    public R updateTeam(@PathVariable("user_name") String username, @RequestBody Team team){
+        User changer = userService.findUserByName(username);
+        teamService.updateTeamInfo(team);
+        if(teamService.selectMemberPosition(team,changer)<2){
+            R r = new R();
+            r.setMsg("不够权限修改团队团队信息");
+            r.setFlag(false);
+            return r;
+        }
+        return new R(true,"团队信息修改成功");
+    }
+
 
     @ApiOperation(value = "邀请用户加入团队")
     @PostMapping("/team/{team_id}/members")
-    public R inviteUserToTeam(@PathVariable("team_id") int t_id,@RequestBody TwoUserParam twoUsers){
+    public R inviteUserToTeam(@PathVariable("team_id") int t_id,@RequestBody InviteRequest twoUsers){
         Team team = teamService.selectTeamById(t_id);
-        User inviter = userService.findUserByName(twoUsers.getuName1());
-        User invitee = userService.findUserByName(twoUsers.getuName2());
+        User inviter = userService.findUserByName(twoUsers.getInviter());
+        User invitee = userService.findUserByName(twoUsers.getInvited());
         R r = new R();
         if(!teamService.isMember(team,invitee)){
-            teamService.addTeamMember(team,invitee);
+//            teamService.addTeamMember(team,invitee);
+            sendInvite(team.getTid(),twoUsers);
             r.setMsg("成功邀请");
             r.setFlag(true);
         }

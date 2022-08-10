@@ -116,4 +116,13 @@ public class TeamServiceImpl implements TeamService {
 //        String inviter = userService.selectUserById(users.getInviter()).getUName();
         return codeUtils.sendInvite(invited, users.getInviter(), team);
     }
+
+    public void deleteTeam(int tid){
+        Team teamToDelete = teamMapper.selectTeamByID(tid);
+        teamMapper.deleteTeam(teamToDelete);
+    }
+
+    public void updateTeamInfo(Team team){
+        teamMapper.updateTeamInfo(team);
+    }
 }
