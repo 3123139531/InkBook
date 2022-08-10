@@ -1,7 +1,7 @@
 <template>
   <div className="not-found">
-    <meta http-equiv="refresh" content="5;URL=http:/www.gg.com">
-    <meta http-equiv="refresh" content="5;URL=/login">
+<!--    <meta http-equiv="refresh" content="5;URL=http:/www.gg.com">-->
+<!--    <meta http-equiv="refresh" content="5;URL=/login">-->
     <h1 style="margin-bottom:25px;">注册成功!</h1>
     <h3>将于<span>&nbsp;{{ initTime }}&nbsp;</span>秒后返回登录界面</h3>
   </div>
@@ -25,8 +25,8 @@ export default {
     leftTime() {
       this.initTime--
       if (this.initTime === 1) {
-        var uname = this.$route.quary.uname
-        var tid = this.$route.quary.t_id
+        var uname = this.$route.query.uname
+        var tid = this.$route.query.t_id
         console.log(uname)
         console.log(tid)
         this.$axios.get('/invite/temp/'+uname+'/'+tid
@@ -57,8 +57,4 @@ h1 {
 span {
   color: dodgerblue;
 }
-<<<<<<< HEAD
 </style>
-=======
-</style>
->>>>>>> 0b800f91c42e7d9b9c52aaf7832dcf35457f5ab6
