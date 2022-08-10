@@ -127,7 +127,7 @@ public class TeamController {
         R r = new R();
         if(!teamService.isMember(team,invitee)){
 //            teamService.addTeamMember(team,invitee);
-            sendInvite(team.getTid(),twoUsers);
+            teamService.sendInvite(team.getTid(),twoUsers);
             r.setMsg("成功邀请");
             r.setFlag(true);
         }
