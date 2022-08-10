@@ -6,8 +6,8 @@ spring:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://101.42.246.11:3306/se?serverTimezone=UTC
-      username: root
-      password: mysql
+      username: admin
+      password: password
 
   mail:
     host: smtp.163.com
