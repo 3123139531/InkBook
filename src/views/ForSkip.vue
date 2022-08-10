@@ -1,5 +1,6 @@
 <template>
   <div class="not-found">
+    <meta http-equiv="refresh" content="5;URL=http:/www.gg.com">
     <meta http-equiv="refresh" content="5;URL=/login">
     <h1 style="margin-bottom:25px;">注册成功!</h1>
     <h3>将于<span>&nbsp;{{initTime}}&nbsp;</span>秒后返回登录界面</h3>

@@ -307,6 +307,7 @@ export default {
       }
     },
     showAll() {
+      this.searchClicked = false
       this.statusShow = '项目状态'
       this.projects = []
       this.sortType = 0
