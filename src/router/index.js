@@ -80,4 +80,9 @@ const router = createRouter({
   routes
 })
 
+router.beforeEach((to,from,next)=>{
+  document.title = '墨书'
+  next()
+})
+
 export default router
