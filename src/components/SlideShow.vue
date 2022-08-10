@@ -11,14 +11,6 @@
       <li><img src="~@/assets/img/71.png" alt="" /></li>
       <li><img src="~@/assets/img/71.png" alt="" /></li>
     </ul>
-    <div ref="pointWrap" class="pointer">
-      <a class="active" href="javascript:;" @click="tabPic(1)"></a>
-      <a href="javascript:;" @click="tabPic(2)"></a>
-      <a href="javascript:;" @click="tabPic(3)"></a>
-      <a href="javascript:;" @click="tabPic(4)"></a>
-      <a href="javascript:;" @click="tabPic(5)"></a>
-      <a href="javascript:;" @click="tabPic(6)"></a>
-    </div>
     <button class="btn-right btn" @click="rightNext">
       <i class="icon-right icon"> &gt;</i>
     </button>
@@ -29,7 +21,7 @@
 </template>
 
 <script>
-import { onMounted, ref, unref } from "vue";
+import { ref, unref } from "vue";
 export default {
   setup() {
     const pointWrap = ref(null);
@@ -45,13 +37,6 @@ export default {
       const box = document.getElementById("navs");
       leftLength = -num * 100;
       box.style.left = `${leftLength}vw`;
-      for (let i = 0; i < 6; i++) {
-        if (i == num - 1) {
-          pointWrap.value.children[i].className = "active";
-        } else {
-          pointWrap.value.children[i].className = "";
-        }
-      }
     };
     const leftNext = () => {
       // 手动往左
@@ -62,64 +47,12 @@ export default {
       const box = document.getElementById("navs");
       leftLength = -num * 100;
       box.style.left = `${leftLength}vw`;
-      for (let i = 0; i < 6; i++) {
-        if (i == num - 1) {
-          pointWrap.value.children[i].className = "active";
-        } else {
-          pointWrap.value.children[i].className = "";
-        }
-      }
     };
     const tabPic = (index) => {
       const box = document.getElementById("navs");
       leftLength = -index * 100;
       box.style.left = `${leftLength}vw`;
-      for (let i = 0; i < 6; i++) {
-        if (i == index - 1) {
-          pointWrap.value.children[i].className = "active";
-        } else {
-          pointWrap.value.children[i].className = "";
-        }
-      }
     };
-    onMounted(() => {
-      // let leftLength = 0;
-      // let i = 0;
-      const box = document.getElementById("navs");
-      const wrap = document.getElementsByClassName("wrap");
-      let timer = null;
-      // console.dir(wrap);
-      // 把定时器功能做一个封装
-      const swiper = () => {
-        timer = setInterval(() => {
-          num++;
-          if (num > 6) {
-            num = 1;
-          }
-          leftLength = -num * 100;
-          box.style.left = `${leftLength}vw`;
-          // console.dir(pointWrap.value.children[1]); //此函数输出元素的所有属性和方法
-          // 注意pointWrap.value.children虽然类似于数组但不是数组，不能使用foreach函数
-          // console.log(pointWrap.value.children);
-          for (let i = 0; i < 6; i++) {
-            if (i == num - 1) {
-              pointWrap.value.children[i].className = "active";
-            } else {
-              pointWrap.value.children[i].className = "";
-            }
-          }
-        }, 3000);
-      };
-      swiper();
-      //鼠标移入清除定时器
-      wrap[0].onmouseover = () => {
-        clearInterval(timer);
-      };
-      //鼠标移出开启定时器
-      wrap[0].onmouseout = () => {
-        swiper();
-      };
-    });
     return {
       num,
       leftLength,

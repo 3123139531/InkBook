@@ -66,14 +66,14 @@
             <th>
               <el-dropdown trigger="click">
                 <div>
-                <el-tooltip
-                    class="box-item"
-                    effect="dark"
-                    content="点击根据状态筛选"
-                    placement="top"
-                >
-                  <span>{{ this.statusShow }}</span>
-                </el-tooltip>
+                  <el-tooltip
+                      class="box-item"
+                      effect="dark"
+                      content="点击根据状态筛选"
+                      placement="top"
+                  >
+                    <span>{{ this.statusShow }}</span>
+                  </el-tooltip>
                 </div>
                 <template #dropdown>
                   <el-dropdown-menu>
