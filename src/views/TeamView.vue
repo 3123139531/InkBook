@@ -248,6 +248,7 @@ export default {
             message: '邀请发送成功，等待对方处理',
             type: 'success'
           })
+          this.dialogVisible = false
         }
       })
       // this.$axios.post("/team/" + this.teamId + '/members', {

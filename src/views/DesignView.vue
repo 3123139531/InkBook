@@ -80,7 +80,8 @@ export default {
       newName : '',
       dialogFormVisible : false,
 
-      content: ''
+      content: '',
+      ct: ''
     }
   },
   mounted() {
@@ -98,7 +99,11 @@ export default {
       ).then(response =>{
         console.log(response)
         this.design = response.data.data
-        this.content = this.design.pgContent
+        console.log(this.design)
+        this.ct = this.design.pgContent
+        var ctt = JSON.parse(this.ct)
+        this.content = ctt
+        console.log(this.content)
         this.editor = grapesjs.init({
           // Indicate where to init the editor. You can also pass an HTMLElement
           container: "#gjs",
@@ -116,7 +121,7 @@ export default {
            greapejspreset,
           ],
         });
-        this.editor.loadProjectData(this.design.pgContent);
+        this.editor.loadProjectData(this.content);
       })
     },
     delDesign () {
@@ -147,9 +152,12 @@ export default {
     },
     saveDesign () {
       this.content = this.editor.getProjectData();
+      console.log(this.content)
+      this.ct = JSON.stringify(this.content)
+      console.log(this.ct)
       this.$axios.post('/pages/content',{
         pgId: this.design.pgId,
-        pgContent: this.content
+        pgContent: this.ct
       }).then(response=> {
         console.log(response)
       })

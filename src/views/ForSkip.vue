@@ -1,6 +1,5 @@
 <template>
   <div class="not-found">
-    <meta http-equiv="refresh" content="5;URL=http:/www.gg.com">
     <meta http-equiv="refresh" content="5;URL=/login">
     <h1 style="margin-bottom:25px;">注册成功!</h1>
     <h3>将于<span>&nbsp;{{initTime}}&nbsp;</span>秒后返回登录界面</h3>
@@ -8,6 +7,7 @@
 </template>
 
 <script>
+/* eslint-disable */
   export default {
     name: "NotFound",
     data() {
@@ -21,14 +21,16 @@
     },
     methods: {
       init() {
+          this.code=this.$route.query.url;
+          console.log(this.code);
+          var data={code:this.code};
+          this.$axios.get('/lookCode/'+this.code
+          ).then( response =>{
+            console.log(response);
+          })
       },
       leftTime() {
         this.initTime--
-        if(this.initTime===0){
-          this.$router.push({
-            name: 'login'
-          })
-        }
       }
     },
     created() {

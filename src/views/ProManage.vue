@@ -66,6 +66,7 @@
             </th>
             <th>
               <el-dropdown trigger="click">
+                <div>
                 <el-tooltip
                     class="box-item"
                     effect="dark"
@@ -74,6 +75,7 @@
                 >
                   <span>{{ this.statusShow }}</span>
                 </el-tooltip>
+                </div>
                 <template #dropdown>
                   <el-dropdown-menu>
                     <el-dropdown-item @click="showAll">全部</el-dropdown-item>
