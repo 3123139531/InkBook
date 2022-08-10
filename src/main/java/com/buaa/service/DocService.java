@@ -13,4 +13,5 @@ public interface DocService {
     boolean updateContent(int docid,String content);
     List<Doc> selectByTeamId(int tid);
     List<Doc> selectByFolderId(int dfid);
+    Doc selectById(int docid);
 }

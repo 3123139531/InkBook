@@ -36,6 +36,11 @@ public class DocController {
         return new R(docService.updateContent(doc.getDocid(),doc.getDContent()),null,"文档内容已经更新");
     }
 
+    @GetMapping("/{docid}")
+    public R selectById(@PathVariable int docid){
+        return new R(true,docService.selectById(docid),"查找成功");
+    }
+
 
 
     @DeleteMapping("/{docid}")

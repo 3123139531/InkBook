@@ -38,6 +38,10 @@ public class DocImpl implements DocService {
     }
 
     @Override
+    public Doc selectById(int docid){
+        return docMapper.selectById(docid);
+    }
+    @Override
     public boolean deleteDocById(int docid){
         QueryWrapper<Doc> qw = new QueryWrapper<>();
         qw.eq("doc_id",docid);

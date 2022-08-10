@@ -17,6 +17,9 @@ public interface DocMapper extends BaseMapper<Doc> {
     @Select("select * from doc where d_name = #{dName} and d_tid = #{dTid}")
     Doc selectByName(Doc doc);
 
+    @Select("select * from doc where doc_id= #{docid}")
+    Doc selectById(int docid);
+
     @Update("update doc set d_name = #{dName} where doc_id = #{docid}")
     void renameDoc(Doc doc);
 
