@@ -50,7 +50,7 @@ public class CodeUtils {
 
             TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("templates", TemplateConfig.ResourceMode.CLASSPATH));
             Template template = engine.getTemplate("EmailTemplate.html");
-            String html =template.render(Dict.create().set("href", "http://101.42.246.11/lookCode/" + token));
+            String html =template.render(Dict.create().set("href", "http://101.42.246.11/skip?url=" + token));
 
             messageHelper.setText(html, true); // 邮箱内容
             System.out.println("邮件内容设置成功");
@@ -96,7 +96,7 @@ public class CodeUtils {
             model.put("inviter", inviter);
             model.put("team", team.getTname());
 //            model.put("href", "http://101.42.246.11/invite/temp/" + user.getUId() + "/" + team.getTid());
-            model.put("href", "http://101.42.246.11/invite/temp/" + user.getUName() + "/" + team.getTid());
+            model.put("href", "http://101.42.246.11/skipInvite?uname=" + user.getUName() + "&t_id=" + team.getTid());
             StringWriter out = new StringWriter();
             template.render(model, out);
 
