@@ -9,7 +9,7 @@ import ProManage from "@/views/ProManage";
 import DocCenter from "@/views/DocCenter";
 import HomeInit from "@/views/HomeInit.vue";
 import ForSkip from "@/views/ForSkip.vue";
-import Design from "../views/DesignView.vue"
+import Design from "../views/DesignView.vue";
 import SkipInvite from "@/views/SkipInvite";
 
 const routes = [

@@ -89,21 +89,7 @@ export default {
   },
   methods : {
     init () {
-      this.userAccount = this.$route.query.ac
-      this.designId = this.$route.query.pg_id
-      this.pid = this.$route.query.p_id
-      this.p_name = this.$route.query.p_name
-      this.teamName = this.$route.query.teamName
-      this.$axios.get('/pages/'+this.designId
-      ).then(response =>{
-        console.log(response)
-        this.design = response.data.data
-        console.log(this.design)
-        this.ct = this.design.pgContent
-        var ctt = JSON.parse(this.ct)
-        this.content = ctt
-        console.log(this.content)
-        this.editor = grapesjs.init({
+      this.editor = grapesjs.init({
           // Indicate where to init the editor. You can also pass an HTMLElement
           container: "#gjs",
           // Get the content for the canvas directly from the element
@@ -119,7 +105,21 @@ export default {
             // 'gjs-blocks-basic',
            greapejspreset,
           ],
-        });
+      });
+      this.userAccount = this.$route.query.ac
+      this.designId = this.$route.query.pg_id
+      this.pid = this.$route.query.p_id
+      this.p_name = this.$route.query.p_name
+      this.teamName = this.$route.query.teamName
+      this.$axios.get('/pages/'+this.designId
+      ).then(response =>{
+        console.log(response)
+        this.design = response.data.data
+        console.log(this.design)
+        this.ct = this.design.pgContent
+        console.log(this.ct)
+        this.content = JSON.parse(this.ct)
+        console.log(this.content)
         this.editor.loadProjectData(this.content);
       })
     },

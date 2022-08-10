@@ -6,7 +6,9 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-
+import moment from 'moment';
+import 'moment/locale/zh-cn';
+moment.locale('zh-cn');
 
 const app = createApp(App)
 app.use(store).use(router).use(ElementPlus).use(VueAxios,axios)

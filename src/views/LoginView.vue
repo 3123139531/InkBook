@@ -79,6 +79,8 @@ export default {
         });
         return;
       }
+        console.log(this.loginForm.password)
+        console.log(this.loginForm.username)
       this.$axios.post("user/login", {
         email: '0',
         password: this.loginForm.password,
@@ -87,6 +89,7 @@ export default {
         uname: this.loginForm.username,
         unickname: '0',
       }).then(response=> {
+        console.log(response)
         var message = response.data.data
         if(response.data.flag === true){
           ElMessage({
