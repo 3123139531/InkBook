@@ -26,6 +26,12 @@ public class UserServiceImpl implements UserService {
     public User findUserByName(String username){
         return userMapper.selectUserByName(username);
     }
+    public boolean isExistsEmail(String email){
+        if(userMapper.selectEmailCount(email)>0){
+            return true;
+        }
+        else return false;
+    }
 
     public void updateUserInfo(User newUserInfo) {
         userMapper.updateUserInfo(newUserInfo);

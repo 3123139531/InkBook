@@ -19,4 +19,6 @@ public interface UserService {
     public boolean eqToken(String token);
 
     User selectUserById(int id);
+
+    public boolean isExistsEmail(String email);
 }

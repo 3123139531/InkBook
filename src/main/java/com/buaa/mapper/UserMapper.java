@@ -15,6 +15,9 @@ public interface UserMapper {
     @Select("select * from user where u_name = #{user_name}")
     public User selectUserByName(String user_name);
 
+    @Select("select count(*) from user where email = #{mail}")
+    public int selectEmailCount(String mail);
+
     @Update("update user set u_nickname = #{uNickname}, profile_pic = #{profilePic}, u_name = #{uName}, email = #{email} , password = #{password}" +
             " where u_id = #{uId}")
     public void updateUserInfo(User newUserInfo);

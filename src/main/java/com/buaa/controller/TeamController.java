@@ -196,8 +196,12 @@ public class TeamController {
     public R inviteJoin(@PathVariable("user_name") String username, @PathVariable int tid) {
         Team team = teamService.selectTeamById(tid);
         User invited = userService.findUserByName(username);
-        teamService.addTeamMember(team, invited);
-        return new R (true, "邀请成功");
+
+        if(!teamService.isMember(team,invited)) {
+            teamService.addTeamMember(team, invited);
+            return new R (true, "邀请成功");
+        }
+        else return new R(false,"用户已在团队中");
     }
 }
 

@@ -101,11 +101,16 @@ public class UserController {
         else {
             if(isValidPassword(user.getPassword())) {
 //                userService.insertRegisteredUser(user);
-                boolean flag = userService.sendCode(user);
-                if (flag)
-                    return new R(true, "邮件发送成功，请前往您的邮箱进行注册验证");
-                else
-                    return new R(false, "邮件发送失败");
+                if(!userService.isExistsEmail(user.getEmail())){
+                    boolean flag = userService.sendCode(user);
+                    if (flag)
+                        return new R(true, "邮件发送成功，请前往您的邮箱进行注册验证");
+                    else
+                        return new R(false, "邮件发送失败");
+                }
+                else{
+                    return new R(false,"此用户邮箱已经存在");
+                }
             }
             else{
                 R r = new R();
