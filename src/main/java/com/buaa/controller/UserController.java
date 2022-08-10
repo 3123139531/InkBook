@@ -123,7 +123,7 @@ public class UserController {
 
     public boolean isValidPassword(String password){
         boolean isValid = false;
-        if(password.length()>6){
+        if(password.length()>=6){
             String numRegex   = ".*[0-9].*";
             String upCaseAlphaRegex = ".*[A-Z].*";
             String lowCaseAlphaRegex = ".*[a-z].*";
