@@ -38,8 +38,9 @@
       <el-main class="TeamMain">
         <div style="font:normal bold 20px/30px Georgia, serif; margin-bottom: 10px;">文档中心</div>
         <el-button type="primary" class="saveBtn" v-if="isDoc" @click="saveFile">保存文档</el-button>
+        <el-button type="primary" class="delBtn" v-if="isDoc" @click="delFIle">删除文档</el-button>
         <el-button type="primary" class="saveBtn" v-if="isTeamDoc" @click="saveTeamDoc">保存文档</el-button>
-        <el-button type="primary" class="delBtn" v-if="isTeamDoc" @click="delFIle">删除文档</el-button>
+        <el-button type="primary" class="delBtn" v-if="isTeamDoc" @click="delTeamDoc">删除文档</el-button>
         <div class="docTree">
           <div style="text-align: center; border-bottom: 1px black solid">文档</div>
           <el-tree :data="data"
@@ -156,9 +157,25 @@ export default {
       this.getTrashTree()
     },
     getTeamDoc() {
-
+      this.data[0].children = []
+      this.$axios.get('/docs/team/' + this.team.teamId
+      ).then(response=> {
+        // console.log(response)
+        let documents = response.data.data
+        let numDoc = documents.length
+        let docTreeNode = []
+        for(let j=0; j<numDoc; j++){
+          docTreeNode.push({
+            id: documents[j].docid,
+            name: documents[j].dname
+          })
+        }
+        this.data[0].children = docTreeNode
+      })
     },
     getDoingTree() {
+      this.data[1].children = []
+      this.dataDoing = []
       this.$axios.get('/projects/doing/' + this.team.teamId, {
         params: {
           tid: this.team.teamId
@@ -191,6 +208,8 @@ export default {
       })
     },
     getFinishTree() {
+      this.data[1].children = []
+      this.dataFinish = []
       this.$axios.get('/projects/finish/' + this.team.teamId, {
         params: {
           tid: this.team.teamId
@@ -223,6 +242,8 @@ export default {
       })
     },
     getTrashTree() {
+      this.data[2].children = []
+      this.dataTrash = []
       this.$axios.get('/projects/trash/' + this.team.teamId, {
         params: {
           tid: this.team.teamId
@@ -315,15 +336,62 @@ export default {
       })
     },
     saveTeamDoc() {
-
+      this.$axios.put('/docs/content',{
+        dcontent: this.text,
+        dfid: 0,
+        dname: this.curNode.name,
+        docid: this.curNode.id,
+        dtid: this.team.teamId
+      }).then(response=> {
+        if(response.data.flag === true){
+          ElMessage({
+            message: '保存成功',
+            type: 'success'
+          })
+        }
+      })
     },
     delFIle() {
-
+      this.$axios.delete('/documents/'+this.curNode.id
+      ).then(response=> {
+        this.getTree()
+        ElMessage({
+          message: response.data.msg,
+          type: (response.data.flag)?'success':'error'
+        })
+      })
+    },
+    delTeamDoc() {
+      this.$axios.delete('/docs/'+this.curNode.id
+      ).then(response=> {
+        this.getTeamDoc()
+        ElMessage({
+          message: response.data.msg,
+          type: (response.data.flag)?'success':'error'
+        })
+      })
     },
     newTeamDocBtn() {
       this.newTeamDocFlag = true
     },
     newTeamDoc() {
+      this.$axios.post('/docs', {
+        dcontent: "",
+        dfid: 0,
+        dname: this.newName,
+        docid: 0,
+        dtid: this.team.teamId
+      }).then(response=> {
+        console.log(response)
+        if(response.data.flag){
+          this.getTeamDoc()
+          console.log(this.data[0].children)
+        }
+        ElMessage({
+          message: response.data.msg,
+          type: (response.data.flag)?'success':'error'
+        })
+      })
       this.newTeamDocFlag = false
       this.newName = ''
     },
@@ -527,7 +595,7 @@ export default {
 
 .delBtn {
   position: absolute;
-  left: 12%;
+  right: 10%;
   top: 20px;
 }
 
