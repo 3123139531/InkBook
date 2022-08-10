@@ -70,13 +70,12 @@
                   <el-tooltip
                       class="box-item"
                       effect="dark"
-                      content="点击进行筛选"
+                      content="点击根据状态筛选"
                       placement="top"
                   >
                     <span>{{ this.statusShow }}</span>
                   </el-tooltip>
                 </div>
-<!--                <span>{{ this.statusShow }}</span>-->
                 <template #dropdown>
                   <el-dropdown-menu>
                     <el-dropdown-item @click="showAll">全部</el-dropdown-item>

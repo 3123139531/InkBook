@@ -99,8 +99,8 @@
             <th>原型名</th>
             <th>操作</th>
           </tr>
-          <tr v-for="i in numDocuments" :key="i">
-            <td>{{documents[i-1].dname}}</td>
+          <tr v-for="i in numDesigns" :key="i">
+            <td>{{designs[i-1].pgName}}</td>
             <td>
               <span @click="toDesignView(i)">编辑原型</span>
               <span @click="delDesign(i)">删除原型</span>
@@ -199,10 +199,10 @@ export default {
       this.$axios.get('/projects/'+this.projectId
       ).then(response =>{
         this.project = response.data.data
-        // console.log(this.project)
+        console.log(this.project)
       })
       this.getDocs()
-      //this.getDesigns()
+      this.getDesigns()
     },
     getDocs() {
       this.$axios.get('/documents/project/'+this.projectId
@@ -215,8 +215,8 @@ export default {
     getDesigns() {
       this.$axios.get('pages/project/'+this.projectId
       ).then(response =>{
-        this.designs = response.data.data.pages
-        this.numDesigns = response.data.data.pages.length
+        this.designs = response.data.data
+        this.numDesigns = response.data.data.length
       })
     },
     copyProBtn() {
@@ -305,10 +305,10 @@ export default {
       this.addDesignDialog = true;
     },
     addNewDesign() {
-      this.$axios.post('/documents',{
+      this.$axios.put('/pages',{
         pgContent: '',
         pgName: this.newDesign,
-        pgPid: this.projectId
+        pgPid: this.project.pid
       }).then(response =>{
         console.log(response)
         // console.log(this.newFile)
@@ -319,7 +319,7 @@ export default {
             type: 'success'
           })
         }
-        this.getDocs()
+        this.getDesigns()
         this.addDesignDialog = false
         this.newDesign = ''
       });
@@ -395,7 +395,7 @@ export default {
         name: 'design',
         query : {
           ac : this.userAccount,
-          pg_id : 7,
+          pg_id : this.designs[id-1].pgId,
           //pg_id : this.designs[id-1].pgId,
           p_id : this.projectId,
           p_name : this.project.pname,

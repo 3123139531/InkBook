@@ -8,6 +8,7 @@
 </template>
 
 <script>
+/* eslint-disable */
   export default {
     name: "NotFound",
     data() {
@@ -21,14 +22,16 @@
     },
     methods: {
       init() {
+          this.code=this.$route.query.url;
+          console.log(this.code);
+          var data={code:this.code};
+          this.$axios.get('/lookCode/'+this.code
+          ).then( response =>{
+            console.log(response);
+          })
       },
       leftTime() {
         this.initTime--
-        if(this.initTime===0){
-          this.$router.push({
-            name: 'login'
-          })
-        }
       }
     },
     created() {

@@ -24,7 +24,7 @@ const routes = [
     component: ForSkip
   },
   {
-    path: '/skipInvite/:uname/:tid',
+    path: '/skipInvite',
     name: 'skipInvite',
     component: SkipInvite
   },

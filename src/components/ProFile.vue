@@ -24,6 +24,7 @@
           ></a>
           <br />
           <div
+            http-equiv="refresh"
             @click="$router.push('/login')"
             target="_blank"
             class="btn-a"

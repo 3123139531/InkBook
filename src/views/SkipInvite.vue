@@ -25,9 +25,8 @@ export default {
     leftTime() {
       this.initTime--
       if (this.initTime === 1) {
-        var url = window.location.href;
-        var uname = url.split('/')[4]
-        var tid = url.split('/')[5]
+        var uname = this.$route.quary.uname
+        var tid = this.$route.quary.t_id
         console.log(uname)
         console.log(tid)
         this.$axios.get('/invite/temp/'+uname+'/'+tid
@@ -58,4 +57,8 @@ h1 {
 span {
   color: dodgerblue;
 }
+<<<<<<< HEAD
 </style>
+=======
+</style>
+>>>>>>> 0b800f91c42e7d9b9c52aaf7832dcf35457f5ab6
