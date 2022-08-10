@@ -1,6 +1,9 @@
 package com.buaa.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.buaa.pojo.MyPage;
+
+import java.util.List;
 
 public interface PageService {
     void createPage(MyPage page);
@@ -10,5 +13,7 @@ public interface PageService {
     boolean checkNameRepeat(String name, int pgPid);
     MyPage getPageById(int id);
     MyPage getPageByName(String name, int pgPid);
+
+    List<MyPage> getPagesByPId(int id);
 
 }

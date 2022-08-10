@@ -59,4 +59,10 @@ public class PageController {
     public R getByName(@PathVariable int pid, @PathVariable String name) {
         return new R(true, pageService.getPageByName(name, pid), "查询成功");
     }
+
+    @ApiOperation(value = "查找对应id项目的所有页面")
+    @GetMapping("/project/{id}")
+    public R getByPId(@PathVariable int id) {
+        return new R(true, pageService.getPagesByPId(id), "查询成功");
+    }
 }

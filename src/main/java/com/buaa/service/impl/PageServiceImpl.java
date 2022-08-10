@@ -1,5 +1,6 @@
 package com.buaa.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.buaa.mapper.PageMapper;
 import com.buaa.pojo.MyPage;
@@ -7,6 +8,7 @@ import com.buaa.service.PageService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class PageServiceImpl implements PageService {
@@ -16,6 +18,7 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public void createPage(MyPage page) {
+//        page.updateJsonString();
         pageMapper.createPage(page);
     }
 
@@ -38,6 +41,7 @@ public class PageServiceImpl implements PageService {
         MyPage page = new MyPage();
         page.setPgPid(pgId);
         page.setPgContent(content);
+//        page.updateJsonString();
         pageMapper.updateById(page);
         return true;
     }
@@ -52,7 +56,9 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public MyPage getPageById(int id) {
-        return pageMapper.selectPageById(id);
+        MyPage page = pageMapper.selectPageById(id);
+//        page.parseJson();
+        return page;
     }
 
     @Override
@@ -60,6 +66,17 @@ public class PageServiceImpl implements PageService {
         MyPage page = new MyPage();
         page.setPgName(name);
         page.setPgPid(pgPid);
-        return pageMapper.selectPageByName(page);
+        MyPage ret = pageMapper.selectPageByName(page);
+//        ret.parseJson();
+        return ret;
+    }
+
+    @Override
+    public List<MyPage> getPagesByPId(int id) {
+        List<MyPage> pages = pageMapper.selectPagesByPId(id);
+//        for(MyPage page : pages){
+//            page.parseJson();
+//        }
+        return pages;
     }
 }
