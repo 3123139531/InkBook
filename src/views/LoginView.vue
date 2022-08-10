@@ -87,7 +87,7 @@ export default {
         uname: this.loginForm.username,
         unickname: '0',
       }).then(response=> {
-        var message = response.data.msg
+        var message = response.data.data
         if(response.data.flag === true){
           ElMessage({
             message: '登录成功',

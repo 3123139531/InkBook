@@ -300,7 +300,7 @@ export default {
       }).then(response =>{
         console.log(response)
         this.showEnterprise();
-        this.addProDialog = false;
+        this.addTeamDialog = false;
         this.newName = '';
       });
     },
